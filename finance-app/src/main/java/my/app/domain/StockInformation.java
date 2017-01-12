@@ -45,4 +45,35 @@ public class StockInformation {
 	@JoinColumn(name = "stock_id")
 	private Stock stock;
 
+	public int getId() {
+		return id;
+	}
+	
+	public Calendar getDate() {
+		return date;
+	}
+	
+	public double getOpen() {
+		return open;
+	}
+
+	public double getClose() {
+		return close;
+	}
+	
+	public double getHigh() {
+		return high;
+	}
+	
+	public double getLow() {
+		return low;
+	}
+	
+	public int getVolume() {
+		return volume;
+	}
+	
+	public double getAdjustedClose() {
+		return adjustedClose;
+	}
 }
