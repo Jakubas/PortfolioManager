@@ -17,20 +17,26 @@ public class Stock {
 	
 	private String name;
 	
+	private String ticker;
+	
 	@OneToMany
 	private List<StockInformation> stockInformation;
 	
-	public Stock(String name) {
+	public Stock(String name, String ticker) {
 		this.name = name;
+		this.ticker = ticker;
 	}
 	
 	public int getId() {
 		return id;
-		
 	}
 	
 	public String getName() {
 		return name;
+	}
+	
+	public String getTicker() {
+		return ticker;
 	}
 	
 	public List<StockInformation> getStockInformation() {
