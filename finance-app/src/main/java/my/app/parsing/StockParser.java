@@ -1,4 +1,4 @@
-package my.app.parse_data;
+package my.app.parsing;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
