@@ -1,15 +1,16 @@
 package my.app.parsing;
 
+import java.util.ArrayList;
+
 public class CSVParser {
 
 	//This method splits a line from a comma separated values file into an array of strings
 	public String[] splitLine(String line) {
 		
 		StringBuffer buffer = new StringBuffer();
-		String[] stockStrs = new String[3];
+		ArrayList<String> stockStrs = new ArrayList<String>();
 		
 		char[] chars = line.toCharArray();
-		int i = 0;
 		boolean inQuotes = false;
 		for (char ch: chars) {
 			if (inQuotes) {
@@ -22,14 +23,16 @@ public class CSVParser {
 				if (ch == '"') {
 					inQuotes = true;
 				} else if (ch == ',') {
-					stockStrs[i++] = buffer.toString();
+					stockStrs.add(buffer.toString());
 					buffer.delete(0, buffer.length());
 				} else {
 					buffer.append(ch);
 				}
 			}
 		}
-		stockStrs[i++] = buffer.toString();
-		return stockStrs;
+		stockStrs.add(buffer.toString());
+	
+		String[] stockStrsArray = stockStrs.toArray(new String[stockStrs.size()]);
+		return stockStrsArray;
 	}
 }
