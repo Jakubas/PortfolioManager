@@ -1,6 +1,6 @@
 package my.app.domain;
 
-import java.util.Calendar;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +21,7 @@ public class StockInformation {
 	
 	@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Calendar date;
+	private Date date;
 	
 	@NotNull
 	private double open;
@@ -45,11 +45,22 @@ public class StockInformation {
 	@JoinColumn(name = "stock_id")
 	private Stock stock;
 
+	public StockInformation(Date date, double open, double close, double high,
+			double low, int volume, double adjustedClose) {
+		this.date = date;
+		this.open = open;
+		this.close = close;
+		this.high = high;
+		this.low = low;
+		this.volume = volume;
+		this.adjustedClose = adjustedClose;
+	}
+	
 	public int getId() {
 		return id;
 	}
 	
-	public Calendar getDate() {
+	public Date getDate() {
 		return date;
 	}
 	
