@@ -18,7 +18,6 @@ public class StockParser {
 		
 		try {
 			reader = new BufferedReader(new FileReader(fileName));
-			
 			String line;
 			while ((line = reader.readLine()) != null) {
 				Stock stock;
@@ -50,43 +49,13 @@ public class StockParser {
 	private Stock parseStock(String line) throws Exception {
 		int i = 0;
 //		String[] stockStr = line.split(",");
-		String[] stockStrs = splitLine(line);
+		CSVParser parser = new CSVParser();
+		String[] stockStrs = parser.splitLine(line);
 		String ticker = parseTicker(stockStrs[i++]);
 		String name = stockStrs[i++];
 		String industry = stockStrs[i];
 		Stock stock = new Stock(name, ticker, industry);
 		return stock;
-	}
-	
-	//This method splits a line from a comma separated values file
-	private String[] splitLine(String line) {
-		
-		StringBuffer buffer = new StringBuffer();
-		String[] stockStrs = new String[3];
-		
-		char[] chars = line.toCharArray();
-		int i = 0;
-		boolean inQuotes = false;
-		for (char ch: chars) {
-			if (inQuotes) {
-				if (ch == '"') {
-					inQuotes = false;
-				} else {
-					buffer.append(ch);
-				}
-			} else {
-				if (ch == '"') {
-					inQuotes = true;
-				} else if (ch == ',') {
-					stockStrs[i++] = buffer.toString();
-					buffer.delete(0, buffer.length());
-				} else {
-					buffer.append(ch);
-				}
-			}
-		}
-		stockStrs[i++] = buffer.toString();
-		return stockStrs;
 	}
 	
 	private String parseTicker(String ticker) throws Exception {
