@@ -1,7 +1,6 @@
 package my.app.domain;
 
 import java.util.Date;
-import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -52,7 +51,7 @@ public class StockInformation {
 	}
 	
 	public StockInformation(Date date, double open, double close, double high,
-			double low, int volume, double adjustedClose) {
+			double low, int volume, double adjustedClose, Stock stock) {
 		this.date = date;
 		this.open = open;
 		this.close = close;
@@ -60,6 +59,7 @@ public class StockInformation {
 		this.low = low;
 		this.volume = volume;
 		this.adjustedClose = adjustedClose;
+		this.stock = stock;
 	}
 	
 	public int getId() {
@@ -102,7 +102,7 @@ public class StockInformation {
             return true;
 
         StockInformation stockInfo = (StockInformation) obj;
-        if (date == stockInfo.getDate() && open == stockInfo.getOpen() &&
+        if (date.getTime() == stockInfo.getDate().getTime() && open == stockInfo.getOpen() &&
         	close == stockInfo.getClose() && high == stockInfo.getHigh() &&
         	low == stockInfo.getLow() && volume == stockInfo.getVolume()) {
         	return true;
@@ -114,7 +114,7 @@ public class StockInformation {
     @Override
     public int hashCode() {
     	HashCodeBuilder builder = new HashCodeBuilder();
-    	builder.append(date);
+    	builder.append(date.getTime());
     	builder.append(open);
     	builder.append(close);
     	builder.append(high);
