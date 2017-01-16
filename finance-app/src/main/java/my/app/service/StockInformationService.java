@@ -9,6 +9,7 @@ public interface StockInformationService {
 	void saveStockInformation(StockInformation stockInformation);
 	StockInformation getStockInformationById(int id);
 	List<StockInformation> getStockInformations();
+	List<StockInformation> getStockInformationsByStockId(int stockId);
 	void updateStockInformation(StockInformation stockInformation);
 	void deleteStockInformation(StockInformation stockInformation);
 }

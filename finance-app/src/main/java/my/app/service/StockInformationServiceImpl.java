@@ -17,7 +17,7 @@ public class StockInformationServiceImpl implements StockInformationService {
 	public StockInformationServiceImpl(StockInformationDAO dao) {
 		this.dao = dao;
 	}
-
+	
 	public void saveStockInformation(StockInformation stockInformation) {
 		dao.saveStockInformation(stockInformation);
 	}
@@ -38,5 +38,10 @@ public class StockInformationServiceImpl implements StockInformationService {
 
 	public void deleteStockInformation(StockInformation stockInformation) {
 		dao.deleteStockInformation(stockInformation);
+	}
+
+	public List<StockInformation> getStockInformationsByStockId(int stockId) {
+		List<StockInformation> stockInformations = dao.getStockInformationsByStockId(stockId);
+		return stockInformations;
 	}
 }

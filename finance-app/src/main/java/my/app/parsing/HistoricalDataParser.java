@@ -9,11 +9,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
 
+import my.app.domain.Stock;
 import my.app.domain.StockInformation;
 
 public class HistoricalDataParser {
 	
-	public ArrayList<StockInformation> parseCSVToStockInformation(String fileName) {
+	public ArrayList<StockInformation> parseCSVToStockInformation(Stock stock, String fileName) {
 		
 		BufferedReader reader = null;
 		ArrayList<StockInformation> stockInformations = new ArrayList<StockInformation>();
@@ -24,7 +25,8 @@ public class HistoricalDataParser {
 			while ((line = reader.readLine()) != null) {
 				StockInformation stockInformation;
 				try {
-					stockInformation = parseStockInformation(line);
+					stockInformation = parseStockInformation(stock, line);
+					
 				} catch (Exception e) {
 					//there is some invalid data in this row so we don't add it our list of stocks
 					continue;
@@ -47,11 +49,11 @@ public class HistoricalDataParser {
 		return stockInformations;
 	}
 	
-	private StockInformation parseStockInformation(String line) throws Exception {
+	private StockInformation parseStockInformation(Stock stock, String line) throws Exception {
 		CSVParser parser = new CSVParser();
 		String[] lines = parser.splitLine(line);
 		
-		int i = 0;
+		int i = 0;		
 		Date date = parseDate(lines[i++]);
 		double open = parseDouble(lines[i++]);
 		double high = parseDouble(lines[i++]);
@@ -61,7 +63,7 @@ public class HistoricalDataParser {
 		double adjustedClose = parseDouble(lines[i++]);
 		
 		StockInformation stockInformation = 
-				new StockInformation(date, open, close, high, low, volume, adjustedClose);
+				new StockInformation(date, open, close, high, low, volume, adjustedClose, stock);
 		return stockInformation;
 	}
 	

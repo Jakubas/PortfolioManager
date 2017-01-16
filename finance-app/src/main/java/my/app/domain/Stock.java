@@ -28,6 +28,10 @@ public class Stock {
 	@NotNull
 	private String industry;
 	
+	public Stock() {
+		
+	}
+	
 	public Stock(String name, String ticker, String industry) {
 		this.name = name;
 		this.ticker = ticker;

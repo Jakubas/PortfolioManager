@@ -13,9 +13,10 @@ import my.app.parsing.StockParser;
 
 public class StockInformationDownloader {
 	
-	public static void downloadStockInformation() {
+	public static void downloadStockInformation(String rootDir) {
 		//download CSV from the Internet and save to local disk
-		String filePath = "/home/daniel/fyp/data/stock_base_info.csv";
+		//"/home/daniel/fyp/data/stock_base_info.csv"
+		String filePath = rootDir + "stock_base_info.csv";
 		downloadBaseStockInformation(filePath);
 		
 		StockParser stockParser = new StockParser();

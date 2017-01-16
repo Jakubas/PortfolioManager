@@ -53,4 +53,13 @@ public class StockInformationDAOImpl implements StockInformationDAO {
 			session.delete(stockInformation);
 		}
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<StockInformation> getStockInformationsByStockId(int stockId) {
+		Session session = sessionFactory.getCurrentSession();
+		List<StockInformation> stockInformations =
+				session.createSQLQuery("SELECT * FROM stock_information WHERE stock_id =" + stockId)
+				.addEntity(StockInformation.class).list();
+		return stockInformations;
+	}
 }
