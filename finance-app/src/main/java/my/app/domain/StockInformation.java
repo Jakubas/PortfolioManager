@@ -1,6 +1,7 @@
 package my.app.domain;
 
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -45,6 +47,10 @@ public class StockInformation {
 	@JoinColumn(name = "stock_id")
 	private Stock stock;
 
+	public StockInformation() {
+		
+	}
+	
 	public StockInformation(Date date, double open, double close, double high,
 			double low, int volume, double adjustedClose) {
 		this.date = date;
@@ -87,4 +93,33 @@ public class StockInformation {
 	public double getAdjustedClose() {
 		return adjustedClose;
 	}
+	
+    @Override
+    public boolean equals(Object obj) {
+       if (!(obj instanceof StockInformation))
+            return false;
+        if (obj == this)
+            return true;
+
+        StockInformation stockInfo = (StockInformation) obj;
+        if (date == stockInfo.getDate() && open == stockInfo.getOpen() &&
+        	close == stockInfo.getClose() && high == stockInfo.getHigh() &&
+        	low == stockInfo.getLow() && volume == stockInfo.getVolume()) {
+        	return true;
+        } else {
+        	return false;
+        }
+    }
+    
+    @Override
+    public int hashCode() {
+    	HashCodeBuilder builder = new HashCodeBuilder();
+    	builder.append(date);
+    	builder.append(open);
+    	builder.append(close);
+    	builder.append(high);
+    	builder.append(low);
+    	builder.append(volume);
+    	return builder.toHashCode();   
+    }
 }
