@@ -10,12 +10,14 @@ import org.apache.commons.lang3.time.DateUtils;
 import my.app.domain.Stock;
 import my.app.domain.StockDailyInformation;
 
-//this object holds all the data that can be displayed on the web page
+//this class is used for various calculations regarding a stock, such as risk, annualised returns, etc.
+//annualisedReturns are estimates and may be off by a couple days
 public class StockDataCalculations {
 
 	public double calculateQuarterlyAnnualisedReturn(Stock stock) {
-		return calculateReturn(stock, 365/4);
-		//need to annualise this return
+		int numberOfDays = 365/4;
+		double annualisedReturn = calculateAnnualisedReturn(stock, numberOfDays);
+		return annualisedReturn;
 	}
 
 	public double calculate1YrAnnualisedReturn(Stock stock) {
@@ -23,13 +25,24 @@ public class StockDataCalculations {
 	}
 	
 	public double calculate5YrAnnualisedReturn(Stock stock) {
-		return calculateReturn(stock, 365*5);
-		//need to annualise this return
+		int numberOfDays = 365*5;
+		double annualisedReturn = calculateAnnualisedReturn(stock, numberOfDays);
+		return annualisedReturn;
 	}
 	
 	public double calculate10YrAnnualisedReturn(Stock stock) {
-		return calculateReturn(stock, 365*10);
-		//need to annualise this return
+		int numberOfDays = 365*10;
+		double annualisedReturn = calculateAnnualisedReturn(stock, numberOfDays);
+		return annualisedReturn;
+	}
+	
+	private double calculateAnnualisedReturn(Stock stock, int numberOfDays) {
+		double cumulativeReturn = calculateReturn(stock, numberOfDays);
+		
+		double a = 1 + cumulativeReturn;
+		double b = 365 / (double) numberOfDays;
+		double annualisedReturn = Math.pow(a, b) - 1;
+		return annualisedReturn;
 	}
 	
 	private double calculateReturn(Stock stock, int numberOfDays) {
