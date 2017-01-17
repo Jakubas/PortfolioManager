@@ -14,7 +14,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-public class StockInformation {
+public class StockDailyInformation {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -46,11 +46,11 @@ public class StockInformation {
 	@JoinColumn(name = "stock_id")
 	private Stock stock;
 
-	public StockInformation() {
+	public StockDailyInformation() {
 		
 	}
 	
-	public StockInformation(Date date, double open, double close, double high,
+	public StockDailyInformation(Date date, double open, double close, double high,
 			double low, int volume, double adjustedClose, Stock stock) {
 		this.date = date;
 		this.open = open;
@@ -96,12 +96,12 @@ public class StockInformation {
 	
     @Override
     public boolean equals(Object obj) {
-       if (!(obj instanceof StockInformation))
+       if (!(obj instanceof StockDailyInformation))
             return false;
         if (obj == this)
             return true;
 
-        StockInformation stockInfo = (StockInformation) obj;
+        StockDailyInformation stockInfo = (StockDailyInformation) obj;
         if (date.getTime() == stockInfo.getDate().getTime() && open == stockInfo.getOpen() &&
         	close == stockInfo.getClose() && high == stockInfo.getHigh() &&
         	low == stockInfo.getLow() && volume == stockInfo.getVolume()) {

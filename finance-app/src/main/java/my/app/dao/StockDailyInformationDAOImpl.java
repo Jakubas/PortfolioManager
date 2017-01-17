@@ -10,28 +10,28 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import my.app.domain.StockInformation;
+import my.app.domain.StockDailyInformation;
 
 @Repository
 @Transactional
-public class StockInformationDAOImpl implements StockInformationDAO {
+public class StockDailyInformationDAOImpl implements StockDailyInformationDAO {
 
 	private final SessionFactory sessionFactory;
 	
 	@Autowired
-	public StockInformationDAOImpl(SessionFactory sessionFactory) {
+	public StockDailyInformationDAOImpl(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
 	
-	public void saveStockInformation(StockInformation stockInformation) {
+	public void saveStockInformation(StockDailyInformation stockInformation) {
 		Session session = sessionFactory.getCurrentSession();
 		session.persist(stockInformation);
 	}
 	
-	public void saveStockInformations(List<StockInformation> stockInformations) {
+	public void saveStockInformations(List<StockDailyInformation> stockInformations) {
 		Session session = sessionFactory.getCurrentSession();
 		Transaction tx = session.beginTransaction();
-		for (StockInformation stockInformation : stockInformations) {
+		for (StockDailyInformation stockInformation : stockInformations) {
 			session.save(stockInformation);
 		}
 		session.flush();
@@ -39,39 +39,39 @@ public class StockInformationDAOImpl implements StockInformationDAO {
 		tx.commit();
 	}
 
-	public StockInformation getStockInformationById(int id) {
+	public StockDailyInformation getStockInformationById(int id) {
 		Session session = sessionFactory.getCurrentSession();
-		StockInformation stockInformation = session.get(StockInformation.class, id);
+		StockDailyInformation stockInformation = session.get(StockDailyInformation.class, id);
 		return stockInformation;
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<StockInformation> getStockInformations() {
+	public List<StockDailyInformation> getStockInformations() {
 		Session session = sessionFactory.getCurrentSession();
-		List<StockInformation> stockInformations = session.createCriteria(StockInformation.class).list();
+		List<StockDailyInformation> stockInformations = session.createCriteria(StockDailyInformation.class).list();
 		return stockInformations;
 	}
 
-	public void updateStockInformation(StockInformation stockInformation) {
+	public void updateStockInformation(StockDailyInformation stockInformation) {
 		Session session = sessionFactory.getCurrentSession();
 		session.update(stockInformation);
 	}
 
-	public void deleteStockInformation(StockInformation stockInformation) {
+	public void deleteStockInformation(StockDailyInformation stockInformation) {
 		Session session = sessionFactory.getCurrentSession();
 		int id = stockInformation.getId();
-		stockInformation = session.get(StockInformation.class, id);
+		stockInformation = session.get(StockDailyInformation.class, id);
 		if (stockInformation != null) {
 			session.delete(stockInformation);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<StockInformation> getStockInformationsByStockId(int stockId) {
+	public List<StockDailyInformation> getStockInformationsByStockId(int stockId) {
 		Session session = sessionFactory.getCurrentSession();
-		List<StockInformation> stockInformations =
+		List<StockDailyInformation> stockInformations =
 				session.createSQLQuery("SELECT * FROM stock_information WHERE stock_id =" + stockId)
-				.addEntity(StockInformation.class).list();
+				.addEntity(StockDailyInformation.class).list();
 		return stockInformations;
 	}
 }

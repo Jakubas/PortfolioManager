@@ -22,8 +22,8 @@ public class Stock {
 	@NotNull
 	private String ticker;
 	
-	@OneToMany
-	private List<StockInformation> stockInformation;
+	@OneToMany(mappedBy = "stock")
+	private List<StockDailyInformation> stockDailyInformation;
 
 	@NotNull
 	private String industry;
@@ -54,7 +54,7 @@ public class Stock {
 		return industry;
 	}
 	
-	public List<StockInformation> getStockInformation() {
-		return stockInformation;
+	public List<StockDailyInformation> getStockInformation() {
+		return stockDailyInformation;
 	}
 }

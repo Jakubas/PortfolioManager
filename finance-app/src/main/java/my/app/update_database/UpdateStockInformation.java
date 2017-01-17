@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import my.app.domain.Stock;
-import my.app.domain.StockInformation;
+import my.app.domain.StockDailyInformation;
 import my.app.parsing.HistoricalDataParser;
-import my.app.service.StockInformationService;
+import my.app.service.StockDailyInformationService;
 import my.app.service.StockService;
 
 
 public class UpdateStockInformation {
 	
-	private final StockInformationService stockInformationService;
+	private final StockDailyInformationService stockInformationService;
 	private final StockService stockService;
 	
-	public UpdateStockInformation(StockInformationService stockInformationService, StockService stockService) {
+	public UpdateStockInformation(StockDailyInformationService stockInformationService, StockService stockService) {
 		this.stockInformationService = stockInformationService;
 		this.stockService = stockService;
 	}
@@ -51,15 +51,15 @@ public class UpdateStockInformation {
 		//parse the CSV file containing the historical stock data into objects
 		String stockInformationFilePath = rootDir + stock.getTicker() + ".csv";
 		HistoricalDataParser hdp = new HistoricalDataParser();
-		List<StockInformation> stockInformations = 
+		List<StockDailyInformation> stockInformations = 
 				hdp.parseCSVToStockInformation(stock, stockInformationFilePath);
 		
 		//retrieve historical data on the stock that is currently in the database
-		List<StockInformation> stockInformationsInDatabase = 
+		List<StockDailyInformation> stockInformationsInDatabase = 
 				stockInformationService.getStockInformationsByStockId(stock.getId());
 		//if the data is not in the database, add it
-		ArrayList<StockInformation> stockInformations2 = new ArrayList<StockInformation>();
-		for(StockInformation stockInformation: stockInformations) {
+		ArrayList<StockDailyInformation> stockInformations2 = new ArrayList<StockDailyInformation>();
+		for(StockDailyInformation stockInformation: stockInformations) {
 			if (stockInformationsInDatabase == null || 
 				!stockInformationsInDatabase.contains(stockInformation)) {
 				stockInformations2.add(stockInformation);

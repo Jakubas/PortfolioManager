@@ -10,20 +10,20 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 import my.app.domain.Stock;
-import my.app.domain.StockInformation;
+import my.app.domain.StockDailyInformation;
 
 public class HistoricalDataParser {
 	
-	public ArrayList<StockInformation> parseCSVToStockInformation(Stock stock, String fileName) {
+	public ArrayList<StockDailyInformation> parseCSVToStockInformation(Stock stock, String fileName) {
 		
 		BufferedReader reader = null;
-		ArrayList<StockInformation> stockInformations = new ArrayList<StockInformation>();
+		ArrayList<StockDailyInformation> stockInformations = new ArrayList<StockDailyInformation>();
 		
 		try {
 			reader = new BufferedReader(new FileReader(fileName));
 			String line;
 			while ((line = reader.readLine()) != null) {
-				StockInformation stockInformation;
+				StockDailyInformation stockInformation;
 				try {
 					stockInformation = parseStockInformation(stock, line);
 					
@@ -49,7 +49,7 @@ public class HistoricalDataParser {
 		return stockInformations;
 	}
 	
-	private StockInformation parseStockInformation(Stock stock, String line) throws Exception {
+	private StockDailyInformation parseStockInformation(Stock stock, String line) throws Exception {
 		CSVParser parser = new CSVParser();
 		String[] lines = parser.splitLine(line);
 		
@@ -62,8 +62,8 @@ public class HistoricalDataParser {
 		int volume = parseInt(lines[i++]);
 		double adjustedClose = parseDouble(lines[i++]);
 		
-		StockInformation stockInformation = 
-				new StockInformation(date, open, close, high, low, volume, adjustedClose, stock);
+		StockDailyInformation stockInformation = 
+				new StockDailyInformation(date, open, close, high, low, volume, adjustedClose, stock);
 		return stockInformation;
 	}
 	

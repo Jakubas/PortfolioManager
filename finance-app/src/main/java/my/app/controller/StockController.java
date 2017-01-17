@@ -5,18 +5,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import my.app.service.StockInformationService;
+import my.app.service.StockDailyInformationService;
 import my.app.service.StockService;
 import my.app.update_database.UpdateStockInformation;
 
 @RestController
 public class StockController {
 
-	private final StockInformationService stockInformationService;
+	private final StockDailyInformationService stockInformationService;
 	private final StockService stockService;
 	
 	@Autowired
-	public StockController(StockInformationService stockInformationService, StockService stockService) {
+	public StockController(StockDailyInformationService stockInformationService, StockService stockService) {
 		this.stockInformationService = stockInformationService;
 		this.stockService = stockService;
 	}
