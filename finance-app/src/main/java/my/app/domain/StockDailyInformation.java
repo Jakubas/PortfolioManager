@@ -42,6 +42,7 @@ public class StockDailyInformation {
 	@NotNull
 	private double adjustedClose;
 	
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "stock_id")
 	private Stock stock;
@@ -92,6 +93,10 @@ public class StockDailyInformation {
 	
 	public double getAdjustedClose() {
 		return adjustedClose;
+	}
+	
+	public Stock getStock() {
+		return stock;
 	}
 	
     @Override

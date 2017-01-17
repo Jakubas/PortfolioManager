@@ -2,6 +2,7 @@ package my.app.domain;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,12 +22,12 @@ public class Stock {
 	
 	@NotNull
 	private String ticker;
-	
-	@OneToMany(mappedBy = "stock")
-	private List<StockDailyInformation> stockDailyInformation;
 
 	@NotNull
 	private String industry;
+	
+	@OneToMany(mappedBy = "stock")
+	private List<StockDailyInformation> stockDailyInformations;
 	
 	public Stock() {
 		
@@ -54,7 +55,8 @@ public class Stock {
 		return industry;
 	}
 	
-	public List<StockDailyInformation> getStockInformation() {
-		return stockDailyInformation;
+	@OneToMany(mappedBy = "stock")
+	public List<StockDailyInformation> getStockDailyInformations() {
+		return stockDailyInformations;
 	}
 }
