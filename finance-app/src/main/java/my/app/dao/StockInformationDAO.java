@@ -7,6 +7,7 @@ import my.app.domain.StockInformation;
 public interface StockInformationDAO {
 	
 	void saveStockInformation(StockInformation stockInformation);
+	void saveStockInformations(List<StockInformation> stockInformation);
 	StockInformation getStockInformationById(int id);
 	List<StockInformation> getStockInformations();
 	List<StockInformation> getStockInformationsByStockId(int stockId);

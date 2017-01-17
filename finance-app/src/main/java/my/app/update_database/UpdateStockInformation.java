@@ -40,7 +40,10 @@ public class UpdateStockInformation {
 		//parse CSV into stockInformation
 		List<Stock> stocks = stockService.getStocks();
 		
-		updateHistoricalPrices(stocks.get(0), rootDir);
+		for (int i = 0; i < stocks.size(); i++) {
+			updateHistoricalPrices(stocks.get(i), rootDir);
+			System.out.println(i + "/" + stocks.size() + " CSVs parsed into database");
+		}
 	}
 	
 	private void updateHistoricalPrices(Stock stock, String rootDir) {
@@ -55,12 +58,18 @@ public class UpdateStockInformation {
 		List<StockInformation> stockInformationsInDatabase = 
 				stockInformationService.getStockInformationsByStockId(stock.getId());
 		//if the data is not in the database, add it
+		ArrayList<StockInformation> stockInformations2 = new ArrayList<StockInformation>();
 		for(StockInformation stockInformation: stockInformations) {
 			if (stockInformationsInDatabase == null || 
 				!stockInformationsInDatabase.contains(stockInformation)) {
-				stockInformationService.saveStockInformation(stockInformation);
+				stockInformations2.add(stockInformation);
+				if (stockInformations2.size() >= 50) {
+					stockInformationService.saveStockInformations(stockInformations2);
+					stockInformations2.clear();
+				}
 			}
 		}
+		stockInformationService.saveStockInformations(stockInformations2);
 	}
 	
 	//takes a list of stocks and returns a list of stock tickers corresponding to the stocks

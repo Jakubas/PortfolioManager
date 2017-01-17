@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -25,6 +26,17 @@ public class StockInformationDAOImpl implements StockInformationDAO {
 	public void saveStockInformation(StockInformation stockInformation) {
 		Session session = sessionFactory.getCurrentSession();
 		session.persist(stockInformation);
+	}
+	
+	public void saveStockInformations(List<StockInformation> stockInformations) {
+		Session session = sessionFactory.getCurrentSession();
+		Transaction tx = session.beginTransaction();
+		for (StockInformation stockInformation : stockInformations) {
+			session.save(stockInformation);
+		}
+		session.flush();
+		session.clear();
+		tx.commit();
 	}
 
 	public StockInformation getStockInformationById(int id) {

@@ -21,6 +21,10 @@ public class StockInformationServiceImpl implements StockInformationService {
 	public void saveStockInformation(StockInformation stockInformation) {
 		dao.saveStockInformation(stockInformation);
 	}
+	
+	public void saveStockInformations(List<StockInformation> stockInformations) {
+		dao.saveStockInformations(stockInformations);
+	}
 
 	public StockInformation getStockInformationById(int id) {
 		StockInformation stockInformation = dao.getStockInformationById(id);
