@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -28,6 +29,9 @@ public class Stock {
 	
 	@OneToMany(mappedBy = "stock")
 	private List<StockDailyInformation> stockDailyInformations;
+	
+	@OneToOne(mappedBy = "stock")
+	private StockCalculatedData stockCalculatedData;
 	
 	public Stock() {
 		
@@ -55,8 +59,11 @@ public class Stock {
 		return industry;
 	}
 	
-	@OneToMany(mappedBy = "stock")
 	public List<StockDailyInformation> getStockDailyInformations() {
 		return stockDailyInformations;
+	}
+	
+	public StockCalculatedData getStockCalculatedData() {
+		return stockCalculatedData;
 	}
 }
