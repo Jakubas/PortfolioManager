@@ -14,30 +14,34 @@ import my.app.domain.StockDailyInformation;
 //annualisedReturns are estimates and may be off by a couple days
 public class StockDataCalculations {
 
-	public double calculateQuarterlyAnnualisedReturn(Stock stock) {
+	public Double calculateQuarterlyAnnualisedReturn(Stock stock) {
 		int numberOfDays = 365/4;
-		double annualisedReturn = calculateAnnualisedReturn(stock, numberOfDays);
+		Double annualisedReturn = calculateAnnualisedReturn(stock, numberOfDays);
 		return annualisedReturn;
 	}
 
-	public double calculate1YrAnnualisedReturn(Stock stock) {
-		return calculateReturn(stock, 365);
+	public Double calculate1YrAnnualisedReturn(Stock stock) {
+		int numberOfDays = 365;
+		Double annualisedReturn = calculateAnnualisedReturn(stock, numberOfDays);
+		return annualisedReturn;
 	}
 	
-	public double calculate5YrAnnualisedReturn(Stock stock) {
+	public Double calculate5YrAnnualisedReturn(Stock stock) {
 		int numberOfDays = 365*5;
-		double annualisedReturn = calculateAnnualisedReturn(stock, numberOfDays);
+		Double annualisedReturn = calculateAnnualisedReturn(stock, numberOfDays);
 		return annualisedReturn;
 	}
 	
-	public double calculate10YrAnnualisedReturn(Stock stock) {
+	public Double calculate10YrAnnualisedReturn(Stock stock) {
 		int numberOfDays = 365*10;
-		double annualisedReturn = calculateAnnualisedReturn(stock, numberOfDays);
+		Double annualisedReturn = calculateAnnualisedReturn(stock, numberOfDays);
 		return annualisedReturn;
 	}
 	
-	private double calculateAnnualisedReturn(Stock stock, int numberOfDays) {
-		double cumulativeReturn = calculateReturn(stock, numberOfDays);
+	private Double calculateAnnualisedReturn(Stock stock, int numberOfDays) {
+		Double cumulativeReturn = calculateReturn(stock, numberOfDays);
+		if (cumulativeReturn == null)
+			return null;
 		
 		double a = 1 + cumulativeReturn;
 		double b = 365 / (double) numberOfDays;
@@ -45,7 +49,7 @@ public class StockDataCalculations {
 		return annualisedReturn;
 	}
 	
-	private double calculateReturn(Stock stock, int numberOfDays) {
+	private Double calculateReturn(Stock stock, int numberOfDays) {
 		List<StockDailyInformation> stockInfos = stock.getStockDailyInformations();
 
 		//date is initialised with the current time
@@ -54,24 +58,29 @@ public class StockDataCalculations {
 		
 		Date date2 = subtractDaysFromDate(date, numberOfDays);
 		StockDailyInformation prevStockInfo = findStockInformationForGivenDate(stockInfos, date2);
+		if (currentStockInfo == null || prevStockInfo == null) {
+			return null;
+		}
 		double currentPrice = currentStockInfo.getAdjustedClose();
 		double prevPrice = prevStockInfo.getAdjustedClose();
 		double percentageChange = (currentPrice/prevPrice) - 1;
 		return percentageChange;
 	}
 	
-	private double calculateReturnInDateRange(Stock stock, int numberOfDaysStart, int numberOfDaysEnd) {
+	private Double calculateReturnInDateRange(Stock stock, int numberOfDaysStart, int numberOfDaysEnd) {
 		List<StockDailyInformation> stockInfos = stock.getStockDailyInformations();
-
 		//date is initialised with the current time
 		Date currentDate = new Date();
 		Date startDate = subtractDaysFromDate(currentDate, numberOfDaysStart);
-		StockDailyInformation currentStockInfo = findStockInformationForGivenDate(stockInfos, startDate);
+		StockDailyInformation startStockInfo = findStockInformationForGivenDate(stockInfos, startDate);
 		
 		Date endDate = subtractDaysFromDate(currentDate, numberOfDaysEnd);
-		StockDailyInformation prevStockInfo = findStockInformationForGivenDate(stockInfos, endDate);
-		double currentPrice = currentStockInfo.getAdjustedClose();
-		double prevPrice = prevStockInfo.getAdjustedClose();
+		StockDailyInformation endStockInfo = findStockInformationForGivenDate(stockInfos, endDate);
+		if (startStockInfo == null || endStockInfo == null) {
+			return null;
+		}
+		double currentPrice = startStockInfo.getAdjustedClose();
+		double prevPrice = endStockInfo.getAdjustedClose();
 		double percentageChange = (currentPrice/prevPrice) - 1;
 		return percentageChange;
 	}
@@ -98,26 +107,33 @@ public class StockDataCalculations {
 	
 	private double calculateVariance(Stock stock) {
 		//Calculate the yearly returns for the last 10 years
-		double[] yearlyReturns = new double[10];
-		for(int i = 0; i < 10; i++) {
-			yearlyReturns[i] = calculateReturnInDateRange(stock, i*365, (i+1)*365);
+		int yearlyReturnsLength = 10;
+		double[] yearlyReturns = new double[yearlyReturnsLength];
+		for(int i = 0; i < yearlyReturnsLength; i++) {
+			Double yearlyReturn = calculateReturnInDateRange(stock, i*365, (i+1)*365);
+			if (yearlyReturn == null) {
+				yearlyReturnsLength = i-1 > 0 ? i-1 : 0;
+				break;
+			}
+			yearlyReturns[i] = yearlyReturn;
 		}
 		//Calculate the average return.
 		double averageReturn = 0.0;
 		double cumulativeReturn = 0.0;
-		for (int i = 0; i < yearlyReturns.length; i++) {
+		for (int i = 0; i < yearlyReturnsLength; i++) {
 			cumulativeReturn += yearlyReturns[i];
 		}
-		averageReturn = cumulativeReturn/yearlyReturns.length;
+		averageReturn = cumulativeReturn/yearlyReturnsLength;
 		//calculate the sum of the squared differences
 		double sumOfSquaredDifferences = 0.0;
-		for (int i = 0; i < yearlyReturns.length; i++) {
+		for (int i = 0; i < yearlyReturnsLength; i++) {
 			sumOfSquaredDifferences += Math.pow((yearlyReturns[i] - averageReturn), 2);
 		}
 		//calculate the variance
-		return sumOfSquaredDifferences/(yearlyReturns.length - 1);
+		return sumOfSquaredDifferences/(yearlyReturnsLength - 1);
 	}
 	
+	//bugs need to fix like in calculateVariance()
 	public double calculateAverageReturn(Stock stock) {
 		//Calculate the yearly returns for the last 10 years
 		double[] yearlyReturns = new double[10];
@@ -135,18 +151,21 @@ public class StockDataCalculations {
 	}
 	
 	private StockDailyInformation findStockInformationForGivenDate(List<StockDailyInformation> stockInfos, Date date) {
+		Date earliestDate = new Date();
 		for (StockDailyInformation stockInfo : stockInfos) {
 			Date stockInfoDate = stockInfo.getDate();
+			if (stockInfoDate.before(earliestDate)) {
+				earliestDate = stockInfoDate;
+			}
 			if (DateUtils.isSameDay(stockInfoDate, date)) {
 				return stockInfo;
 			}
 		}
-		//check if date we are searching for is >= Jan 1 1970
-		if (date.getTime() > 0) {
-			return findStockInformationForGivenDate(stockInfos, subtractDaysFromDate(date, 1));
-		} else {
+		if (earliestDate.after(date)) {
 			return null;
 		}
+		//check if date we are searching for is >= Jan 1 1970
+		return findStockInformationForGivenDate(stockInfos, subtractDaysFromDate(date, 1));
 	}
 	
 	private Date subtractDaysFromDate(Date date, int numberOfDays) {	
