@@ -65,15 +65,7 @@ public class Stock {
 		return stockDailyInformations;
 	}
 	
-	public void setStockDailyInformations(List<StockDailyInformation> stockDailyInformations) {
-		this.stockDailyInformations = stockDailyInformations;
-	}
-	
 	public StockCalculatedData getStockCalculatedData() {
 		return stockCalculatedData;
-	}
-	
-	public void setStockCalculatedData(StockCalculatedData stockCalculatedData) {
-		this.stockCalculatedData = stockCalculatedData;
 	}
 }
