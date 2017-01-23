@@ -12,4 +12,5 @@ public interface StockCalculatedDataService {
 	List<StockCalculatedData> getStockCalculatedDatas();
 	void updateStockCalculatedData(StockCalculatedData stockCalculatedData);
 	void deleteStockCalculatedData(StockCalculatedData stockCalculatedData);
+	void deleteStockCalculatedDataById(int id);
 }

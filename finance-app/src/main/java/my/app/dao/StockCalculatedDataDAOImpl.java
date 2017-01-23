@@ -2,15 +2,17 @@ package my.app.dao;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import my.app.domain.Stock;
 import my.app.domain.StockCalculatedData;
 
 @Repository
+@Transactional
 public class StockCalculatedDataDAOImpl implements StockCalculatedDataDAO {
 
 	private final SessionFactory sessionFactory;
@@ -45,7 +47,11 @@ public class StockCalculatedDataDAOImpl implements StockCalculatedDataDAO {
 
 	public void deleteStockCalculatedData(StockCalculatedData stockCalculatedData) {
 		Session session = sessionFactory.getCurrentSession();
-		session.delete(stockCalculatedData);
+		int id = stockCalculatedData.getStockId();
+		stockCalculatedData = session.get(StockCalculatedData.class, id);
+		if (stockCalculatedData != null) {
+			session.delete(stockCalculatedData);
+		}
 	}
 
 }

@@ -35,4 +35,9 @@ public class StockCalculatedDataServiceImpl implements StockCalculatedDataServic
 	public void deleteStockCalculatedData(StockCalculatedData stockCalculatedData) {
 		dao.deleteStockCalculatedData(stockCalculatedData);
 	}
+
+	public void deleteStockCalculatedDataById(int id) {
+		StockCalculatedData stockCalculatedData = dao.getStockCalculatedDataById(id);
+		dao.deleteStockCalculatedData(stockCalculatedData);
+	}
 }

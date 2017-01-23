@@ -89,8 +89,14 @@ public class StockDataCalculations {
 	//it is on a scale of 0 - 100, where 0 is very low risk and 100 is very high risk
 	public String calculateRisk(Stock stock) {
 		double variance = calculateVariance(stock);
+		return calculateRisk(variance);
+	}
+	
+	public String calculateRisk(Double variance) {
 		double standardDeviation = Math.sqrt(variance)*100;
-		if (standardDeviation < 10) {
+		if (standardDeviation == 0) {
+			return "N/A";
+		} else if (standardDeviation < 10) {
 			return "very low risk";
 		} else if (standardDeviation < 20) {
 			return "low risk";
@@ -105,18 +111,19 @@ public class StockDataCalculations {
 		}
 	}
 	
-	private double calculateVariance(Stock stock) {
+	public double calculateVariance(Stock stock) {
 		//Calculate the yearly returns for the last 10 years
 		int yearlyReturnsLength = 10;
 		double[] yearlyReturns = new double[yearlyReturnsLength];
 		for(int i = 0; i < yearlyReturnsLength; i++) {
 			Double yearlyReturn = calculateReturnInDateRange(stock, i*365, (i+1)*365);
 			if (yearlyReturn == null) {
-				yearlyReturnsLength = i-1 > 0 ? i-1 : 0;
+				yearlyReturnsLength = i;
 				break;
 			}
 			yearlyReturns[i] = yearlyReturn;
 		}
+
 		//Calculate the average return.
 		double averageReturn = 0.0;
 		double cumulativeReturn = 0.0;
@@ -124,13 +131,18 @@ public class StockDataCalculations {
 			cumulativeReturn += yearlyReturns[i];
 		}
 		averageReturn = cumulativeReturn/yearlyReturnsLength;
+		
 		//calculate the sum of the squared differences
 		double sumOfSquaredDifferences = 0.0;
 		for (int i = 0; i < yearlyReturnsLength; i++) {
 			sumOfSquaredDifferences += Math.pow((yearlyReturns[i] - averageReturn), 2);
 		}
+
 		//calculate the variance
-		return sumOfSquaredDifferences/(yearlyReturnsLength - 1);
+		if (sumOfSquaredDifferences != 0 && yearlyReturnsLength != 0)
+			return sumOfSquaredDifferences/(yearlyReturnsLength - 1);
+		else
+			return 0;
 	}
 	
 	//bugs need to fix like in calculateVariance()
