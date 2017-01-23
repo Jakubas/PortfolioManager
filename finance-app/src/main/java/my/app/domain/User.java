@@ -3,6 +3,9 @@ package my.app.domain;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,6 +14,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class User {
 
 	//For registration only the first name, user name and password is required, other fields are optional
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int id;
+	
 	@NotNull
 	private String firstName;
 
@@ -37,6 +44,10 @@ public class User {
 		this.firstName = firstName;
 		this.userName = userName;
 		this.passwordHash = passwordHash;
+	}
+	
+	public int getId() {
+		return id;
 	}
 	
 	public String getFirstName() {
