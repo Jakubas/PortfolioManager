@@ -2,12 +2,17 @@ package my.app.dao;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import my.app.domain.User;
 
+@Repository
+@Transactional
 public class UserDAOImpl implements UserDAO {
 
 	private final SessionFactory sessionFactory;
@@ -30,7 +35,7 @@ public class UserDAOImpl implements UserDAO {
 	
 	public User getUserByUserName(String userName) {
 		Session session = sessionFactory.getCurrentSession();
-		User user = session.get(User.class, userName);
+		User user = (User) session.createCriteria(User.class, userName).list().get(0);
 		return user;
 	}
 
