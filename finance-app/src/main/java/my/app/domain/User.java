@@ -1,14 +1,20 @@
 package my.app.domain;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import my.app.security.PasswordHasher;
 
 @Entity
 public class User {
@@ -24,10 +30,15 @@ public class User {
 	private String lastName;
 	
 	@NotNull
+	@NotEmpty
+	@Column(unique=true)
 	private String userName;
 	
 	@NotNull
 	private String passwordHash;
+	
+	@NotNull
+	private String passwordSalt;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dob;
@@ -40,10 +51,11 @@ public class User {
 		
 	}
 	
-	public User(String firstName, String userName, String passwordHash) {
+	public User(String firstName, String userName, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		this.firstName = firstName;
 		this.userName = userName;
-		this.passwordHash = passwordHash;
+		this.passwordSalt = PasswordHasher.toHex(PasswordHasher.getSalt());
+		this.passwordHash = PasswordHasher.hashPassword(password, passwordSalt);
 	}
 	
 	public int getId() {
@@ -76,6 +88,10 @@ public class User {
 
 	public void setPasswordHash(String passwordHash) {
 		this.passwordHash = passwordHash;
+	}
+	
+	public String getPasswordSalt() {
+		return passwordSalt;
 	}
 	
 	public Date getDob() {
