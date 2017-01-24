@@ -27,6 +27,12 @@ public class UserDAOImpl implements UserDAO {
 		User user = session.get(User.class, id);
 		return user;
 	}
+	
+	public User getUserByUserName(String userName) {
+		Session session = sessionFactory.getCurrentSession();
+		User user = session.get(User.class, userName);
+		return user;
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<User> getUsers() {
