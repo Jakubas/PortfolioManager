@@ -40,6 +40,9 @@ public class User {
 	@NotNull
 	private String passwordSalt;
 	
+	@NotNull
+	private boolean isAdmin;
+	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dob;
 	
@@ -56,6 +59,7 @@ public class User {
 		this.userName = userName;
 		this.passwordSalt = PasswordHasher.toHex(PasswordHasher.getSalt());
 		this.passwordHash = PasswordHasher.hashPassword(password, passwordSalt);
+		this.isAdmin = false;
 	}
 	
 	public int getId() {
@@ -92,6 +96,14 @@ public class User {
 	
 	public String getPasswordSalt() {
 		return passwordSalt;
+	}
+	
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+	
+	public void setAdminPrivileges(boolean isAdmin) {
+		this.isAdmin = isAdmin;
 	}
 	
 	public Date getDob() {
