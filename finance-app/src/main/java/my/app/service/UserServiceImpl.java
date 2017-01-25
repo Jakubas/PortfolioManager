@@ -4,6 +4,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import my.app.dao.UserDAO;
@@ -47,22 +49,23 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	public String hashPassword(User user, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-		String salt = user.getPasswordSalt();
-		String passwordHash = PasswordHasher.hashPassword(password, salt);
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String passwordHash = passwordEncoder.encode(password);
 		return passwordHash;
 	}
 
 	public boolean authenticateUser(User user, String password) {
-		try {
-			String originalPasswordHash = user.getPasswordHash();
-			String checkPasswordHash = hashPassword(user, password);
-			return PasswordHasher.checkPassword(originalPasswordHash, checkPasswordHash);
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-			return false;
-		} catch (InvalidKeySpecException e) {
-			e.printStackTrace();
-			return false;
+		String passwordHash = user.getPasswordHash();
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		return passwordEncoder.matches(password, passwordHash);
+	}
+	
+	public void setAdmin(User user, boolean makeAdmin) {
+		if (makeAdmin) {
+			user.setAdminPrivileges(true);
+		} else {
+			user.setAdminPrivileges(false);
 		}
-	}  
+		updateUser(user);
+	}
 }

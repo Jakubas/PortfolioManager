@@ -13,6 +13,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import my.app.security.PasswordHasher;
 
@@ -37,8 +39,8 @@ public class User {
 	@NotNull
 	private String passwordHash;
 	
-	@NotNull
-	private String passwordSalt;
+//	@NotNull
+//	private String passwordSalt;
 	
 	@NotNull
 	private boolean isAdmin;
@@ -57,8 +59,9 @@ public class User {
 	public User(String firstName, String userName, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		this.firstName = firstName;
 		this.userName = userName;
-		this.passwordSalt = PasswordHasher.toHex(PasswordHasher.getSalt());
-		this.passwordHash = PasswordHasher.hashPassword(password, passwordSalt);
+//		this.passwordSalt = PasswordHasher.toHex(PasswordHasher.getSalt());
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		this.passwordHash = passwordEncoder.encode(password);
 		this.isAdmin = false;
 	}
 	
@@ -90,13 +93,13 @@ public class User {
 		return passwordHash;
 	}
 
-	public void setPasswordHash(String passwordHash) {
-		this.passwordHash = passwordHash;
-	}
-	
-	public String getPasswordSalt() {
-		return passwordSalt;
-	}
+//	public void setPasswordHash(String passwordHash) {
+//		this.passwordHash = passwordHash;
+//	}
+//	
+//	public String getPasswordSalt() {
+//		return passwordSalt;
+//	}
 	
 	public boolean isAdmin() {
 		return isAdmin;

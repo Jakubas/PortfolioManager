@@ -16,4 +16,5 @@ public interface UserService {
 	void deleteUser(User user);
 	String hashPassword(User user, String password) throws NoSuchAlgorithmException, InvalidKeySpecException;
 	boolean authenticateUser(User user, String password);
+	public void setAdmin(User user, boolean makeAdmin);
 }
