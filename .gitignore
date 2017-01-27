@@ -2,3 +2,5 @@
 finance-app/.classpath
 finance-app/.settings*
 finance-app/bin/*
+.project
+finance-app/target
