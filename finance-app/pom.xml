@@ -20,6 +20,10 @@
       		<scope>test</scope>
     	</dependency>
     	<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+    	<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
@@ -64,7 +68,10 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
-        <finalName>finance-app</finalName>
     </build>
- 
+ 	
+ 	<properties>
+		<java.version>1.8</java.version>
+	</properties>
+	
 </project>
