@@ -1,7 +1,5 @@
 package my.app.controller;
 
-import java.util.Map;
-
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,16 +11,16 @@ import my.app.domain.StockCalculatedData;
 import my.app.service.StockCalculatedDataService;
 
 @RestController
-public class StockCalculatedDataController {
+public class StockCalculatedDataRestController {
 	
 	private final StockCalculatedDataService stockCalculatedDataService;
 	
 	@Autowired
-	public StockCalculatedDataController(StockCalculatedDataService stockCalculatedDataService) {
+	public StockCalculatedDataRestController(StockCalculatedDataService stockCalculatedDataService) {
 		this.stockCalculatedDataService = stockCalculatedDataService;
 	}
 	
-	@RequestMapping(value = "/stocks/{stock_id}/calculatedData", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "api/stocks/{stock_id}/calculatedData", method = RequestMethod.GET, produces = "application/json")
 	public String getStockCalculatedData(@PathVariable("stock_id") int stockId) {
 		StockCalculatedData stockCalculatedData = stockCalculatedDataService.getStockCalculatedDataById(stockId);
 	    JSONObject json = new JSONObject();

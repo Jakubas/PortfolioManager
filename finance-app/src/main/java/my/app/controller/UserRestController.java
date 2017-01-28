@@ -15,22 +15,22 @@ import my.app.domain.User;
 import my.app.service.UserService;
 
 @RestController
-public class UserController {
+public class UserRestController {
 
 	private final UserService userService;
 	
 	@Autowired
-	public UserController(UserService userService) {
+	public UserRestController(UserService userService) {
 		this.userService = userService;
 	}
 	
-	@RequestMapping(value = "/users", method = RequestMethod.GET)
+	@RequestMapping(value = "api/users", method = RequestMethod.GET)
 	public List<User> getUsers() {
 		List<User> users = userService.getUsers();
 		return users;
 	}
 	
-	@RequestMapping(value = "/users", method = RequestMethod.POST)
+	@RequestMapping(value = "api/users", method = RequestMethod.POST)
 	public String createUser(@RequestParam(value = "firstName") String firstName,
 			@RequestParam(value = "userName") String userName, 
 			@RequestParam(value = "password") String password) {
@@ -47,7 +47,7 @@ public class UserController {
 		return "successfully created user";
 	}
 	
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@RequestMapping(value = "api/login", method = RequestMethod.POST)
 	public boolean authenticateUser(@RequestParam(value = "userName") String userName, 
 			@RequestParam(value = "password") String password) {
 		User user = userService.getUserByUserName(userName);
@@ -58,7 +58,7 @@ public class UserController {
 		return result;
 	}
 	
-	@RequestMapping(value = "/users/{id}/isAdmin", method = RequestMethod.PUT)
+	@RequestMapping(value = "api/users/{id}/isAdmin", method = RequestMethod.PUT)
 	public String setAdminStatus(@PathVariable(value = "id") int userId, 
 			@RequestParam(value = "makeAdmin") boolean makeAdmin) {
 		User user = userService.getUserById(userId);

@@ -14,16 +14,16 @@ import my.app.domain.Stock;
 import my.app.service.StockService;
 
 @RestController
-public class StockController {
+public class StockRestController {
 
 	private final StockService stockService;
 	
 	@Autowired
-	public StockController(StockService stockService) {
+	public StockRestController(StockService stockService) {
 		this.stockService = stockService;
 	}
 	
-	@RequestMapping(value = "/stocks/{id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "api/stocks/{id}", method = RequestMethod.GET, produces = "application/json")
 	public String getStock(@PathVariable("id") int id) {
 		Stock stock = stockService.getStockById(id);
 	    JSONObject json = new JSONObject();
@@ -34,7 +34,7 @@ public class StockController {
 		return json.toString();
 	}
 	
-	@RequestMapping(value = "/stocks", method = RequestMethod.GET)
+	@RequestMapping(value = "api/stocks", method = RequestMethod.GET)
 	public List<?> getStocks() {
 		List<Stock> stocks = stockService.getStocks();
 		
