@@ -13,7 +13,7 @@ public class StockInformationReader {
 		StockParser stockParser = new StockParser();
 		StockParserTwo stockParserTwo = new StockParserTwo();
 		List<Stock> stocks = stockParser.parseCSVToStocks(filePath);
-		stocks = stockParserTwo.parseAdditionalStockData(stocks);
+		stocks = stockParserTwo.parseAdditionalStockData(stocks, rootDir);
 		return stocks;
 	}
 }

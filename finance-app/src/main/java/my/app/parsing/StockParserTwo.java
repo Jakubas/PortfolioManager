@@ -16,11 +16,11 @@ import my.app.domain.Stock;
 
 public class StockParserTwo {
 
-	public List<Stock> parseAdditionalStockData(List<Stock> stocks) {
+	public List<Stock> parseAdditionalStockData(List<Stock> stocks, String rootDir) {
 		List<Stock> stocks2 = new ArrayList<Stock>();
 		for (Stock stock : stocks) {
 			String ticker = stock.getTicker();
-			String filePath = "/home/daniel/fyp/data/" + ticker + "_current.csv";
+			String filePath = rootDir + ticker + "_current.csv";
 			downloadCSV(stock.getTicker(), filePath);
 			
 			BufferedReader reader = null;

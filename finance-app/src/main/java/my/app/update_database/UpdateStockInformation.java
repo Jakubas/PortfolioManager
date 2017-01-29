@@ -20,6 +20,7 @@ public class UpdateStockInformation {
 		this.stockService = stockService;
 	}
 	
+	//rootDir = "/home/daniel/fyp/data/"
 	public void updateStocks(String rootDir) {
 		List<Stock> stocks = StockInformationReader.retrieveBaseStockInformation(rootDir);
 		List<Stock> stocksInDatabase = stockService.getStocks();
