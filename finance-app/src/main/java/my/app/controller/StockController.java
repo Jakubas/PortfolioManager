@@ -1,5 +1,6 @@
 package my.app.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import my.app.domain.Stock;
-import my.app.domain.StockCalculatedData;
 import my.app.service.StockCalculatedDataService;
 import my.app.service.StockService;
+import my.app.update_database.UpdateStockInformation;
 
 @Controller
 public class StockController {
@@ -36,9 +37,8 @@ public class StockController {
 	@RequestMapping(value = "stocks/{id}", method=RequestMethod.GET)
 	public String getStockGraph(@PathVariable("id") int id, Model model) {
 		Stock stock = stockService.getStockById(id);
-		StockCalculatedData scd = scdService.getStockCalculatedDataById(id);
 		model.addAttribute("stock", stock);
-		model.addAttribute("stockCalculatedData", scd);
+		model.addAttribute("stockCalculatedData", stock.getStockCalculatedData());
 		return "stockInformation";
 	}
 }

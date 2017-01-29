@@ -35,7 +35,9 @@ public class UpdateStockInformation {
 				!tickersInDatabase.contains(stock.getTicker())) {
 				stockService.saveStock(stock);
 			} else if (!stock.getMarketCap().equals(currentStock.getMarketCap()) ||
-					   stock.getLastTradePrice() != currentStock.getLastTradePrice()) {
+					   stock.getLastTradePrice() != currentStock.getLastTradePrice() ||
+					   stock.getPERatio() == null ||
+					   !stock.getPERatio().equals(currentStock.getPERatio())) {
 				stockService.updateStock(stock);
 			}
 		}
