@@ -4,12 +4,15 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import my.app.domain.Stock;
+import my.app.domain.User;
 
 @Repository
 @Transactional
@@ -35,13 +38,17 @@ public class StockDAOImpl implements StockDAO {
 
 	public Stock getStockByName(String name) {
 		Session session = sessionFactory.getCurrentSession();
-		Stock stock = session.get(Stock.class, name);
+		Criteria cr = session.createCriteria(Stock.class, name);
+		cr.add(Restrictions.eq("ticker", name));
+		Stock stock = (Stock) cr.list().get(0);
 		return stock;
 	}
 
 	public Stock getStockByTicker(String ticker) {
 		Session session = sessionFactory.getCurrentSession();
-		Stock stock = session.get(Stock.class, ticker);
+		Criteria cr = session.createCriteria(Stock.class, ticker);
+		cr.add(Restrictions.eq("ticker", ticker));
+		Stock stock = (Stock) cr.list().get(0);
 		return stock;
 	}
 
@@ -54,7 +61,16 @@ public class StockDAOImpl implements StockDAO {
 
 	public void updateStock(Stock stock) {
 		Session session = sessionFactory.getCurrentSession();
-		session.update(stock);
+		String ticker = stock.getTicker();
+		Criteria cr = session.createCriteria(Stock.class, ticker);
+		cr.add(Restrictions.eq("ticker", ticker));
+		Stock stock2 = (Stock) cr.list().get(0);
+		if (stock2 != null) {
+			stock2.setMarketCap(stock.getMarketCap());
+			stock2.setLastTradePrice(stock.getLastTradePrice());
+			stock2.setPERatio(stock.getPERatio());
+			session.update(stock2);
+		}
 	}
 
 	public void deleteStock(Stock stock) {
