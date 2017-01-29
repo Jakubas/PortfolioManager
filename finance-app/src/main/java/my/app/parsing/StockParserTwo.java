@@ -16,13 +16,16 @@ import my.app.domain.Stock;
 
 public class StockParserTwo {
 
-	public List<Stock> parseAdditionalStockData(List<Stock> stocks, String rootDir) {
+	public List<Stock> parseAdditionalStockData(List<Stock> stocks, String rootDir, boolean downloadCSVs) {
 		List<Stock> stocks2 = new ArrayList<Stock>();
+		int i = 0;
 		for (Stock stock : stocks) {
+			System.out.println(i++);
 			String ticker = stock.getTicker();
 			String filePath = rootDir + ticker + "_current.csv";
-			downloadCSV(stock.getTicker(), filePath);
-			
+			if (downloadCSVs) {
+				downloadCSV(stock.getTicker(), filePath);
+			}
 			BufferedReader reader = null;
 			try {
 				reader = new BufferedReader(new FileReader(filePath));
@@ -32,7 +35,7 @@ public class StockParserTwo {
 						stock = addStockInformation(line, stock);
 						stocks2.add(stock);
 					} catch (Exception e) {
-						System.out.println("could not parse additional information about stock");
+						System.out.println("could not parse additional information about stock" + ticker);
 					}
 				}
 			} catch (FileNotFoundException e) {

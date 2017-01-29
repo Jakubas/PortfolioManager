@@ -21,13 +21,14 @@ public class UpdateStockInformation {
 	}
 	
 	//rootDir = "/home/daniel/fyp/data/"
-	public void updateStocks(String rootDir) {
-		List<Stock> stocks = StockInformationReader.retrieveBaseStockInformation(rootDir);
+	public void updateStocks(String rootDir, boolean downloadCSVs) {
+		List<Stock> stocks = StockInformationReader.retrieveBaseStockInformation(rootDir, downloadCSVs);
 		List<Stock> stocksInDatabase = stockService.getStocks();
 		ArrayList<String> tickersInDatabase = stocksToTickers(stocksInDatabase);
 		
+		int i = 0;
 		for(Stock stock : stocks) {
-			
+			System.out.println(i++);
 			Stock currentStock = stockService.getStockById(stock.getId());
 			
 			if (tickersInDatabase == null ||
@@ -41,8 +42,8 @@ public class UpdateStockInformation {
 		}
 	}
 
-	public void updateStockInformation(String rootDir) {
-		updateStocks(rootDir);
+	public void updateStockInformation(String rootDir, boolean downloadCSVs) {
+		updateStocks(rootDir, downloadCSVs);
 		
 		//parse CSV into stockInformation
 		List<Stock> stocks = stockService.getStocks();
