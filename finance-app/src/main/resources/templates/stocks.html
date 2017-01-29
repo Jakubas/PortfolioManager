@@ -11,25 +11,45 @@
 		    	<a class="navbar-brand" href="#">Investment App</a>
 		    </div>
 		    	<ul class="nav navbar-nav">
-		    	<li class="active"><a href="/">Home</a></li>
+		    	<li><a href="/">Home</a></li>
 		    </ul>
 	  	</div>
 	</nav>
-	<div class="container">
-		<h3>Stock</h3>
-		<table class="table">
-			<tr>
-				<th>Name</th>
-				<th>Stock Ticker</th>
-				<th>Industry</th>
-				<th class="minimal_cell"></th>
-			</tr>
-		    <tr th:each="stock : ${stocks}">
-		        <td th:text="${stock.name}" />
-				<td th:text="${stock.ticker}" />
-				<td th:text="${stock.industry}" />
-	    	</tr>
-    	</table>
-   	</div>
+
+	<div class="container" th:each="stock : ${stocks}" >
+		<h3>
+			<a th:href="@{/stocks/{id}/(id=${stock.id})}" th:text="${stock.name}" />
+		</h3>
+		<h4 th:text="${stock.ticker}" />
+		<h4 th:text ="${stock.industry}" />
+		<div class ="row">
+			<div class ="col-sm-2">
+				Price
+			</div>
+			<div class ="col-sm-2">
+				<span th:text="${stock.lastTradePrice}" />
+			</div>
+			<div class ="col-sm-2">
+				Market Cap
+			</div>
+			<div class ="col-sm-2">
+				<span th:text="${stock.marketCap}" />
+			</div>
+		</div>
+		<div class ="row">
+			<div class ="col-sm-2">
+				P/E Ratio
+			</div>
+			<div class ="col-sm-2">
+				<span th:text="${stock.getPERatio()} ? ${stock.getPERatio()} : 'N/A'" />
+			</div>
+			<div class ="col-sm-2">
+				10 Yr Annualised Return
+			</div>
+			<div class ="col-sm-2">
+				<span th:text="${stock.stockCalculatedData.tenYearAnnualisedReturn}" />
+			</div>
+		</div>
+	</div>
 </body>
 </html>
