@@ -39,7 +39,7 @@ public class Stock {
 	
 	private double lastTradePrice;
 	
-	private double peRatio;
+	private Double peRatio;
 	
 	public Stock() {
 		
@@ -91,11 +91,11 @@ public class Stock {
 		this.lastTradePrice = lastTradePrice;
 	}
 
-	public double getPERatio() {
+	public Double getPERatio() {
 		return peRatio;
 	}
 	
-	public void setPERatio(double peRatio) {
+	public void setPERatio(Double peRatio) {
 		// TODO Auto-generated method stub
 		this.peRatio = peRatio;
 	}
