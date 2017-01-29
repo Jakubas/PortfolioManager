@@ -35,6 +35,12 @@ public class Stock {
 	@Cascade(value=org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private StockCalculatedData stockCalculatedData;
 	
+	private String marketCap;
+	
+	private double lastTradePrice;
+	
+	private double peRatio;
+	
 	public Stock() {
 		
 	}
@@ -67,5 +73,30 @@ public class Stock {
 	
 	public StockCalculatedData getStockCalculatedData() {
 		return stockCalculatedData;
+	}
+
+	public String getMarketCap() {
+		return marketCap;
+	}
+
+	public void setMarketCap(String marketCap) {
+		this.marketCap = marketCap;
+	}
+
+	public double getLastTradePrice() {
+		return lastTradePrice;
+	}
+
+	public void setLastTradePrice(double lastTradePrice) {
+		this.lastTradePrice = lastTradePrice;
+	}
+
+	public double getPERatio() {
+		return peRatio;
+	}
+	
+	public void setPERatio(double peRatio) {
+		// TODO Auto-generated method stub
+		this.peRatio = peRatio;
 	}
 }
