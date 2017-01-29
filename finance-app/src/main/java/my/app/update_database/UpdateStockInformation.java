@@ -29,15 +29,14 @@ public class UpdateStockInformation {
 		int i = 0;
 		for(Stock stock : stocks) {
 			System.out.println(i++);
-			Stock currentStock = stockService.getStockById(stock.getId());
+			Stock currentStock = stockService.getStockByTicker(stock.getTicker());
 			
 			if (tickersInDatabase == null ||
 				!tickersInDatabase.contains(stock.getTicker())) {
 				stockService.saveStock(stock);
-			} else if (stock.getMarketCap() != currentStock.getMarketCap() ||
+			} else if (!stock.getMarketCap().equals(currentStock.getMarketCap()) ||
 					   stock.getLastTradePrice() != currentStock.getLastTradePrice()) {
-				stockService.deleteStock(currentStock);
-				stockService.saveStock(stock);
+				stockService.updateStock(stock);
 			}
 		}
 	}
