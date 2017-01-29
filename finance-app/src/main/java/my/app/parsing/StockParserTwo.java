@@ -60,7 +60,13 @@ public class StockParserTwo {
 		CSVParser parser = new CSVParser();
 		String[] stockStrs = parser.splitLine(line);
 		stock.setLastTradePrice(parser.parseDouble(stockStrs[i++]));
-		stock.setPERatio(parser.parseDouble(stockStrs[i++]));
+		String peRatio = stockStrs[i++];
+		if (!peRatio.equals("N/A")) {
+			System.out.println(peRatio);
+			stock.setPERatio(parser.parseDouble(peRatio));
+		} else {
+			stock.setPERatio(null);
+		}
 		stock.setMarketCap(stockStrs[i++]);
 		return stock;
 	}
