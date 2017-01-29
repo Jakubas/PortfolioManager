@@ -26,9 +26,15 @@ public class UpdateStockInformation {
 		ArrayList<String> tickersInDatabase = stocksToTickers(stocksInDatabase);
 		
 		for(Stock stock : stocks) {
-			//the stock ticker is not in the database, therefore we add the stock to the database
+			
+			Stock currentStock = stockService.getStockById(stock.getId());
+			
 			if (tickersInDatabase == null ||
 				!tickersInDatabase.contains(stock.getTicker())) {
+				stockService.saveStock(stock);
+			} else if (stock.getMarketCap() != currentStock.getMarketCap() ||
+					   stock.getLastTradePrice() != currentStock.getLastTradePrice()) {
+				stockService.deleteStock(currentStock);
 				stockService.saveStock(stock);
 			}
 		}
@@ -60,6 +66,7 @@ public class UpdateStockInformation {
 		//if the data is not in the database, add it
 		ArrayList<StockDailyInformation> stockInformations2 = new ArrayList<StockDailyInformation>();
 		for(StockDailyInformation stockInformation: stockInformations) {
+			
 			if (stockInformationsInDatabase == null || 
 				!stockInformationsInDatabase.contains(stockInformation)) {
 				stockInformations2.add(stockInformation);
