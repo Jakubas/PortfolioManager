@@ -1,6 +1,9 @@
 package my.app.parsing;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.regex.Pattern;
 
 public class CSVParser {
 
@@ -34,5 +37,40 @@ public class CSVParser {
 	
 		String[] stockStrsArray = stockStrs.toArray(new String[stockStrs.size()]);
 		return stockStrsArray;
+	}
+	
+	public Date parseDate(String dateStr) throws Exception {
+		String datePattern = "([0-9]+)-([0-9]+)-([0-9]+)";  
+		boolean match = Pattern.matches(datePattern, dateStr);
+		if (match) {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			Date date = formatter.parse(dateStr);
+			return date;
+		} else {
+			throw new Exception();
+		}
+	}
+	
+	public boolean isDouble(String doubleStr) {
+		String doublePattern = "([0-9]+)(.?)([0-9]+)?";
+		return Pattern.matches(doublePattern, doubleStr);
+	}
+	
+	public double parseDouble(String doubleStr) throws Exception {
+		if (isDouble(doubleStr)) {
+			return Double.valueOf(doubleStr);
+		} else {
+			throw new Exception();
+		}
+	}
+	
+	public int parseInt(String intStr) throws Exception {
+		String intPattern = "([0-9]+)";
+		boolean match = Pattern.matches(intPattern, intStr);
+		if (match) {
+			return Integer.valueOf(intStr);
+		} else {
+			throw new Exception();
+		}
 	}
 }

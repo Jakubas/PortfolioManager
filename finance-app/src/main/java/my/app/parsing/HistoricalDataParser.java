@@ -54,51 +54,16 @@ public class HistoricalDataParser {
 		String[] lines = parser.splitLine(line);
 		
 		int i = 0;		
-		Date date = parseDate(lines[i++]);
-		double open = parseDouble(lines[i++]);
-		double high = parseDouble(lines[i++]);
-		double low = parseDouble(lines[i++]);
-		double close = parseDouble(lines[i++]);
-		int volume = parseInt(lines[i++]);
-		double adjustedClose = parseDouble(lines[i++]);
+		Date date = parser.parseDate(lines[i++]);
+		double open = parser.parseDouble(lines[i++]);
+		double high = parser.parseDouble(lines[i++]);
+		double low = parser.parseDouble(lines[i++]);
+		double close = parser.parseDouble(lines[i++]);
+		int volume = parser.parseInt(lines[i++]);
+		double adjustedClose = parser.parseDouble(lines[i++]);
 		
 		StockDailyInformation stockInformation = 
 				new StockDailyInformation(date, open, close, high, low, volume, adjustedClose, stock);
 		return stockInformation;
-	}
-	
-	private Date parseDate(String dateStr) throws Exception {
-		String datePattern = "([0-9]+)-([0-9]+)-([0-9]+)";  
-		boolean match = Pattern.matches(datePattern, dateStr);
-		if (match) {
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-			Date date = formatter.parse(dateStr);
-			return date;
-		} else {
-			throw new Exception();
-		}
-	}
-	
-	private boolean isDouble(String doubleStr) {
-		String doublePattern = "([0-9]+)(.?)([0-9]+)?";
-		return Pattern.matches(doublePattern, doubleStr);
-	}
-	
-	private double parseDouble(String doubleStr) throws Exception {
-		if (isDouble(doubleStr)) {
-			return Double.valueOf(doubleStr);
-		} else {
-			throw new Exception();
-		}
-	}
-	
-	private int parseInt(String intStr) throws Exception {
-		String intPattern = "([0-9]+)";
-		boolean match = Pattern.matches(intPattern, intStr);
-		if (match) {
-			return Integer.valueOf(intStr);
-		} else {
-			throw new Exception();
-		}
 	}
 }
