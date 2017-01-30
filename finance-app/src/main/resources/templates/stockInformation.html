@@ -35,23 +35,121 @@
 	  	</div>
 	</nav>
 	<div class="container">
-		<h3 th:text="${stock.name}"></h3>
-        <h3>
-        Ticker:
-        <span th:text="${stock.ticker}" />
-         </h3>
-        <div class="row">
-            <div class ="col-sm-2">
-                Variance
-            </div>
-            <div class ="col-sm-2" th:text="${stockCalculatedData.variance}">
-            </div>
-            <div class ="col-sm-2">
-                10 Year Annualised Return
-            </div>
-            <div class ="col-sm-2" th:text="${stockCalculatedData.tenYearAnnualisedReturn}">
-            </div>
-        </div>
-   	</div>
+		<div class="row">
+			<div class="col-sm-1" />
+			<div class="col-sm-4">
+				<h3>
+					<span th:text="${stock.name}" />
+					<br />
+					<span th:text="${stock.ticker}" />
+			 	</h3>
+				<h3>
+					802.56
+					<br />
+					<p style="font-size:14px">
+					20-12-2016
+					<br />
+					1:56PM
+					</p>
+				</h3>
+		 	</div>
+			<div class="col-sm-2">
+				<p style="font-size:16px; margin-top:2em;">
+					Market cap
+					<br />
+					P/E ratio
+					<br />
+					1y variance
+					<br />
+					1y annualised ret
+					<br />
+					1y ROI est
+					<br />
+					1y target est
+				</p>
+			</div>
+			<div class="col-sm-2">
+				<p style="font-size:16px; margin-top:2em;">
+					520.50B
+					<br />
+					22.51
+					<br />
+					12.25%
+					<br />
+					<span th:text="${stockCalculatedData.tenYearAnnualisedReturn}" />
+					<br />
+					20.25%
+					<br />
+					963.25
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-1"> </div>
+			<div class="col-sm-10">
+			<h1>
+				GRAPH GRAPH GRAPH GRAPH GRAPH GRAPH
+				GRAPH GRAPH GRAPH GRAPH GRAPH GRAPH
+				GRAPH GRAPH GRAPH GRAPH GRAPH GRAPH
+				GRAPH GRAPH GRAPH GRAPH GRAPH GRAPH
+				GRAPH GRAPH GRAPH GRAPH GRAPH GRAPH
+				GRAPH GRAPH GRAPH GRAPH GRAPH GRAPH
+			</h1>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-1"> </div>
+			<div class="col-sm-2">
+				3m variance
+				<br />
+				1y variance
+				<br />
+				3y variance
+				<br />
+				5y variance
+				<br />
+				10y variance
+			</div>
+			<div class="col-sm-2">
+				10.25%
+				<br />
+				31.12%
+				<br />
+				24.25%
+				<br />
+				26.32%
+				<br />
+				<span th:text="${stockCalculatedData.variance}" />
+			</div>
+			<div class="col-sm-2">
+				3m annualised ret
+				<br />
+				1y annualised ret
+				<br />
+				3y annualised ret
+				<br />
+				5y annualised ret
+				<br />
+				10y annualised ret
+			</div>
+			<div class="col-sm-2">
+				<span th:text="${stockCalculatedData.quarterlyAnnualisedReturn}" />
+				<br />
+				<span th:text="${stockCalculatedData.oneYearAnnualisedReturn}" />
+				<br />
+				24.25%
+				<br />
+				<span th:text="${stockCalculatedData.fiveYearAnnualisedReturn}" />
+				<br />
+				<span th:text="${stockCalculatedData.tenYearAnnualisedReturn}" />
+			</div>
+		</div>
+	</div>
 </body>
 </html>

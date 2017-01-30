@@ -34,7 +34,7 @@ public class RegistrationController {
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String registerUser(Model model, @RequestParam("username") String username, 
 			@RequestParam("password") String password,
-			@RequestParam("firstName") String firstName, 
+			@RequestParam("firstName") String firstName,
 			@RequestParam(value = "lastName", required = false) String lastName,
 			@RequestParam(value = "dob", required = false) String dob) {
 		try {
