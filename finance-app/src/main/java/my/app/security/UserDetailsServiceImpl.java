@@ -29,12 +29,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	}
 	
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		System.out.println("------------------SGSG---------------------------");
+		System.out.println("Username: " + userName);
 		my.app.domain.User user = userService.getUserByUserName(userName);
 		if (user == null) {
 			throw new UsernameNotFoundException("Username " + userName + " not found");
 		}
-		System.out.println(user.getUserName());
 		return new User(user.getUserName(), user.getPasswordHash(), getGrantedAuthorities(user));
 	}
 	

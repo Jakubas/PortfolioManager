@@ -10,10 +10,28 @@
 		    <div class="navbar-header">
 		    	<a class="navbar-brand" href="#">Investment App</a>
 		    </div>
-		    	<ul class="nav navbar-nav">
-				<li><a href="/">Home</a></li>
-				<li class="active"><a th:href="@{/stocks}">Stocks</a></li>
-		    </ul>
+            <div class="nav navbar-left">
+                <ul class="nav navbar-nav">
+	            <li><a th:href="@{/}">Home</a></li>
+	            <li class="active"><a th:href="@{/stocks}">Stocks</a></li>
+                <li><a th:href="@{/login}">Login</a></li>
+                </ul>
+            </div>
+            <div class="navbar-collapse navbar-right collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+                        <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                            <input hidden="true" type="submit" value="Sign Out"/>
+                        </form>
+                    </li>
+                    <li>
+                        <a>
+                            Welcome, <span sec:authentication="name"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
 	  	</div>
 	</nav>
 
