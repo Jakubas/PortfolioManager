@@ -38,9 +38,13 @@ public class UserDAOImpl implements UserDAO {
 	public User getUserByUserName(String userName) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria cr = session.createCriteria(User.class, userName);
-		cr.add(Restrictions.eq("userName", userName));
-		User user = (User) cr.list().get(0);
-		return user;
+		if (!cr.list().isEmpty()) {
+			cr.add(Restrictions.eq("userName", userName));
+			User user = (User) cr.list().get(0);
+			return user;
+		} else {
+			return null;
+		}
 	}
 
 	@SuppressWarnings("unchecked")

@@ -49,6 +49,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.httpBasic();
 		http.csrf().disable();
         http.authorizeRequests()
-        .antMatchers("/users").hasRole("ADMIN");
+        .antMatchers("/stocks").hasRole("USER")
+        .antMatchers("/api/**").hasRole("ADMIN");
+        
+	    http
+        .formLogin()
+        .loginPage("/login")
+        .failureUrl("/login-error")
+        .and()
+        .logout()
+        .logoutUrl("/logout")
+        .logoutSuccessUrl("/");
 	}
 }
