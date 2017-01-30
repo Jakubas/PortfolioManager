@@ -16,8 +16,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import my.app.security.PasswordHasher;
-
 @Entity
 public class User {
 
@@ -34,13 +32,10 @@ public class User {
 	@NotNull
 	@NotEmpty
 	@Column(unique=true)
-	private String userName;
+	private String username;
 	
 	@NotNull
 	private String passwordHash;
-	
-//	@NotNull
-//	private String passwordSalt;
 	
 	@NotNull
 	private boolean isAdmin;
@@ -56,10 +51,9 @@ public class User {
 		
 	}
 	
-	public User(String firstName, String userName, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+	public User(String firstName, String username, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		this.firstName = firstName;
-		this.userName = userName;
-//		this.passwordSalt = PasswordHasher.toHex(PasswordHasher.getSalt());
+		this.username = username;
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		this.passwordHash = passwordEncoder.encode(password);
 		this.isAdmin = false;
@@ -86,20 +80,12 @@ public class User {
 	}
 
 	public String getUserName() {
-		return userName;
+		return username;
 	}
 	
 	public String getPasswordHash() {
 		return passwordHash;
 	}
-
-//	public void setPasswordHash(String passwordHash) {
-//		this.passwordHash = passwordHash;
-//	}
-//	
-//	public String getPasswordSalt() {
-//		return passwordSalt;
-//	}
 	
 	public boolean isAdmin() {
 		return isAdmin;
