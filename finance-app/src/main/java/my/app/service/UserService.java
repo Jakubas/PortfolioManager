@@ -10,11 +10,12 @@ public interface UserService {
 
 	void saveUser(User user);
 	User getUserById(int id);
-	User getUserByUserName(String userName);
+	User getUserByUsername(String username);
 	List<User> getUsers();
 	void updateUser(User user);
 	void deleteUser(User user);
 	String hashPassword(User user, String password) throws NoSuchAlgorithmException, InvalidKeySpecException;
 	boolean authenticateUser(User user, String password);
-	public void setAdmin(User user, boolean makeAdmin);
+	void setAdmin(User user, boolean makeAdmin);
+	boolean isUsernameRegistered(String username);
 }

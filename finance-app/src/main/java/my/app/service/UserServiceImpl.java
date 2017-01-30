@@ -30,8 +30,8 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 	
-	public User getUserByUserName(String userName) {
-		User user = dao.getUserByUserName(userName);
+	public User getUserByUsername(String username) {
+		User user = dao.getUserByUsername(username);
 		return user;
 	}
 
@@ -67,5 +67,9 @@ public class UserServiceImpl implements UserService {
 			user.setAdminPrivileges(false);
 		}
 		updateUser(user);
+	}
+
+	public boolean isUsernameRegistered(String username) {
+		return false;
 	}
 }

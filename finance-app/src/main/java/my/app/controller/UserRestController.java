@@ -50,7 +50,7 @@ public class UserRestController {
 	@RequestMapping(value = "api/login", method = RequestMethod.POST)
 	public boolean authenticateUser(@RequestParam(value = "userName") String userName, 
 			@RequestParam(value = "password") String password) {
-		User user = userService.getUserByUserName(userName);
+		User user = userService.getUserByUsername(userName);
 		if (user == null) {
 			return false;
 		}
