@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import my.app.domain.Stock;
-import my.app.domain.User;
 
 @Repository
 @Transactional

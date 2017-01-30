@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import my.app.dao.UserDAO;
 import my.app.domain.User;
-import my.app.security.PasswordHasher;
 
 @Service
 public class UserServiceImpl implements UserService {

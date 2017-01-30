@@ -2,7 +2,6 @@ package my.app.service;
 
 import java.util.List;
 
-import my.app.domain.Stock;
 import my.app.domain.StockCalculatedData;
 
 public interface StockCalculatedDataService {
