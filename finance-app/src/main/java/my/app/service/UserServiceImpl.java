@@ -70,6 +70,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public boolean isUsernameRegistered(String username) {
-		return false;
+		return getUserByUsername(username) != null;
 	}
 }
