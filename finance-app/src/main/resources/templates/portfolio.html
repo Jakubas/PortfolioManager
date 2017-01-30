@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Investment App</title>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+</head>
+<body>
+    <nav class="navbar navbar-default">
+		<div class="container-fluid">
+		    <div class="navbar-header">
+		    	<a class="navbar-brand" href="#">Investment App</a>
+		    </div>
+            <div class="nav navbar-left">
+                <ul class="nav navbar-nav">
+	            <li><a th:href="@{/}">Home</a></li>
+	            <li><a th:href="@{/stocks}">Stocks</a></li>
+                <li><a th:href="@{/login}">Login</a></li>
+                </ul>
+            </div>
+            <div class="navbar-collapse navbar-right collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+                        <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                            <input hidden="true" type="submit" value="Sign Out"/>
+                        </form>
+                    </li>
+                    <li>
+                        <a>
+                            Welcome, <span sec:authentication="name"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+	  	</div>
+    </nav>
+
+    <div class="container">
+        <h3>
+            My Portfolio
+        </h3>
+        <div class="row" style="font-size:18px">
+            <div class="col-sm-2">
+                3A Company
+                <br />
+                Date Bought:
+                <br />
+                Date Sold:
+            </div>
+            <div class="col-sm-2">
+                <br />
+                28/05/2012
+                <br />
+                N/A
+            </div>
+            <div class="col-sm-2">
+                AAA
+                <br />
+                ROI:
+                <br />
+                Annualised:
+            </div>
+            <div class="col-sm-1">
+                <br />
+                -5.62%
+                <br />
+                -1.24%
+            </div>
+        </div>
+    </div>
+</body>
+</html>
