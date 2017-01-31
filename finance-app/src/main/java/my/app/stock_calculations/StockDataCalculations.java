@@ -2,6 +2,7 @@ package my.app.stock_calculations;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 
@@ -42,8 +43,7 @@ public class StockDataCalculations {
 		return annualisedReturn;
 	}
 	
-	private static Double calculateAnnualisedReturn(Stock stock, int numberOfDays) {
-		Double cumulativeReturn = calculateReturn(stock, numberOfDays);
+	private static Double calculateAnnualisedReturn(Double cumulativeReturn, int numberOfDays) {
 		if (cumulativeReturn == null)
 			return null;
 		
@@ -51,6 +51,23 @@ public class StockDataCalculations {
 		double b = 365 / (double) numberOfDays;
 		double annualisedReturn = Math.pow(a, b) - 1;
 		return annualisedReturn;
+	}
+	
+	private static Double calculateAnnualisedReturn(Stock stock, int numberOfDays) {
+		Double cumulativeReturn = calculateReturn(stock, numberOfDays);
+		return calculateAnnualisedReturn(cumulativeReturn, numberOfDays);
+	}
+	
+	public static Double calculateAnnualisedReturn(Stock stock, Date startDate, Date endDate) {
+		Double cumulativeReturn = calculateReturnInDateRange(stock, startDate, endDate);
+		if (cumulativeReturn == null)
+			return null;
+		int numberOfDays = (int) daysBetweenDates(startDate, endDate);
+		return calculateAnnualisedReturn(cumulativeReturn, numberOfDays);
+	}
+	
+	public static long daysBetweenDates(Date startDate, Date endDate) {
+	    return ChronoUnit.DAYS.between(startDate.toInstant(), endDate.toInstant());
 	}
 	
 	private static Double calculateReturn(Stock stock, int numberOfDays) {
