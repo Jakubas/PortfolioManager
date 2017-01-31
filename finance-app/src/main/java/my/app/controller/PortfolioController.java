@@ -46,17 +46,21 @@ public class PortfolioController {
 	@RequestMapping(value = "portfolio", method = RequestMethod.POST)
 	public String addToPortfolio(Model model, Principal principal,
 			@RequestParam("stockId") int stockId,
-			@RequestParam("buyDate") String buyDateStr) {
+			@RequestParam(value = "buyDate", required = false) String buyDateStr) {
 		
 		String username = principal.getName();
 		User user = userService.getUserByUsername(username);
 		Stock stock = stockService.getStockById(stockId);
 		Date buyDate;
-		try {
-			buyDate = Utility.stringToDate(buyDateStr);
-		} catch (ParseException e) {
-			model.addAttribute("dateError", true);
-			return "stocks";
+		if (!buyDateStr.isEmpty()) {
+			try {
+				buyDate = Utility.stringToDate(buyDateStr);
+			} catch (ParseException e) {
+				model.addAttribute("dateError", true);
+				return "stocks";
+			}
+		} else {
+			buyDate = new Date();
 		}
 		StockInPortfolio sip = new StockInPortfolio(stock, user, buyDate);
 		stockInPortfolioService.saveStockInPortfolio(sip);
