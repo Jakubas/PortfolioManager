@@ -3,12 +3,14 @@ package my.app.domain;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -47,6 +49,9 @@ public class User {
 	
 	private String goal;
 	
+	@OneToMany(mappedBy = "user")
+	private List<StockInPortfolio> portfolio;
+
 	public User() {
 		
 	}
@@ -117,5 +122,9 @@ public class User {
 	
 	public void setGoal(String goal) {
 		this.goal = goal;
+	}
+	
+	public List<StockInPortfolio> getPortfolio() {
+		return portfolio;
 	}
 }
