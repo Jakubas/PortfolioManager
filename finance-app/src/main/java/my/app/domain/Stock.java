@@ -37,6 +37,7 @@ public class Stock {
 	
 	private String marketCap;
 	
+	@NotNull
 	private double lastTradePrice;
 	
 	private Double peRatio;

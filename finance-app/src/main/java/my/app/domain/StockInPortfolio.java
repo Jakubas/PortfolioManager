@@ -39,6 +39,12 @@ public class StockInPortfolio {
 	
 	private Double sellPrice;
 	
+	@NotNull
+	private double returnOnInvestment;
+	
+	@NotNull
+	private double annualisedReturn;
+	
 	public StockInPortfolio() {
 		
 	}
@@ -48,6 +54,7 @@ public class StockInPortfolio {
 		this.user = user;
 		this.buyDate = buyDate;
 		this.buyPrice = StockDataCalculations.findStockPriceOnDate(stock, buyDate);
+		calculateMetrics();
 	}
 
 	public StockInPortfolio(Stock stock, User user, Date buyDate, Date sellDate) {
@@ -57,6 +64,25 @@ public class StockInPortfolio {
 		this.buyPrice = StockDataCalculations.findStockPriceOnDate(stock, buyDate);
 		this.sellDate = sellDate;
 		this.sellPrice = StockDataCalculations.findStockPriceOnDate(stock, sellDate);
+		calculateMetrics();
+	}
+	
+	private void calculateMetrics() {
+		Double sellPrice = this.sellPrice;
+		Date sellDate = this.sellDate;
+		if (sellPrice == null) {
+			if (sellDate == null) {
+				sellPrice = stock.getLastTradePrice();
+			} else {
+				this.sellPrice = StockDataCalculations.findStockPriceOnDate(stock, sellDate);
+				sellPrice = this.sellPrice;
+			}
+		}
+		
+		double returnOnInvestment = (sellPrice - buyPrice)/buyPrice;
+		double annualisedReturn = StockDataCalculations.calculateAnnualisedReturn(stock, buyDate, sellDate);
+		this.returnOnInvestment = returnOnInvestment;
+		this.annualisedReturn = annualisedReturn;
 	}
 	
 	public Date getBuyDate() {
@@ -101,5 +127,13 @@ public class StockInPortfolio {
 
 	public User getUser() {
 		return user;
+	}
+	
+	public double getReturnOnInvestment() {
+		return returnOnInvestment;
+	}
+	
+	public double getAnnualisedReturn() {
+		return annualisedReturn;
 	}
 }
