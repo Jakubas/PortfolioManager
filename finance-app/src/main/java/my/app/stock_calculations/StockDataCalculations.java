@@ -54,31 +54,23 @@ public class StockDataCalculations {
 	}
 	
 	private static Double calculateReturn(Stock stock, int numberOfDays) {
-		List<StockDailyInformation> stockInfos = stock.getStockDailyInformations();
-
 		//date is initialised with the current time
 		Date date = new Date();
-		StockDailyInformation currentStockInfo = findStockInformationForGivenDate(stockInfos, date);
-		
-		Date date2 = subtractDaysFromDate(date, numberOfDays);
-		StockDailyInformation prevStockInfo = findStockInformationForGivenDate(stockInfos, date2);
-		if (currentStockInfo == null || prevStockInfo == null) {
-			return null;
-		}
-		double currentPrice = currentStockInfo.getAdjustedClose();
-		double prevPrice = prevStockInfo.getAdjustedClose();
-		double percentageChange = (currentPrice/prevPrice) - 1;
-		return percentageChange;
+		Date endDate = subtractDaysFromDate(date, numberOfDays);
+		return calculateReturnInDateRange(stock, date, endDate);
 	}
 	
 	private static Double calculateReturnInDateRange(Stock stock, int numberOfDaysStart, int numberOfDaysEnd) {
-		List<StockDailyInformation> stockInfos = stock.getStockDailyInformations();
 		//date is initialised with the current time
 		Date currentDate = new Date();
 		Date startDate = subtractDaysFromDate(currentDate, numberOfDaysStart);
-		StockDailyInformation startStockInfo = findStockInformationForGivenDate(stockInfos, startDate);
-		
 		Date endDate = subtractDaysFromDate(currentDate, numberOfDaysEnd);
+		return calculateReturnInDateRange(stock, startDate, endDate);
+	}
+	
+	private static Double calculateReturnInDateRange(Stock stock, Date startDate, Date endDate) {
+		List<StockDailyInformation> stockInfos = stock.getStockDailyInformations();
+		StockDailyInformation startStockInfo = findStockInformationForGivenDate(stockInfos, startDate);
 		StockDailyInformation endStockInfo = findStockInformationForGivenDate(stockInfos, endDate);
 		if (startStockInfo == null || endStockInfo == null) {
 			return null;
@@ -150,6 +142,7 @@ public class StockDataCalculations {
 	}
 	
 	//bugs need to fix like in calculateVariance()
+	//not used anywhere
 	public static double calculateAverageReturn(Stock stock) {
 		//Calculate the yearly returns for the last 10 years
 		double[] yearlyReturns = new double[10];
