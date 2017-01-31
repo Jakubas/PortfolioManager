@@ -44,9 +44,8 @@ public class StockDataCalculations {
 	}
 	
 	private static Double calculateAnnualisedReturn(Double cumulativeReturn, int numberOfDays) {
-		if (cumulativeReturn == null)
+		if (cumulativeReturn == null || numberOfDays == 0)
 			return null;
-		
 		double a = 1 + cumulativeReturn;
 		double b = 365 / (double) numberOfDays;
 		double annualisedReturn = Math.pow(a, b) - 1;
@@ -60,6 +59,15 @@ public class StockDataCalculations {
 	
 	public static Double calculateAnnualisedReturn(Stock stock, Date startDate, Date endDate) {
 		Double cumulativeReturn = calculateReturnInDateRange(stock, startDate, endDate);
+		if (cumulativeReturn == null)
+			return null;
+		int numberOfDays = (int) daysBetweenDates(startDate, endDate);
+		return calculateAnnualisedReturn(cumulativeReturn, numberOfDays);
+	}
+	
+	public static Double calculateAnnualisedReturn(Date startDate, Date endDate,
+												   double buyPrice, double sellPrice) {
+		Double cumulativeReturn = calculateReturn(buyPrice, sellPrice);
 		if (cumulativeReturn == null)
 			return null;
 		int numberOfDays = (int) daysBetweenDates(startDate, endDate);
@@ -92,9 +100,13 @@ public class StockDataCalculations {
 		if (startStockInfo == null || endStockInfo == null) {
 			return null;
 		}
-		double currentPrice = startStockInfo.getAdjustedClose();
-		double prevPrice = endStockInfo.getAdjustedClose();
-		double percentageChange = (currentPrice/prevPrice) - 1;
+		double sellPrice = startStockInfo.getAdjustedClose();
+		double buyPrice = endStockInfo.getAdjustedClose();
+		return calculateReturn(buyPrice, sellPrice);
+	}
+	
+	private static Double calculateReturn(double buyPrice, double sellPrice) {
+		double percentageChange = (sellPrice/buyPrice) - 1;
 		return percentageChange;
 	}
 	

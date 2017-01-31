@@ -42,8 +42,7 @@ public class StockInPortfolio {
 	@NotNull
 	private double returnOnInvestment;
 	
-	@NotNull
-	private double annualisedReturn;
+	private Double annualisedReturn;
 	
 	public StockInPortfolio() {
 		
@@ -79,8 +78,15 @@ public class StockInPortfolio {
 			}
 		}
 		
+		System.out.println(sellPrice);
+		System.out.println(buyPrice);
 		double returnOnInvestment = (sellPrice - buyPrice)/buyPrice;
-		double annualisedReturn = StockDataCalculations.calculateAnnualisedReturn(stock, buyDate, sellDate);
+		Double annualisedReturn;
+		if (sellDate == null) {
+			annualisedReturn = StockDataCalculations.calculateAnnualisedReturn(new Date(), buyDate, buyPrice, sellPrice);
+		} else {
+			annualisedReturn = StockDataCalculations.calculateAnnualisedReturn(stock, buyDate, sellDate);
+		}
 		this.returnOnInvestment = returnOnInvestment;
 		this.annualisedReturn = annualisedReturn;
 	}
