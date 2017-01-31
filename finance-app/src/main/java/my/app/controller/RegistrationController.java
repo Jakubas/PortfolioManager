@@ -3,8 +3,6 @@ package my.app.controller;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,7 +41,7 @@ public class RegistrationController {
 					user.setLastName(lastName);
 				}
 				if (!dob.isEmpty()) {
-					user.setDob(stringToDate(dob));
+					user.setDob(Utility.stringToDate(dob));
 				}
 				userService.saveUser(user);
 				return "login";
@@ -58,11 +56,5 @@ public class RegistrationController {
 	public String registrationFailed(Model model, String error) {
 		model.addAttribute(error, true);
 		return "register";
-	}
-	
-	private Date stringToDate(String dateStr) throws ParseException {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = sdf.parse(dateStr);
-		return date;
 	}
 }
