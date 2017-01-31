@@ -63,9 +63,10 @@ public class UpdateStockInformation {
 		List<StockDailyInformation> stockInformations = 
 				hdp.parseCSVToStockInformation(stock, stockInformationFilePath);
 		
-		//retrieve historical data on the stock that is currently in the database
-		List<StockDailyInformation> stockInformationsInDatabase = 
-				stockInformationService.getStockInformationsByStockId(stock.getId());
+//		//retrieve historical data on the stock that is currently in the database
+//		List<StockDailyInformation> stockInformationsInDatabase = 
+//				stockInformationService.getStockInformationsByStockId(stock.getId());
+		List<StockDailyInformation> stockInformationsInDatabase = stock.getStockDailyInformations();
 		//if the data is not in the database, add it
 		ArrayList<StockDailyInformation> stockInformations2 = new ArrayList<StockDailyInformation>();
 		for(StockDailyInformation stockInformation: stockInformations) {
