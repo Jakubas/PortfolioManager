@@ -49,10 +49,10 @@ public class PortfolioController {
 			@RequestParam(value = "buyDate", required = false) String buyDateStr) {
 		
 		String username = principal.getName();
-		User user = userService.getUserByUsername(username);
+		User user = userService.getUserByUsername(username); 
 		Stock stock = stockService.getStockById(stockId);
 		Date buyDate;
-		if (!buyDateStr.isEmpty()) {
+		if (buyDateStr != null) {
 			try {
 				buyDate = Utility.stringToDate(buyDateStr);
 			} catch (ParseException e) {
