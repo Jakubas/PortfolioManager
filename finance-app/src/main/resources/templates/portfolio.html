@@ -39,9 +39,9 @@
         <h3>
             My Portfolio
         </h3>
-        <div class="row" style="font-size:18px">
+        <div class="row" th:each="stockInPortfolio : ${portfolio}" style="font-size:18px">
             <div class="col-sm-2">
-                3A Company
+                <span th:text="${stockInPortfolio.stock.name}" />
                 <br />
                 Date Bought:
                 <br />
@@ -49,12 +49,12 @@
             </div>
             <div class="col-sm-2">
                 <br />
-                28/05/2012
+                <span th:text="${stockInPortfolio.buyDate}" />
                 <br />
-                N/A
+                <span th:text="${stockInPortfolio.sellDate ? stockInPortfolio.sellDate : 'N/A' }" />
             </div>
             <div class="col-sm-2">
-                AAA
+                <span th:text="${stockInPortfolio.stock.ticker}" />
                 <br />
                 ROI:
                 <br />
@@ -62,9 +62,9 @@
             </div>
             <div class="col-sm-1">
                 <br />
-                -5.62%
+                <span th:text="${stockInPortfolio.returnOnInvestment}" />
                 <br />
-                -1.24%
+                <span th:text="${stockInPortfolio.annualisedReturn}" />
             </div>
         </div>
     </div>
