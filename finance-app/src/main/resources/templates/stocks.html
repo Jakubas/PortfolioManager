@@ -39,7 +39,13 @@
 		<h3>
 			<a th:href="@{/stocks/{id}/(id=${stock.id})}" th:text="${stock.name}" />
 		</h3>
-		<h4 th:text="${stock.ticker}" />
+		<h4>
+			<form class="form-noborder" action="/portfolio" method="post">
+				<input type="hidden" name="stockId" th:value="${stock.id}" />
+					<button type="submit" class="btn btn-link glyphicon glyphicon-plus-sign"></button>
+			</form>
+			<span th:text="${stock.ticker}" />
+		</h4>
 		<h4 th:text ="${stock.industry}" />
 		<div class ="row">
 			<div class ="col-sm-2">
