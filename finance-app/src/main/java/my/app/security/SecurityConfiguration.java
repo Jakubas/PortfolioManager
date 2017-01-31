@@ -50,7 +50,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
         http.authorizeRequests()
         .antMatchers("/stocks/**").hasRole("USER")
-        .antMatchers("/portfolio/**").hasRole("USER");
+        .antMatchers("/portfolio/**").hasRole("USER")
         .antMatchers("/api/**").hasRole("ADMIN");
         
 	    http
