@@ -14,31 +14,35 @@ import my.app.domain.StockDailyInformation;
 //annualisedReturns are estimates and may be off by a couple days
 public class StockDataCalculations {
 
-	public Double calculateQuarterlyAnnualisedReturn(Stock stock) {
+	private StockDataCalculations() {
+		
+	}
+	
+	public static Double calculateQuarterlyAnnualisedReturn(Stock stock) {
 		int numberOfDays = 365/4;
 		Double annualisedReturn = calculateAnnualisedReturn(stock, numberOfDays);
 		return annualisedReturn;
 	}
 
-	public Double calculate1YrAnnualisedReturn(Stock stock) {
+	public static Double calculate1YrAnnualisedReturn(Stock stock) {
 		int numberOfDays = 365;
 		Double annualisedReturn = calculateAnnualisedReturn(stock, numberOfDays);
 		return annualisedReturn;
 	}
 	
-	public Double calculate5YrAnnualisedReturn(Stock stock) {
+	public static Double calculate5YrAnnualisedReturn(Stock stock) {
 		int numberOfDays = 365*5;
 		Double annualisedReturn = calculateAnnualisedReturn(stock, numberOfDays);
 		return annualisedReturn;
 	}
 	
-	public Double calculate10YrAnnualisedReturn(Stock stock) {
+	public static Double calculate10YrAnnualisedReturn(Stock stock) {
 		int numberOfDays = 365*10;
 		Double annualisedReturn = calculateAnnualisedReturn(stock, numberOfDays);
 		return annualisedReturn;
 	}
 	
-	private Double calculateAnnualisedReturn(Stock stock, int numberOfDays) {
+	private static Double calculateAnnualisedReturn(Stock stock, int numberOfDays) {
 		Double cumulativeReturn = calculateReturn(stock, numberOfDays);
 		if (cumulativeReturn == null)
 			return null;
@@ -49,7 +53,7 @@ public class StockDataCalculations {
 		return annualisedReturn;
 	}
 	
-	private Double calculateReturn(Stock stock, int numberOfDays) {
+	private static Double calculateReturn(Stock stock, int numberOfDays) {
 		List<StockDailyInformation> stockInfos = stock.getStockDailyInformations();
 
 		//date is initialised with the current time
@@ -67,7 +71,7 @@ public class StockDataCalculations {
 		return percentageChange;
 	}
 	
-	private Double calculateReturnInDateRange(Stock stock, int numberOfDaysStart, int numberOfDaysEnd) {
+	private static Double calculateReturnInDateRange(Stock stock, int numberOfDaysStart, int numberOfDaysEnd) {
 		List<StockDailyInformation> stockInfos = stock.getStockDailyInformations();
 		//date is initialised with the current time
 		Date currentDate = new Date();
@@ -87,12 +91,12 @@ public class StockDataCalculations {
 	
 	//The risk is based on the last 10 years of historical data
 	//it is on a scale of 0 - 100, where 0 is very low risk and 100 is very high risk
-	public String calculateRisk(Stock stock) {
+	public static String calculateRisk(Stock stock) {
 		double variance = calculateVariance(stock);
 		return calculateRisk(variance);
 	}
 	
-	public String calculateRisk(Double variance) {
+	public static String calculateRisk(Double variance) {
 		double standardDeviation = Math.sqrt(variance)*100;
 		if (standardDeviation == 0) {
 			return "N/A";
@@ -111,7 +115,7 @@ public class StockDataCalculations {
 		}
 	}
 	
-	public double calculateVariance(Stock stock) {
+	public static double calculateVariance(Stock stock) {
 		//Calculate the yearly returns for the last 10 years
 		int yearlyReturnsLength = 10;
 		double[] yearlyReturns = new double[yearlyReturnsLength];
@@ -146,7 +150,7 @@ public class StockDataCalculations {
 	}
 	
 	//bugs need to fix like in calculateVariance()
-	public double calculateAverageReturn(Stock stock) {
+	public static double calculateAverageReturn(Stock stock) {
 		//Calculate the yearly returns for the last 10 years
 		double[] yearlyReturns = new double[10];
 		for(int i = 0; i < 10; i++) {
@@ -162,7 +166,7 @@ public class StockDataCalculations {
 		return averageReturn;
 	}
 	
-	private StockDailyInformation findStockInformationForGivenDate(List<StockDailyInformation> stockInfos, Date date) {
+	private static StockDailyInformation findStockInformationForGivenDate(List<StockDailyInformation> stockInfos, Date date) {
 		Date earliestDate = new Date();
 		for (StockDailyInformation stockInfo : stockInfos) {
 			Date stockInfoDate = stockInfo.getDate();
@@ -180,7 +184,7 @@ public class StockDataCalculations {
 		return findStockInformationForGivenDate(stockInfos, subtractDaysFromDate(date, 1));
 	}
 	
-	private Date subtractDaysFromDate(Date date, int numberOfDays) {	
+	private static Date subtractDaysFromDate(Date date, int numberOfDays) {	
 		LocalDateTime ldt = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
 		LocalDateTime tenDaysAgo = ldt.minusDays(numberOfDays);
 		Date adjustedDate = Date.from(tenDaysAgo.atZone(ZoneId.systemDefault()).toInstant());

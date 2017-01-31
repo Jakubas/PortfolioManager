@@ -19,16 +19,14 @@ public class UpdateStockCalculations {
 	}
 	
 	public void updateStockCalculations() {
-		StockDataCalculations stockDataCalculations = new StockDataCalculations();
-		
 		List<Stock> stocks = stockService.getStocks();
 		for (Stock stock : stocks) {
 			System.out.println(stock.getId());
-			Double quarterlyAnnualisedReturn = stockDataCalculations.calculateQuarterlyAnnualisedReturn(stock);
-			Double oneYearAnnualisedReturn = stockDataCalculations.calculate1YrAnnualisedReturn(stock);
-			Double fiveYearAnnualisedReturn = stockDataCalculations.calculate5YrAnnualisedReturn(stock);
-			Double tenYearAnnualisedReturn = stockDataCalculations.calculate10YrAnnualisedReturn(stock);
-			Double variance = stockDataCalculations.calculateVariance(stock);
+			Double quarterlyAnnualisedReturn = StockDataCalculations.calculateQuarterlyAnnualisedReturn(stock);
+			Double oneYearAnnualisedReturn = StockDataCalculations.calculate1YrAnnualisedReturn(stock);
+			Double fiveYearAnnualisedReturn = StockDataCalculations.calculate5YrAnnualisedReturn(stock);
+			Double tenYearAnnualisedReturn = StockDataCalculations.calculate10YrAnnualisedReturn(stock);
+			Double variance = StockDataCalculations.calculateVariance(stock);
 			
 			StockCalculatedData stockCalculatedData = 
 					new StockCalculatedData(stock, quarterlyAnnualisedReturn, oneYearAnnualisedReturn, 
