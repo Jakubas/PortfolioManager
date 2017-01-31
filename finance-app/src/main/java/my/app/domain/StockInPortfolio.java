@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import my.app.stock_calculations.StockDataCalculations;
 
 @Entity
@@ -30,8 +32,10 @@ public class StockInPortfolio {
 	private User user;
 	
 	@NotNull
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date buyDate;
 	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date sellDate;
 	
 	@NotNull
@@ -139,7 +143,7 @@ public class StockInPortfolio {
 		return returnOnInvestment;
 	}
 	
-	public double getAnnualisedReturn() {
+	public Double getAnnualisedReturn() {
 		return annualisedReturn;
 	}
 }

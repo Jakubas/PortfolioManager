@@ -49,9 +49,9 @@
             </div>
             <div class="col-sm-2">
                 <br />
-                <span th:text="${stockInPortfolio.buyDate}" />
+                <span th:text="${{stockInPortfolio.buyDate}}" />
                 <br />
-                <span th:text="${stockInPortfolio.sellDate ? stockInPortfolio.sellDate : 'N/A' }" />
+                <span th:text="${{stockInPortfolio.sellDate}} ? ${{stockInPortfolio.sellDate}} : 'N/A'" />
             </div>
             <div class="col-sm-2">
                 <span th:text="${stockInPortfolio.stock.ticker}" />
@@ -60,11 +60,11 @@
                 <br />
                 Annualised:
             </div>
-            <div class="col-sm-1">
+            <div class="col-sm-3">
                 <br />
                 <span th:text="${stockInPortfolio.returnOnInvestment}" />
                 <br />
-                <span th:text="${stockInPortfolio.annualisedReturn}" />
+                <span th:text="${stockInPortfolio.annualisedReturn} ? ${stockInPortfolio.annualisedReturn} : 'N/A'" />
             </div>
         </div>
     </div>
