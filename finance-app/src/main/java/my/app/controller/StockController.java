@@ -33,7 +33,7 @@ public class StockController {
 	public String getStockGraph(@PathVariable("id") int id, Model model) {
 		Stock stock = stockService.getStockById(id);
 		model.addAttribute("stock", stock);
-		model.addAttribute("stockCalculatedData", stock.getStockCalculatedData());
+		model.addAttribute("stockMetrics", stock.getStockMetrics());
 		return "stockInformation";
 	}
 }

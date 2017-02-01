@@ -3,18 +3,18 @@ package my.app.update_database;
 import java.util.List;
 
 import my.app.domain.Stock;
-import my.app.domain.StockCalculatedData;
-import my.app.service.StockCalculatedDataService;
+import my.app.domain.StockMetrics;
+import my.app.service.StockMetricsService;
 import my.app.service.StockService;
 import my.app.stock_calculations.StockDataCalculations;
 
 public class UpdateStockCalculations {
 	
-	private final StockCalculatedDataService stockCalculatedDataService;
+	private final StockMetricsService stockMetricsService;
 	private final StockService stockService;
 	
-	public UpdateStockCalculations(StockCalculatedDataService stockCalculatedDataService, StockService stockService) {
-		this.stockCalculatedDataService = stockCalculatedDataService;
+	public UpdateStockCalculations(StockMetricsService stockMetricsService, StockService stockService) {
+		this.stockMetricsService = stockMetricsService;
 		this.stockService = stockService;
 	}
 	
@@ -28,18 +28,18 @@ public class UpdateStockCalculations {
 			Double tenYearAnnualisedReturn = StockDataCalculations.calculate10YrAnnualisedReturn(stock);
 			Double variance = StockDataCalculations.calculateVariance(stock);
 			
-			StockCalculatedData stockCalculatedData = 
-					new StockCalculatedData(stock, quarterlyAnnualisedReturn, oneYearAnnualisedReturn, 
+			StockMetrics stockMetrics = 
+					new StockMetrics(stock, quarterlyAnnualisedReturn, oneYearAnnualisedReturn, 
 							fiveYearAnnualisedReturn, tenYearAnnualisedReturn, variance);
 			
-			StockCalculatedData prevStockCalculatedData = 
-					stockCalculatedDataService.getStockCalculatedDataById(stock.getId());
-			if (prevStockCalculatedData != null &&
-				!stockCalculatedData.getVariance().equals(prevStockCalculatedData.getVariance())) {
-				stockCalculatedDataService.deleteStockCalculatedData(prevStockCalculatedData);
-				stockCalculatedDataService.saveStockCalculatedData(stockCalculatedData);
-			} else if(prevStockCalculatedData == null) {
-				stockCalculatedDataService.saveStockCalculatedData(stockCalculatedData);
+			StockMetrics prevStockMetrics = 
+					stockMetricsService.getStockMetricsById(stock.getId());
+			if (prevStockMetrics != null &&
+				!stockMetrics.getThreeMonthAnnualisedReturn().equals(prevStockMetrics.getThreeMonthAnnualisedReturn())) {
+				stockMetricsService.deleteStockMetrics(prevStockMetrics);
+				stockMetricsService.saveStockMetrics(stockMetrics);
+			} else if(prevStockMetrics == null) {
+				stockMetricsService.saveStockMetrics(stockMetrics);
 			}
 		}
 	}

@@ -33,7 +33,7 @@ public class Stock {
 	
 	@OneToOne(mappedBy = "stock")
 	@Cascade(value=org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-	private StockCalculatedData stockCalculatedData;
+	private StockMetrics stockMetrics;
 	
 	private String marketCap;
 	
@@ -72,8 +72,8 @@ public class Stock {
 		return stockDailyInformations;
 	}
 	
-	public StockCalculatedData getStockCalculatedData() {
-		return stockCalculatedData;
+	public StockMetrics getStockMetrics() {
+		return stockMetrics;
 	}
 
 	public String getMarketCap() {

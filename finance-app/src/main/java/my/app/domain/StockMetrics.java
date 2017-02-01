@@ -12,7 +12,7 @@ import org.hibernate.annotations.Parameter;
 import my.app.formatter.PercentageFormat;
 
 @Entity
-public class StockCalculatedData {
+public class StockMetrics {
 	
 	@Id
 	@GeneratedValue(generator = "generator")
@@ -25,9 +25,11 @@ public class StockCalculatedData {
 	private Stock stock;
 	
 	@PercentageFormat
-	private Double quarterlyAnnualisedReturn;
+	private Double threeMonthAnnualisedReturn;
 	@PercentageFormat
 	private Double oneYearAnnualisedReturn;
+	@PercentageFormat
+	private Double threeYearAnnualisedReturn;
 	@PercentageFormat
 	private Double fiveYearAnnualisedReturn;
 	@PercentageFormat
@@ -35,14 +37,14 @@ public class StockCalculatedData {
 	@PercentageFormat
 	private Double variance;
 	
-	public StockCalculatedData() {
+	public StockMetrics() {
 		
 	}
 	
-	public StockCalculatedData(Stock stock, Double quarterlyAnnualisedReturn, Double oneYearAnnualisedReturn,
+	public StockMetrics(Stock stock, Double quarterlyAnnualisedReturn, Double oneYearAnnualisedReturn,
 			Double fiveYearAnnualisedReturn, Double tenYearAnnualisedReturn, Double variance) {
 		this.stock = stock;
-		this.quarterlyAnnualisedReturn = quarterlyAnnualisedReturn;
+		this.threeMonthAnnualisedReturn = quarterlyAnnualisedReturn;
 		this.oneYearAnnualisedReturn = oneYearAnnualisedReturn;
 		this.setFiveYearAnnualisedReturn(fiveYearAnnualisedReturn);
 		this.setTenYearAnnualisedReturn(tenYearAnnualisedReturn);
@@ -57,12 +59,12 @@ public class StockCalculatedData {
 		return stock;
 	}
 	
-	public Double getQuarterlyAnnualisedReturn() {
-		return quarterlyAnnualisedReturn;
+	public Double getThreeMonthAnnualisedReturn() {
+		return threeMonthAnnualisedReturn;
 	}
 	
-	public void setQuarterlyAnnualisedReturn(Double quarterlyAnnualisedReturn) {
-		this.quarterlyAnnualisedReturn = quarterlyAnnualisedReturn;
+	public void setThreeMonthAnnualisedReturn(Double threeMonthAnnualisedReturn) {
+		this.threeMonthAnnualisedReturn = threeMonthAnnualisedReturn;
 	}
 	
 	public Double getOneYearAnnualisedReturn() {
@@ -72,7 +74,15 @@ public class StockCalculatedData {
 	public void setOneYearAnnualisedReturn(Double oneYearAnnualisedReturn) {
 		this.oneYearAnnualisedReturn = oneYearAnnualisedReturn;
 	}
-
+	
+	public Double getThreeYearAnnualisedReturn() {
+		return fiveYearAnnualisedReturn;
+	}
+	
+	public void setThreeYearAnnualisedReturn(Double threeYearAnnualisedReturn) {
+		this.threeYearAnnualisedReturn = threeYearAnnualisedReturn;
+	}
+	
 	public Double getFiveYearAnnualisedReturn() {
 		return fiveYearAnnualisedReturn;
 	}
@@ -88,16 +98,4 @@ public class StockCalculatedData {
 	public void setTenYearAnnualisedReturn(Double tenYearAnnualisedReturn) {
 		this.tenYearAnnualisedReturn = tenYearAnnualisedReturn;
 	}
-
-	public Double getVariance() {
-		return variance;
-	}
-
-	public void setVariance(Double variance) {
-		this.variance = variance;
-	}
-	
-	
-	
-
 }
