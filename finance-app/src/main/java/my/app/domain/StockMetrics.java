@@ -35,20 +35,32 @@ public class StockMetrics {
 	@PercentageFormat
 	private Double tenYearAnnualisedReturn;
 	@PercentageFormat
-	private Double variance;
+	private Double threeMonthVariance;
+	@PercentageFormat
+	private Double oneYearVariance;
+	@PercentageFormat
+	private Double threeYearVariance;
+	@PercentageFormat
+	private Double fiveYearVariance;
+	@PercentageFormat
+	private Double tenYearVariance;
+	@PercentageFormat
+	private Double oneYearTargetPriceEst;
+	@PercentageFormat
+	private Double oneYearROIEst;
 	
 	public StockMetrics() {
 		
 	}
 	
 	public StockMetrics(Stock stock, Double quarterlyAnnualisedReturn, Double oneYearAnnualisedReturn,
-			Double fiveYearAnnualisedReturn, Double tenYearAnnualisedReturn, Double variance) {
+			Double fiveYearAnnualisedReturn, Double tenYearAnnualisedReturn, Double tenYearVariance) {
 		this.stock = stock;
 		this.threeMonthAnnualisedReturn = quarterlyAnnualisedReturn;
 		this.oneYearAnnualisedReturn = oneYearAnnualisedReturn;
 		this.setFiveYearAnnualisedReturn(fiveYearAnnualisedReturn);
 		this.setTenYearAnnualisedReturn(tenYearAnnualisedReturn);
-		this.variance = variance;
+		this.tenYearVariance = tenYearVariance;
 	}
 	
 	public int getStockId() {
@@ -97,5 +109,61 @@ public class StockMetrics {
 
 	public void setTenYearAnnualisedReturn(Double tenYearAnnualisedReturn) {
 		this.tenYearAnnualisedReturn = tenYearAnnualisedReturn;
+	}
+
+	public Double getThreeMonthVariance() {
+		return threeMonthVariance;
+	}
+
+	public void setThreeMonthVariance(Double threeMonthVariance) {
+		this.threeMonthVariance = threeMonthVariance;
+	}
+
+	public Double getOneYearVariance() {
+		return oneYearVariance;
+	}
+
+	public void setOneYearVariance(Double oneYearVariance) {
+		this.oneYearVariance = oneYearVariance;
+	}
+
+	public Double getThreeYearVariance() {
+		return threeYearVariance;
+	}
+
+	public void setThreeYearVariance(Double threeYearVariance) {
+		this.threeYearVariance = threeYearVariance;
+	}
+
+	public Double getFiveYearVariance() {
+		return fiveYearVariance;
+	}
+
+	public void setFiveYearVariance(Double fiveYearVariance) {
+		this.fiveYearVariance = fiveYearVariance;
+	}
+
+	public Double getTenYearVariance() {
+		return tenYearVariance;
+	}
+
+	public void setTenYearVariance(Double tenYearVariance) {
+		this.tenYearVariance = tenYearVariance;
+	}
+
+	public Double getOneYearTargetPriceEst() {
+		return oneYearTargetPriceEst;
+	}
+
+	public void setOneYearTargetPriceEst(Double oneYearTargetPriceEst) {
+		this.oneYearTargetPriceEst = oneYearTargetPriceEst;
+	}
+
+	public Double getOneYearROIEst() {
+		return oneYearROIEst;
+	}
+
+	public void setOneYearROIEst(Double oneYearROIEst) {
+		this.oneYearROIEst = oneYearROIEst;
 	}
 }

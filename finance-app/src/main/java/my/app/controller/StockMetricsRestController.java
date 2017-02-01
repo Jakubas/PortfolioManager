@@ -25,11 +25,10 @@ public class StockMetricsRestController {
 		StockMetrics stockMetrics = stockMetricsService.getStockMetricsById(stockId);
 	    JSONObject json = new JSONObject();
 	    json.put("stockId", stockMetrics.getStockId());
-	    json.put("quarterlyAnnualisedReturn", stockMetrics.getQuarterlyAnnualisedReturn());
+	    json.put("threeMonthAnnualisedReturn", stockMetrics.getThreeMonthAnnualisedReturn());
 	    json.put("oneYearAnnualisedReturn", stockMetrics.getOneYearAnnualisedReturn());
 	    json.put("fiveYearAnnualisedReturn", stockMetrics.getFiveYearAnnualisedReturn());
 	    json.put("tenYearAnnualisedReturn", stockMetrics.getTenYearAnnualisedReturn());
-	    json.put("variance", stockMetrics.getVariance());
 	    return json.toString();
 	}
 }
