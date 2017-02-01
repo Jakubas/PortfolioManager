@@ -9,6 +9,8 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import my.app.formatter.PercentageFormat;
+
 @Entity
 public class StockCalculatedData {
 	
@@ -21,11 +23,16 @@ public class StockCalculatedData {
 	@OneToOne
 	@PrimaryKeyJoinColumn
 	private Stock stock;
-
+	
+	@PercentageFormat
 	private Double quarterlyAnnualisedReturn;
+	@PercentageFormat
 	private Double oneYearAnnualisedReturn;
+	@PercentageFormat
 	private Double fiveYearAnnualisedReturn;
+	@PercentageFormat
 	private Double tenYearAnnualisedReturn;
+	@PercentageFormat
 	private Double variance;
 	
 	public StockCalculatedData() {

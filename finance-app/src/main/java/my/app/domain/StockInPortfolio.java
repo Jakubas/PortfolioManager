@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import my.app.formatter.PercentageFormat;
 import my.app.stock_calculations.StockDataCalculations;
 
 @Entity
@@ -47,6 +48,7 @@ public class StockInPortfolio {
 	@NotNull
 	private double returnOnInvestment;
 	
+	@PercentageFormat
 	private Double annualisedReturn;
 	
 	public StockInPortfolio() {
