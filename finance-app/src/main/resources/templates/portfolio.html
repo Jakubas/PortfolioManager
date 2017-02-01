@@ -35,11 +35,11 @@
 	  	</div>
     </nav>
 
-    <div class="container">
+    <div class="container" th:each="stockInPortfolio : ${portfolio}">
         <h3>
             My Portfolio
         </h3>
-        <div class="row" th:each="stockInPortfolio : ${portfolio}" style="font-size:18px">
+        <div class="row" style="font-size:18px">
             <div class="col-sm-2">
                 <span th:text="${stockInPortfolio.stock.name}" />
                 <br />
@@ -67,6 +67,11 @@
                 <span th:text="${stockInPortfolio.annualisedReturn} ? ${stockInPortfolio.annualisedReturn} : 'N/A'" />
             </div>
         </div>
+		<form class="form-noborder" th:action="@{/portfolio/{id}/(id=${stockInPortfolio.id})}"
+		method="get">
+			<button type="submit" class="btn btn-link glyphicon glyphicon-edit" />
+		</form>
+	   	<br />
     </div>
 </body>
 </html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Investment App</title>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+</head>
+<body>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+		    <div class="navbar-header">
+		    	<a class="navbar-brand" href="#">Investment App</a>
+		    </div>
+            <div class="nav navbar-left">
+                <ul class="nav navbar-nav">
+	            <li><a th:href="@{/}">Home</a></li>
+	            <li><a th:href="@{/stocks}">Stocks</a></li>
+                <li class="active"><a th:href="@{/login}">Login</a></li>
+                </ul>
+            </div>
+            <div class="navbar-collapse navbar-right collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+                        <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                            <input hidden="true" type="submit" value="Sign Out"/>
+                        </form>
+                    </li>
+                    <li>
+                        <a>
+                            Welcome, <span sec:authentication="name"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+	  	</div>
+	</nav>
+    <div class="container">
+		<h3>
+            Update Portfolio for
+            <span th:text="${stockInPortfolio.stock.name}" />
+        </h3>
+        <p th:if="${dateError}" class="error">Incorrect date</p>
+        <p th:if="${dateError2}" class="error">Date is too early, stock wasn't listed yet</p>
+		<form th:action="@{/portfolio/{id}/(id=${stockInPortfolio.id})}" method="post">
+            <input type="hidden" name="_method" value="put" />
+			<div class="form-group">
+				<label>Date bought</label>
+				<input type="date" class="form-control" name="buyDate" required="true"
+                th:value="${{stockInPortfolio.buyDate}}" />
+			</div>
+            <div class="form-group">
+                <label>Date sold</label>
+                <input type="date" class="form-control" name="sellDate"
+                th:value="${{stockInPortfolio.sellDate}}" />
+            </div>
+            <div class="form-group">
+                <label>Buy price</label>
+                <input type="text" class="form-control" step="0.01" max="2147483647" name="buyPrice"
+                required="true" th:value="${stockInPortfolio.buyPrice}" />
+            </div>
+			<div class="form-group">
+				<label>Sell price</label>
+				<input type="text" class="form-control" step="0.01" max="2147483647" name="sellPrice"
+                th:value="${stockInPortfolio.sellPrice}" />
+			</div>
+			<button type="submit" class="btn btn-default">Update</button>
+		</form>
+	</div>
+</body>
+</html>
