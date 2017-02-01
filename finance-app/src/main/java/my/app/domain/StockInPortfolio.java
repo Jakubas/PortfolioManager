@@ -46,6 +46,7 @@ public class StockInPortfolio {
 	private Double sellPrice;
 	
 	@NotNull
+	@PercentageFormat
 	private double returnOnInvestment;
 	
 	@PercentageFormat

@@ -62,9 +62,9 @@
             </div>
             <div class="col-sm-3">
                 <br />
-                <span th:text="${stockInPortfolio.returnOnInvestment}" />
+                <span th:text="${{stockInPortfolio.returnOnInvestment}}" />
                 <br />
-                <span th:text="${stockInPortfolio.annualisedReturn} ? ${stockInPortfolio.annualisedReturn} : 'N/A'" />
+                <span th:text="${{stockInPortfolio.annualisedReturn}} ? ${{stockInPortfolio.annualisedReturn}} : 'N/A'" />
             </div>
         </div>
 		<form class="form-noborder" th:action="@{/portfolio/{id}/(id=${stockInPortfolio.id})}"
