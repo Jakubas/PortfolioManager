@@ -2,6 +2,7 @@ package my.app.controller;
 
 import java.security.Principal;
 import java.text.ParseException;
+import java.time.DateTimeException;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import my.app.domain.Stock;
 import my.app.domain.StockInPortfolio;
@@ -64,31 +66,50 @@ public class PortfolioController {
 		}
 		StockInPortfolio sip = new StockInPortfolio(stock, user, buyDate);
 		stockInPortfolioService.saveStockInPortfolio(sip);
-		return "redirect:/stocks";
+		return "redirect:stocks";
 	}
 	
+	@RequestMapping(value = "portfolio/{stockInPortfolioId}", method = RequestMethod.GET)
+	public String updateStockInPortfolio(Model model,
+			@PathVariable("stockInPortfolioId") int id) {
+		StockInPortfolio sip = stockInPortfolioService.getStockInPortfolioById(id);
+		model.addAttribute("stockInPortfolio", sip);
+		return "updatePortfolio";
+	}
+			
 	@RequestMapping(value = "portfolio/{stockInPortfolioId}", method = RequestMethod.PUT)
-	public String updateStockInPortfolio(Model model, Principal principal,
+	public String updateStockInPortfolio(RedirectAttributes ra, Principal principal,
 			@PathVariable("stockInPortfolioId") int id,
 			@RequestParam("buyDate") String buyDateStr,
-			@RequestParam("sellDate") String sellDateStr,
+			@RequestParam(value = "sellDate", required = false) String sellDateStr,
 			@RequestParam("buyPrice") Double buyPrice,
-			@RequestParam("sellPrice") Double sellPrice) {
-		
+			@RequestParam(value = "sellPrice", required = false) Double sellPrice) {
 		StockInPortfolio sip = stockInPortfolioService.getStockInPortfolioById(id);
 		Date buyDate;
-		Date sellDate;
+		Date sellDate = null;
 		try {
 			buyDate = Utility.stringToDate(buyDateStr);
-			sellDate = Utility.stringToDate(sellDateStr);
+			if (!sellDateStr.isEmpty())
+				sellDate = Utility.stringToDate(sellDateStr);
 		} catch (ParseException e) {
-			model.addAttribute("dateError", true);
-			return "portfolio/" + id;
+			ra.addAttribute("dateError", true);
+			return "redirect:/portfolio/{stockInPortfolioId}";
 		}
-		sip.setBuyDate(buyDate);
-		sip.setSellDate(sellDate);
-		sip.setBuyPrice(buyPrice);
-		sip.setSellPrice(sellPrice);
+		
+		Double prevBuyPrice = sip.getBuyPrice();
+		try {
+			sip.setBuyDate(buyDate);
+			sip.setSellDate(sellDate);
+		} catch (DateTimeException e) {
+			ra.addFlashAttribute("dateError2", true);
+			return "redirect:/portfolio/{stockInPortfolioId}";
+		}
+		if (!buyPrice.equals(prevBuyPrice)) {
+			sip.setBuyPrice(buyPrice);
+		}
+		if (sellPrice == null || !sellPrice.equals(sip.getSellPrice())) {
+			sip.setSellPrice(sellPrice);
+		}
 		stockInPortfolioService.updateStockInPortfolio(sip);
 		return "redirect:/portfolio";
 	}
