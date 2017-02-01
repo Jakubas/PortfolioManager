@@ -41,7 +41,7 @@
         </h3>
         <div class="row" style="font-size:18px">
             <div class="col-sm-2">
-                <span th:text="${stockInPortfolio.stock.name}" />
+                <a th:href="@{/stocks/{id}/(id=${stockInPortfolio.stock.id})}" th:text="${stockInPortfolio.stock.name}" />
                 <br />
                 Date Bought:
                 <br />
