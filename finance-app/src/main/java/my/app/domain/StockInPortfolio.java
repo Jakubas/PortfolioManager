@@ -1,5 +1,6 @@
 package my.app.domain;
 
+import java.time.DateTimeException;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -81,9 +82,6 @@ public class StockInPortfolio {
 				sellPrice = this.sellPrice;
 			}
 		}
-		
-		System.out.println(sellPrice);
-		System.out.println(buyPrice);
 		double returnOnInvestment = (sellPrice - buyPrice)/buyPrice;
 		Double annualisedReturn;
 		if (sellDate == null) {
@@ -99,16 +97,32 @@ public class StockInPortfolio {
 		return buyDate;
 	}
 
-	public void setBuyDate(Date buyDate) {
+	public void setBuyDate(Date buyDate) throws DateTimeException {
+		Double buyPrice = StockDataCalculations.findStockPriceOnDate(stock, buyDate);
+		if (buyPrice == null) {
+			throw new DateTimeException("Date is too early");
+		}
 		this.buyDate = buyDate;
+		this.buyPrice = buyPrice;
+		calculateMetrics();
 	}
 
 	public Date getSellDate() {
 		return sellDate;
 	}
 
-	public void setSellDate(Date sellDate) {
-		this.sellDate = sellDate;
+	public void setSellDate(Date sellDate) throws DateTimeException {
+		if (sellDate != null) {
+			Double sellPrice = StockDataCalculations.findStockPriceOnDate(stock, buyDate);
+			if (sellPrice == null) {
+				throw new DateTimeException("Date is too early");
+			}
+			this.sellDate = sellDate;
+			this.sellPrice = sellPrice;
+			calculateMetrics();
+		} else {
+			this.sellDate = null;
+		}
 	}
 
 	public Double getBuyPrice() {
@@ -117,6 +131,7 @@ public class StockInPortfolio {
 
 	public void setBuyPrice(Double buyPrice) {
 		this.buyPrice = buyPrice;
+		calculateMetrics();
 	}
 
 	public Double getSellPrice() {
@@ -125,6 +140,7 @@ public class StockInPortfolio {
 
 	public void setSellPrice(Double sellPrice) {
 		this.sellPrice = sellPrice;
+		calculateMetrics();
 	}
 
 	public int getId() {
