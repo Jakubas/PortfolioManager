@@ -57,20 +57,21 @@ public class StockDataCalculations {
 		return calculateAnnualisedReturn(cumulativeReturn, numberOfDays);
 	}
 	
-	public static Double calculateAnnualisedReturn(Stock stock, Date startDate, Date endDate) {
-		Double cumulativeReturn = calculateReturnInDateRange(stock, startDate, endDate);
+	public static Double calculateAnnualisedReturn(Stock stock, Date buyDate, Date sellDate) {
+		Double cumulativeReturn = calculateReturnInDateRange(stock, sellDate, buyDate);
 		if (cumulativeReturn == null)
 			return null;
-		int numberOfDays = (int) daysBetweenDates(startDate, endDate);
+		int numberOfDays = (int) daysBetweenDates(buyDate, sellDate);
 		return calculateAnnualisedReturn(cumulativeReturn, numberOfDays);
 	}
 	
-	public static Double calculateAnnualisedReturn(Date startDate, Date endDate,
+	public static Double calculateAnnualisedReturn(Date buyDate, Date sellDate,
 												   double buyPrice, double sellPrice) {
 		Double cumulativeReturn = calculateReturn(buyPrice, sellPrice);
 		if (cumulativeReturn == null)
 			return null;
-		int numberOfDays = (int) daysBetweenDates(startDate, endDate);
+		int numberOfDays = (int) daysBetweenDates(buyDate, sellDate);
+		System.out.println(numberOfDays);
 		return calculateAnnualisedReturn(cumulativeReturn, numberOfDays);
 	}
 	
@@ -93,15 +94,15 @@ public class StockDataCalculations {
 		return calculateReturnInDateRange(stock, startDate, endDate);
 	}
 	
-	private static Double calculateReturnInDateRange(Stock stock, Date startDate, Date endDate) {
+	private static Double calculateReturnInDateRange(Stock stock, Date sellDate, Date buyDate) {
 		List<StockDailyInformation> stockInfos = stock.getStockDailyInformations();
-		StockDailyInformation startStockInfo = findStockInformationForGivenDate(stockInfos, startDate);
-		StockDailyInformation endStockInfo = findStockInformationForGivenDate(stockInfos, endDate);
-		if (startStockInfo == null || endStockInfo == null) {
+		StockDailyInformation sellStockInfo = findStockInformationForGivenDate(stockInfos, sellDate);
+		StockDailyInformation buyStockInfo = findStockInformationForGivenDate(stockInfos, buyDate);
+		if (sellStockInfo == null || buyStockInfo == null) {
 			return null;
 		}
-		double sellPrice = startStockInfo.getAdjustedClose();
-		double buyPrice = endStockInfo.getAdjustedClose();
+		double buyPrice = buyStockInfo.getAdjustedClose();
+		double sellPrice = sellStockInfo.getAdjustedClose();
 		return calculateReturn(buyPrice, sellPrice);
 	}
 	
