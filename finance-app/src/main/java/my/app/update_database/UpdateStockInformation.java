@@ -43,15 +43,17 @@ public class UpdateStockInformation {
 		}
 	}
 
-	public void updateStockInformation(String rootDir, boolean downloadCSVs) {
-		updateStocks(rootDir, downloadCSVs);
+	public void updateStockInformation(String rootDir, boolean downloadCurrentData, boolean downloadHistoricalData) {
 		
-		//parse CSV into stockInformation
-		List<Stock> stocks = stockService.getStocks();
-		
+//		if (downloadHistoricalData) {
+//			StockInformationDownloader.downloadStockInformation("/home/daniel/fyp/data/");
+//		}
+//		updateStocks(rootDir, downloadCurrentData);
+
+		List<Stock> stocks = stockService.getStocks();		
 		for (int i = 0; i < stocks.size(); i++) {
 			updateHistoricalPrices(stocks.get(i), rootDir);
-			System.out.println(i + "/" + stocks.size() + " CSVs parsed into database");
+			System.out.println((i+1) + "/" + stocks.size() + " CSVs parsed into database");
 		}
 	}
 	
@@ -64,13 +66,11 @@ public class UpdateStockInformation {
 				hdp.parseCSVToStockInformation(stock, stockInformationFilePath);
 		
 //		//retrieve historical data on the stock that is currently in the database
-//		List<StockDailyInformation> stockInformationsInDatabase = 
-//				stockInformationService.getStockInformationsByStockId(stock.getId());
 		List<StockDailyInformation> stockInformationsInDatabase = stock.getStockDailyInformations();
-		//if the data is not in the database, add it
+		
 		ArrayList<StockDailyInformation> stockInformations2 = new ArrayList<StockDailyInformation>();
+		//if the data is not in the database, add it
 		for(StockDailyInformation stockInformation: stockInformations) {
-			
 			if (stockInformationsInDatabase == null || 
 				!stockInformationsInDatabase.contains(stockInformation)) {
 				stockInformations2.add(stockInformation);

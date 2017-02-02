@@ -20,8 +20,10 @@ public class StockInformationDownloader {
 		
 		StockParser stockParser = new StockParser();
 		List<Stock> stocks = stockParser.parseCSVToStocks(filePath);
+		int i = 1;
 		for(Stock stock : stocks) {
 			downloadHistoricalStockInformation(stock.getTicker());
+			System.out.println(i++ + "/" + stocks.size() + " CSVs downloaded");
 		}
 	}
 	
