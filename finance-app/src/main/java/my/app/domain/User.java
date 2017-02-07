@@ -47,7 +47,9 @@ public class User {
 	
 	private Long cashAmount;
 	
-	private String goal;
+	@OneToMany(mappedBy = "user")
+	private List<Goal> goals;
+	
 	
 	@OneToMany(mappedBy = "user")
 	private List<StockInPortfolio> portfolio;
@@ -116,12 +118,8 @@ public class User {
 		this.cashAmount = cashAmount;
 	}
 	
-	public String getGoal() {
-		return goal;
-	}
-	
-	public void setGoal(String goal) {
-		this.goal = goal;
+	public List<Goal> getGoals() {
+		return goals;
 	}
 	
 	public List<StockInPortfolio> getPortfolio() {
