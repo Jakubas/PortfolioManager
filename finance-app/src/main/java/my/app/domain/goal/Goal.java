@@ -1,4 +1,4 @@
-package my.app.domain;
+package my.app.domain.goal;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+
+import my.app.domain.User;
 
 @Entity
 public class Goal {
