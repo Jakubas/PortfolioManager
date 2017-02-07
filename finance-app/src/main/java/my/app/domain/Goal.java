@@ -1,8 +1,6 @@
 package my.app.domain;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,63 +29,91 @@ public class Goal {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-	
-    @NotNull
-    @Enumerated(EnumType.STRING)
+    
+	@NotNull
 	private Type type;
 	
     @NotNull
-    private Double goalTarget; 
+    private String goalStr;
     
-    private Double goalTarget2;
+    @NotNull
+    private String goalTarget;
+    
+    @NotNull
+    private String goalTarget2;
+    
+    @NotNull
+    private String goalTarget3;
     
 	public Goal() {
 		
 	}
 	
-	public Goal(User user, Type type, Double goalTarget) {
+	public Goal(User user, Type type, String goalStr, String goalTarget) {
 		this.user = user;
 		this.type = type;
+		this.goalStr = goalStr;
 		this.goalTarget = goalTarget;
 	}
 	
-	public Goal(User user, Type type, Double goalTarget, Double goalTarget2) {
+	public Goal(User user, Type type, String goalStr, String goalTarget, String goalTarget2) {
 		this.user = user;
 		this.type = type;
+		this.goalStr = goalStr;
 		this.goalTarget = goalTarget;
-		this.setGoalTarget2(goalTarget2);
+		this.goalTarget2 = goalTarget2;
+	}
+	
+	public Goal(User user, Type type, String goalStr, String goalTarget, String goalTarget2, String goalTarget3) {
+		this.user = user;
+		this.type = type;
+		this.goalStr = goalStr;
+		this.goalTarget = goalTarget;
+		this.goalTarget2 = goalTarget2;
+		this.goalTarget3 = goalTarget3;
 	}
 
 	public int getId() {
 		return id;
+	}
+	
+	public Type getType() {
+		return type;
 	}
 
 	public User getUser() {
 		return user;
 	}
 	
-	public Type getGoal() {
-		return type;
+	public String getGoalStr() {
+		return goalStr;
 	}
 	
-	public Double getGoalTarget() {
+	public void setGoalStr(String goalStr) {
+		this.goalStr = goalStr;
+	}
+
+	public String getGoalTarget() {
 		return goalTarget;
 	}
-	
-	public void setGoalTarget(Double goalTarget) {
+
+	public void setGoalTarget(String goalTarget) {
 		this.goalTarget = goalTarget;
 	}
-	
-	public Double getGoalTarget2() {
+
+	public String getGoalTarget2() {
 		return goalTarget2;
 	}
-	
-	public void setGoalTarget2(Double goalTarget2) {
-		if (this.type.equals(Type.MONTHLY_INVESTOR)) {
-			this.goalTarget2 = goalTarget2;
-		} else {
-			//this goal type only has one target so the second target is set to null
-			this.goalTarget2 = null;
-		}
+
+	public void setGoalTarget2(String goalTarget2) {
+		this.goalTarget2 = goalTarget2;
+	}
+
+	public String getGoalTarget3() {
+		return goalTarget3;
+	}
+
+	public void setGoalTarget3(String goalTarget3) {
+		this.goalTarget3 = goalTarget3;
 	}
 }
