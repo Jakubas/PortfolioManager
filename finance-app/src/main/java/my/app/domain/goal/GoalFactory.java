@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
 import my.app.domain.User;
 import my.app.domain.goal.Goal.Type;
 
+@Component
 public class GoalFactory {
 
 	public Goal getGoal(User user, String goalStr, String goalTarget, String goalTarget2, String goalTarget3) {
