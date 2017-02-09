@@ -11,7 +11,7 @@ import my.app.domain.goal.Goal.Type;
 
 @Component
 public class GoalFactory {
-
+	
 	public Goal getGoal(User user, String goalTemplate, Double percentage, 
 			String sector1, String sector2, Integer monthlyDepositAmount, 
 			Integer amount, Double length, String risk, String monthsOrYears) {

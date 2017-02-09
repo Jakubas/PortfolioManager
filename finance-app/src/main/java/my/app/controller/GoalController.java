@@ -17,6 +17,7 @@ import my.app.domain.goal.Goal.Type;
 import my.app.domain.goal.GoalFactory;
 import my.app.domain.goal.GoalTemplates;
 import my.app.service.GoalService;
+import my.app.service.StockService;
 import my.app.service.UserService;
 
 @Controller
@@ -24,13 +25,16 @@ public class GoalController {
 
 	private final GoalService goalService;
 	private final UserService userService;
+	private final StockService stockService;
 	private final GoalFactory goalFactory;
 	
 	@Autowired
-	public GoalController(GoalService goalService, UserService userService, GoalFactory goalFactory) {
+	public GoalController(GoalService goalService, UserService userService, 
+			StockService stockService, GoalFactory goalFactory) {
 		this.goalService = goalService;
 		this.userService = userService;
 		this.goalFactory = goalFactory;
+		this.stockService = stockService;
 	}
 	
 	@RequestMapping(value = "portfolio/goals", method = RequestMethod.GET)
@@ -38,9 +42,11 @@ public class GoalController {
 		List<Goal> goals = goalService.getGoals();
 		List<String> goalTemplates = GoalTemplates.goalTemplates;
 		Map<String, Type> goalToTypeMapping = GoalTemplates.goalToTypeMapping;
+		List<String> sectors = stockService.getSectors();
 		model.addAttribute("goals", goals);
 		model.addAttribute("goalTemplates", goalTemplates);
 		model.addAttribute("typeMap", goalToTypeMapping);
+		model.addAttribute("sectors", sectors);
 		return "goals";
 	}
 	 

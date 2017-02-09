@@ -128,24 +128,30 @@
 			<div id="form-fields">
 	            <div id="1-1" class="form-group" style="display:none;">
 	                <label>percentage</label>
-	                <input type="number" class="form-control" name="percentage"/>
+	                <input type="number" step="0.01" class="form-control" name="percentage"/>
 	            </div>
 	            <div id="1-2" class="form-group" style="display:none;">
 	                <label>in Sector</label>
-	                <input type="text" class="form-control" name="sector1"/>
+					<select name="sector1">
+						<option th:each="sector : ${sectors}" th:text="${sector}"/>
+					</select>
 	            </div>
 
 	            <div id="2-1" class="form-group" style="display:none;">
 	                <label>percentage</label>
-	                <input type="number" class="form-control" name="percentage"/>
+	                <input type="number" step="0.01" class="form-control" name="percentage"/>
 	            </div>
 	            <div id="2-2" class="form-group" style="display:none;">
 	                <label>from Sector</label>
-	                <input type="text" class="form-control" name="sector1"/>
+					<select name="sector1">
+						<option th:each="sector : ${sectors}" th:text="${sector}"/>
+					</select>
 	            </div>
 	            <div id="2-3" class="form-group" style="display:none;">
 	                <label>to Sector</label>
-	                <input type="text" class="form-control" name="sector2"/>
+					<select name="sector2">
+						<option th:each="sector : ${sectors}" th:text="${sector}"/>
+					</select>
 	            </div>
 
 	            <div id="3-1" class="form-group" style="display:none;">
