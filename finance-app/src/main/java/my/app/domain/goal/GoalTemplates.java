@@ -8,13 +8,13 @@ import my.app.domain.goal.Goal.Type;
 
 public class GoalTemplates {
 
-	private final static String a = "I want X% of my stock in y sector";
-	private final static String b = "I want to move x% from y sector to z sector";
-	private final static String c = "I want to retire in x years";
-	private final static String d = "I want to grow my investments to $x";
-	private final static String e = "I want to invest for x y";
-	private final static String f = "I want to have a x risk portfolio";
-	private final static String g = "I want to deposit $x per month and grow my investments to $y";
+	private final static String a = "I want _x_% of my stock in _y_ sector";
+	private final static String b = "I want to move _x_% from _y_ sector to _z_ sector";
+	private final static String c = "I want to retire in _x_ years";
+	private final static String d = "I want to grow my investments to $_x_";
+	private final static String e = "I want to invest for _x_   _y_";
+	private final static String f = "I want to have a _x_ risk portfolio";
+	private final static String g = "I want to deposit $_x_ per month and grow my investments to $_y_";
 
 	private GoalTemplates() {
 		
