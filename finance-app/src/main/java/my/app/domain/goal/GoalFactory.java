@@ -12,15 +12,17 @@ import my.app.domain.goal.Goal.Type;
 @Component
 public class GoalFactory {
 
-	public Goal getGoal(User user, String goalStr) {
-	   Type type = getType(goalStr);
-	   Goal goal = new Goal(user, type, goalStr);
-	   
+	public Goal getGoal(User user, String goalTemplate, Double percentage, 
+			String sector1, String sector2, Integer monthlyDepositAmount, 
+			Integer amount, Double length, String risk, String monthsOrYears) {
+		
+	   Type type = getType(goalTemplate);
+	   Goal goal = new Goal(user, type, goalTemplate);
 	   return goal;
    }
 	
 	//compare the string to all template strings and return the type of the most similar one
-	private Type getType(String goalStr) {
+	private Type getType(String goalTemplate) {
 		List<String> templates = GoalTemplates.goalTemplates;
 		Map<String, Type> goalTypeMapping = GoalTemplates.goalToTypeMapping;
 		
@@ -28,7 +30,7 @@ public class GoalFactory {
 		double highestScore = 0.0;
 		for (int i = 0; i < templates.size(); i++) {
 			String template = templates.get(i);
-			double matchingScore = compareStrings(goalStr, template);
+			double matchingScore = compareStrings(goalTemplate, template);
 			if (highestScore < matchingScore) {
 				highestScore = matchingScore;
 				mostSimiliar = template;

@@ -39,17 +39,17 @@ public class Goal {
     private String goalStr;
     
     //Since each goal has different targets most of the fields listed below here will be null
-	private double percentage;
+	private Double percentage;
 	
     private String sector1;
 
     private String sector2;
     
-    private int monthlyDepositAmount;
+    private Integer monthlyDepositAmount;
     
-	private int amount;
+	private Integer amount;
 	
-    private double length;
+    private Double length;
     
     private String risk;
     
@@ -83,11 +83,11 @@ public class Goal {
 		this.goalStr = goalStr;
 	}
 
-	public double getPercentage() {
+	public Double getPercentage() {
 		return percentage;
 	}
 
-	public void setPercentage(double percentage) {
+	public void setPercentage(Double percentage) {
 		this.percentage = percentage;
 	}
 
@@ -107,27 +107,27 @@ public class Goal {
 		this.sector2 = sector2;
 	}
 
-	public int getMonthlyDepositAmount() {
+	public Integer getMonthlyDepositAmount() {
 		return monthlyDepositAmount;
 	}
 
-	public void setMonthlyDepositAmount(int monthlyDepositAmount) {
+	public void setMonthlyDepositAmount(Integer monthlyDepositAmount) {
 		this.monthlyDepositAmount = monthlyDepositAmount;
 	}
 
-	public int getAmount() {
+	public Integer getAmount() {
 		return amount;
 	}
 
-	public void setAmount(int amount) {
+	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
 
-	public double getLength() {
+	public Double getLength() {
 		return length;
 	}
 
-	public void setLength(double length) {
+	public void setLength(Double length) {
 		this.length = length;
 	}
 
