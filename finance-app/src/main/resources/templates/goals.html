@@ -11,13 +11,15 @@
 		var divs = document.getElementById("form-fields").getElementsByTagName("div");
 		for (var i = 0; i < divs.length; i++) {
 			divs[i].style.display = "none";
-			var input = divs[i].getElementsByTagName("input");
-			var select = divs[i].getElementsByTagName("select");
-			if (input[0]) {
-				input[0].name = "";
+			var inputs = divs[i].getElementsByTagName("input");
+			var selects = divs[i].getElementsByTagName("select");
+			if (inputs[0]) {
+				inputs[0].name = "";
+				inputs[0].disabled = true;
 			}
-			if (select[0]) {
-				select[0].name = "";
+			if (selects[0]) {
+				selects[0].name = "";
+				selects[0].disabled = true;
 			}
 		}
 
@@ -49,13 +51,15 @@
 	function showInput(id, targetName) {
 		var e = document.getElementById(id);
 		e.style.display = 'block';
-		var input  = e.getElementsByTagName("input");
-		var select = e.getElementsByTagName("select");
-		if (input[0]) {
-			input[0].name = targetName;
+		var inputs  = e.getElementsByTagName("input");
+		var selects = e.getElementsByTagName("select");
+		if (inputs[0]) {
+			inputs[0].name = targetName;
+			inputs[0].disabled = false;
 		}
-		if (select[0]) {
-			select[0].name = targetName;
+		if (selects[0]) {
+			selects[0].name = targetName;
+			selects[0].disabled = false;
 		}
 	}
 	/*]]>*/
@@ -126,11 +130,11 @@
             </div>
 
 			<div id="form-fields">
-	            <div id="1-1" class="form-group" style="display:none;">
+	            <div id="1-1" class="form-group" style="display:block;">
 	                <label>percentage</label>
 	                <input type="number" step="0.01" class="form-control" name="percentage"/>
 	            </div>
-	            <div id="1-2" class="form-group" style="display:none;">
+	            <div id="1-2" class="form-group" style="display:block;">
 	                <label>in Sector</label>
 					<select name="sector1">
 						<option th:each="sector : ${sectors}" th:text="${sector}"/>
@@ -143,13 +147,13 @@
 	            </div>
 	            <div id="2-2" class="form-group" style="display:none;">
 	                <label>from Sector</label>
-					<select name="sector1">
+					<select name="sector1" disabled="disabled">
 						<option th:each="sector : ${sectors}" th:text="${sector}"/>
 					</select>
 	            </div>
 	            <div id="2-3" class="form-group" style="display:none;">
 	                <label>to Sector</label>
-					<select name="sector2">
+					<select name="sector2" disabled="disabled">
 						<option th:each="sector : ${sectors}" th:text="${sector}"/>
 					</select>
 	            </div>
@@ -170,7 +174,7 @@
 	            </div>
 	            <div id="5-2" class="form-group" style="display:none;">
 	                <label>months/years</label>
-	                <select name="monthsOrYears">
+	                <select name="monthsOrYears" disabled="disabled">
 	                    <option>Months</option>
 	                    <option>Years</option>
 	                </select>
@@ -178,7 +182,7 @@
 
 	            <div id="6-1" class="form-group" style="display:none;">
 	                <label>risk</label>
-	                <select name="risk">
+	                <select name="risk" disabled="disabled">
 	                    <option>Very high</option>
 	                    <option>high</option>
 	                    <option>medium</option>
@@ -196,7 +200,7 @@
 	                <input type="number" class="form-control" name="amount"/>
 	            </div>
 			</div>
-            <button id="0-1" type="submit" class="btn btn-default" style="display:none;">Create Goal</button>
+            <button id="0-1" type="submit" class="btn btn-default" style="display:block;">Create Goal</button>
         </form>
     </div>
 </body>

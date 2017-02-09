@@ -127,15 +127,37 @@ public class GoalFactory {
 	
 	private void setGoalTargets(Goal goal, Double percentage, String sector1, String sector2,
 			Integer monthlyDepositAmount, Integer amount, Double length, String risk, String monthsOrYears) {
+		
 		if (monthsOrYears != null && monthsOrYears.equals("Months")) {
 			length = length/12;
 		}
-		goal.setPercentage(percentage);
-		goal.setSector1(sector1);
-		goal.setSector2(sector2);
-		goal.setMonthlyDepositAmount(monthlyDepositAmount);
-		goal.setAmount(amount);
-		goal.setLength(length);
-		goal.setRisk(risk);
+		
+		switch(goal.getType()) {
+		case GROW_TO_AMOUNT:
+			goal.setAmount(amount);
+			break;
+		case INVEST_TIME_LENGTH:
+			goal.setLength(length);
+			break;
+		case MONTHLY_INVESTOR:
+			goal.setMonthlyDepositAmount(monthlyDepositAmount);
+			goal.setAmount(amount);
+			break;
+		case MOVE:
+			goal.setPercentage(percentage);
+			goal.setSector1(sector1);
+			break;
+		case RETIRE:
+			goal.setLength(length);
+			break;
+		case RISK:
+			goal.setRisk(risk);
+			break;
+		case SECTOR:
+			goal.setPercentage(percentage);
+			goal.setSector1(sector1);
+			goal.setSector2(sector2);
+			break;
+		}
 	}
 }
