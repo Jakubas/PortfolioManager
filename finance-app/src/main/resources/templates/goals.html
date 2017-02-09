@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Investment App</title>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script th:inline="javascript">
+	/*<![CDATA[*/
+	function expandForm() {
+		//set all form field divs be hidden and change their name to not interfere
+		//when submitting the form
+		var divs = document.getElementById("form-fields").getElementsByTagName("div");
+		for (var i = 0; i < divs.length; i++) {
+			divs[i].style.display = "none";
+			var input = divs[i].getElementsByTagName("input");
+			var select = divs[i].getElementsByTagName("select");
+			if (input[0]) {
+				input[0].name = "";
+			}
+			if (select[0]) {
+				select[0].name = "";
+			}
+		}
+
+		var e = document.getElementById("goalTemplate");
+		var value = e.options[e.selectedIndex].id;
+		if (value == 'SECTOR') {
+			showInput('1-1', "percentage");
+			showInput('1-2', "sector1")
+		} else if (value == 'MOVE') {
+			showInput('2-1', "percentage");
+			showInput('2-2', "sector1");
+			showInput('2-3', "sector2");
+		} else if (value == 'RETIRE') {
+			showInput('3-1', "length");
+		} else if (value == 'GROW_TO_AMOUNT') {
+			showInput('4-1', "amount");
+		} else if (value == 'INVEST_TIME_LENGTH') {
+			showInput('5-1', "length");
+			showInput('5-2', "monthsOrYears");
+		} else if (value == 'RISK') {
+			showInput('6-1', "risk");
+		} else if (value == 'MONTHLY_INVESTOR') {
+			showInput('7-1', "monthlyDepositAmount");
+			showInput('7-2', "amount");
+
+		}
+		showInput('0-1', "");
+	}
+	function showInput(id, targetName) {
+		var e = document.getElementById(id);
+		e.style.display = 'block';
+		var input  = e.getElementsByTagName("input");
+		var select = e.getElementsByTagName("select");
+		if (input[0]) {
+			input[0].name = targetName;
+		}
+		if (select[0]) {
+			select[0].name = targetName;
+		}
+	}
+	/*]]>*/
+	</script>
+</head>
+<body>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+		    <div class="navbar-header">
+		    	<a class="navbar-brand" href="#">Investment App</a>
+		    </div>
+            <div class="nav navbar-left">
+                <ul class="nav navbar-nav">
+	            <li><a th:href="@{/}">Home</a></li>
+	            <li><a th:href="@{/stocks}">Stocks</a></li>
+                <li><a th:href="@{/login}">Login</a></li>
+                </ul>
+            </div>
+            <div class="navbar-collapse navbar-right collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+                        <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                            <input hidden="true" type="submit" value="Sign Out"/>
+                        </form>
+                    </li>
+                    <li>
+                        <a>
+                            Welcome, <span sec:authentication="name"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+	  	</div>
+	</nav>
+
+    <div class="container">
+        <h3>
+            Goals
+        </h3>
+        <div class="container" th:each="goal : ${goals}" >
+            <h4 th:text ="${goal.goalStr}" />
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="20"
+              aria-valuemin="0" aria-valuemax="100" style="width:20%">
+                5/10%
+              </div>
+            </div>
+            <p>
+                Some tip on how to accomplish this goal
+            </p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h3>
+            Add Goal
+        </h3>
+        <p th:if="${error}" class="error">error</p>
+        <form action="/portfolio/goals" method="post">
+            <div class="form-group">
+                <label>Type of Goal:</label>
+                <select id="goalTemplate" name="goalTemplate" onclick="expandForm()">
+                    <option th:each="goalTemplate : ${goalTemplates}"
+                    th:id="${typeMap['__${goalTemplate}__']}" th:text="${goalTemplate}"
+					th:value="${goalTemplate}" />
+                </select>
+            </div>
+
+			<div id="form-fields">
+	            <div id="1-1" class="form-group" style="display:none;">
+	                <label>percentage</label>
+	                <input type="number" class="form-control" name="percentage"/>
+	            </div>
+	            <div id="1-2" class="form-group" style="display:none;">
+	                <label>in Sector</label>
+	                <input type="text" class="form-control" name="sector1"/>
+	            </div>
+
+	            <div id="2-1" class="form-group" style="display:none;">
+	                <label>percentage</label>
+	                <input type="number" class="form-control" name="percentage"/>
+	            </div>
+	            <div id="2-2" class="form-group" style="display:none;">
+	                <label>from Sector</label>
+	                <input type="text" class="form-control" name="sector1"/>
+	            </div>
+	            <div id="2-3" class="form-group" style="display:none;">
+	                <label>to Sector</label>
+	                <input type="text" class="form-control" name="sector2"/>
+	            </div>
+
+	            <div id="3-1" class="form-group" style="display:none;">
+	                <label>years</label>
+	                <input type="number" class="form-control" name="length"/>
+	            </div>
+
+	            <div id="4-1" class="form-group" style="display:none;">
+	                <label>amount</label>
+	                <input type="number" class="form-control" name="amount"/>
+	            </div>
+
+	            <div id="5-1" class="form-group" style="display:none;">
+	                <label>length</label>
+	                <input type="number" class="form-control" name="length"/>
+	            </div>
+	            <div id="5-2" class="form-group" style="display:none;">
+	                <label>months/years</label>
+	                <select name="monthsOrYears">
+	                    <option>Months</option>
+	                    <option>Years</option>
+	                </select>
+	            </div>
+
+	            <div id="6-1" class="form-group" style="display:none;">
+	                <label>risk</label>
+	                <select name="risk">
+	                    <option>Very high</option>
+	                    <option>high</option>
+	                    <option>medium</option>
+	                    <option>low</option>
+	                    <option>Very low</option>
+	                </select>
+	            </div>
+
+	            <div id="7-1" class="form-group" style="display:none;">
+	                <label>monthly deposit</label>
+	                <input type="number" class="form-control" name="monthlyDepositAmount"/>
+	            </div>
+	            <div id="7-2" class="form-group" style="display:none;">
+	                <label>goal amount</label>
+	                <input type="number" class="form-control" name="amount"/>
+	            </div>
+			</div>
+            <button id="0-1" type="submit" class="btn btn-default" style="display:none;">Create Goal</button>
+        </form>
+    </div>
+</body>
+</html>
