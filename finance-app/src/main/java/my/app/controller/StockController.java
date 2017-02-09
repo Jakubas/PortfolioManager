@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import my.app.domain.Stock;
-import my.app.service.StockDailyInformationService;
 import my.app.service.StockService;
-import my.app.update_database.UpdateStockInformation;
 
 @Controller
 public class StockController {
