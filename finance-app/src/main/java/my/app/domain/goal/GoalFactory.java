@@ -12,17 +12,15 @@ import my.app.domain.goal.Goal.Type;
 @Component
 public class GoalFactory {
 
-	public Goal getGoal(User user, String goalStr, String goalTarget, String goalTarget2, String goalTarget3) {
+	public Goal getGoal(User user, String goalStr) {
 	   Type type = getType(goalStr);
+	   Goal goal = new Goal(user, type, goalStr);
 	   
-	   //for some goals goalTarget2 and goalTarget3 can be null
-	   //e.g. I want x% of my stock in y sector, only has two targets x and y
-	   return new Goal(user, type, goalStr, goalTarget, goalTarget2, goalTarget3);
+	   return goal;
    }
 	
 	//compare the string to all template strings and return the type of the most similar one
 	private Type getType(String goalStr) {
-		
 		List<String> templates = GoalTemplates.goalTemplates;
 		Map<String, Type> goalTypeMapping = GoalTemplates.goalToTypeMapping;
 		
