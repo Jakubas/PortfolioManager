@@ -4,27 +4,55 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.sun.media.sound.InvalidDataException;
 
 import my.app.domain.User;
 import my.app.domain.goal.Goal.Type;
+import my.app.service.StockService;
 
 @Component
 public class GoalFactory {
 	
+	private final StockService stockService;
+	
+	@Autowired
+	public GoalFactory(StockService stockService) {
+		this.stockService = stockService;
+	}
+	
 	public Goal getGoal(User user, String goalTemplate, Double percentage, 
 			String sector1, String sector2, Integer monthlyDepositAmount, 
-			Integer amount, Double length, String risk, String monthsOrYears) {
+			Integer amount, Double length, String risk, String monthsOrYears) throws InvalidDataException {
 		
-	   Type type = getType(goalTemplate);
-	   String goalStr = generateGoalText(goalTemplate, type, percentage, sector1, sector2, 
+		if(!areSectorsValid(sector1, sector2)) {
+			throw new InvalidDataException(sector1 + " or " + sector2 + " is not a sector");
+		}
+        Type type = getType(goalTemplate);
+	    String goalStr = generateGoalText(goalTemplate, type, percentage, sector1, sector2, 
 			   monthlyDepositAmount, amount, length, risk, monthsOrYears);
 	   
-	   Goal goal = new Goal(user, type, goalStr);
-	   setGoalTargets(goal, percentage, sector1, sector2, 
+	    Goal goal = new Goal(user, type, goalStr);
+	    setGoalTargets(goal, percentage, sector1, sector2, 
 			   monthlyDepositAmount, amount, length, risk, monthsOrYears);
-	   return goal;
+        return goal;
    }
+
+	//checks if the sectors provided as arguments are in the list of valid sectors
+	private boolean areSectorsValid(String sector1, String sector2) {
+		List<String> sectors = stockService.getSectors();
+		if (sector1 != null) {
+			if (!sectors.contains(sector1)) {
+				return false;
+			}
+		}
+		if (sector2 != null) {
+			return sectors.contains(sector2);
+		}
+		return true;
+	}
 
 	private String generateGoalText(String goalTemplate, Type type, Double percentage, String sector1, String sector2,
 			Integer monthlyDepositAmount, Integer amount, Double length, String risk, String monthsOrYears) {

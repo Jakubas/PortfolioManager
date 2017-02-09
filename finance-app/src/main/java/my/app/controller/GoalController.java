@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.sun.media.sound.InvalidDataException;
+
 import my.app.domain.User;
 import my.app.domain.goal.Goal;
 import my.app.domain.goal.Goal.Type;
@@ -76,7 +78,13 @@ public class GoalController {
 		System.out.println(risk);
 		System.out.println(monthsOrYears);
 		System.out.println("-----------------------------");
-		Goal goal = goalFactory.getGoal(user, goalTemplate, percentage, sector1, sector2, monthlyDepositAmount, amount, length, risk, monthsOrYears);
+		Goal goal;
+		try {
+			goal = goalFactory.getGoal(user, goalTemplate, percentage, sector1, sector2, monthlyDepositAmount, amount, length, risk, monthsOrYears);
+		} catch (InvalidDataException e) {
+			model.addAttribute("error", true);
+			return "goals";
+		}
 		goalService.saveGoal(goal);
 		return "redirect:goals";
 	}
