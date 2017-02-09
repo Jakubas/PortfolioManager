@@ -30,7 +30,7 @@ public class StockRestController {
 	    json.put("id", stock.getId());
 	    json.put("name", stock.getName());
 	    json.put("ticker", stock.getTicker());
-	    json.put("industry", stock.getIndustry());
+	    json.put("sector", stock.getSector());
 		return json.toString();
 	}
 	
@@ -45,7 +45,7 @@ public class StockRestController {
 		    json.put("id", stock.getId());
 		    json.put("name", stock.getName());
 		    json.put("ticker", stock.getTicker());
-		    json.put("industry", stock.getIndustry());
+		    json.put("sector", stock.getSector());
 			jsonStrings.add(json.toMap());
 		}
 		return jsonStrings;

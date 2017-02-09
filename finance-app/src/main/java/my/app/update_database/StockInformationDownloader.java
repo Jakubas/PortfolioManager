@@ -27,7 +27,7 @@ public class StockInformationDownloader {
 		}
 	}
 	
-	//downloads a file that contains the stock ticker symbol, stock name and industry
+	//downloads a file that contains the stock ticker symbol, stock name and sector
 	public static void downloadBaseStockInformation(String filePath) {
 		try {
 			URL url = new URL("http://data.okfn.org/data/core/s-and-p-500-companies/r/constituents.csv");

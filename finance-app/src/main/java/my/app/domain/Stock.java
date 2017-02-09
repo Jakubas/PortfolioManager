@@ -26,7 +26,7 @@ public class Stock {
 	private String ticker;
 
 	@NotNull
-	private String industry;
+	private String sector;
 	
 	@OneToMany(mappedBy = "stock")
 	private List<StockDailyInformation> stockDailyInformations;
@@ -46,10 +46,10 @@ public class Stock {
 		
 	}
 	
-	public Stock(String name, String ticker, String industry) {
+	public Stock(String name, String ticker, String sector) {
 		this.name = name;
 		this.ticker = ticker;
-		this.industry = industry;
+		this.sector = sector;
 	}
 	
 	public int getId() {
@@ -64,8 +64,8 @@ public class Stock {
 		return ticker;
 	}
 	
-	public String getIndustry() {
-		return industry;
+	public String getSector() {
+		return sector;
 	}
 	
 	public List<StockDailyInformation> getStockDailyInformations() {

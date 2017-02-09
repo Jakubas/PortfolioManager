@@ -53,8 +53,8 @@ public class StockParser {
 		String[] stockStrs = parser.splitLine(line);
 		String ticker = parseTicker(stockStrs[i++]);
 		String name = stockStrs[i++];
-		String industry = stockStrs[i];
-		Stock stock = new Stock(name, ticker, industry);
+		String sector = stockStrs[i];
+		Stock stock = new Stock(name, ticker, sector);
 		return stock;
 	}
 	
