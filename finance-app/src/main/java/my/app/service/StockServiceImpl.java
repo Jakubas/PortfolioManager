@@ -49,4 +49,10 @@ public class StockServiceImpl implements StockService {
 	public void deleteStock(Stock stock) {
 		dao.deleteStock(stock);
 	}
+
+	@Override
+	public List<String> getSectors() {
+		List<String> sectors = dao.getSectors();
+		return sectors;
+	}
 }

@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -79,5 +80,15 @@ public class StockDAOImpl implements StockDAO {
 		if (stock != null) {
 			session.delete(stock);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> getSectors() {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(Stock.class);
+		criteria.setProjection(Projections.distinct(Projections.property("sector")));
+		List<String> sectors = criteria.list();
+		return sectors;
 	}
 }

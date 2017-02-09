@@ -13,4 +13,5 @@ public interface StockService {
 	List<Stock> getStocks();
 	void updateStock(Stock stock);
 	void deleteStock(Stock stock);
+	List<String> getSectors();
 }
