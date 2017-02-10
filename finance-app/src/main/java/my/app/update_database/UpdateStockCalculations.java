@@ -4,6 +4,7 @@ import java.util.List;
 
 import my.app.domain.Stock;
 import my.app.domain.StockMetrics;
+import my.app.risk.Risk;
 import my.app.service.StockMetricsService;
 import my.app.service.StockService;
 import my.app.stock_calculations.StockDataCalculations;
@@ -26,7 +27,7 @@ public class UpdateStockCalculations {
 			Double oneYearAnnualisedReturn = StockDataCalculations.calculate1YrAnnualisedReturn(stock);
 			Double fiveYearAnnualisedReturn = StockDataCalculations.calculate5YrAnnualisedReturn(stock);
 			Double tenYearAnnualisedReturn = StockDataCalculations.calculate10YrAnnualisedReturn(stock);
-			Double variance = StockDataCalculations.calculateVariance(stock);
+			Double variance = Risk.calculateVariance(stock);
 			
 			StockMetrics stockMetrics = 
 					new StockMetrics(stock, quarterlyAnnualisedReturn, oneYearAnnualisedReturn, 

@@ -18,6 +18,7 @@ import my.app.domain.goal.Goal;
 import my.app.domain.goal.Goal.Type;
 import my.app.domain.goal.GoalFactory;
 import my.app.domain.goal.GoalTemplates;
+import my.app.risk.RiskValues;
 import my.app.service.GoalService;
 import my.app.service.StockService;
 import my.app.service.UserService;
@@ -42,13 +43,15 @@ public class GoalController {
 	@RequestMapping(value = "portfolio/goals", method = RequestMethod.GET)
 	public String getGoals(Model model) {
 		List<Goal> goals = goalService.getGoals();
-		List<String> goalTemplates = GoalTemplates.goalTemplates;
-		Map<String, Type> goalToTypeMapping = GoalTemplates.goalToTypeMapping;
+		List<String> goalTemplates = GoalTemplates.GOAL_TEMPLATES;
+		Map<String, Type> goalToTypeMapping = GoalTemplates.GOAL_TO_TYPE_MAPPING;
 		List<String> sectors = stockService.getSectors();
+		List<String> risks = RiskValues.RISKS;
 		model.addAttribute("goals", goals);
 		model.addAttribute("goalTemplates", goalTemplates);
 		model.addAttribute("typeMap", goalToTypeMapping);
 		model.addAttribute("sectors", sectors);
+		model.addAttribute("risks", risks);
 		return "goals";
 	}
 	 

@@ -105,8 +105,8 @@ public class GoalFactory {
 
 	//compare the string to all template strings and return the type of the most similar one
 	private Type getType(String goalTemplate) {
-		List<String> templates = GoalTemplates.goalTemplates;
-		Map<String, Type> goalTypeMapping = GoalTemplates.goalToTypeMapping;
+		List<String> templates = GoalTemplates.GOAL_TEMPLATES;
+		Map<String, Type> goalTypeMapping = GoalTemplates.GOAL_TO_TYPE_MAPPING;
 		
 		String mostSimiliar = templates.get(0);
 		double highestScore = 0.0;
