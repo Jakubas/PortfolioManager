@@ -47,7 +47,7 @@ public class User {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dob;
 	
-	private Long cashAmount;
+	private double cashAmount;
 	
 	@OneToMany(mappedBy = "user")
 	private List<Goal> goals;
@@ -112,7 +112,7 @@ public class User {
 		this.dob = dob;
 	}
 
-	public Long getCashAmount() {
+	public double getCashAmount() {
 		return cashAmount;
 	}
 
@@ -126,5 +126,36 @@ public class User {
 	
 	public List<StockInPortfolio> getPortfolio() {
 		return portfolio;
+	}
+	
+	//the value of all investments in the user's portfolio
+	public double portfolioValue() {
+		double value = 0;
+		for (StockInPortfolio stockInPortfolio : portfolio) {
+			value += stockInPortfolio.getValue();
+		}
+		return value + cashAmount;
+	}
+	
+	//the value of all investments in a given sector from a user's portfolio
+	public double sectorValue(String sector) {
+		double value = 0;
+		for (StockInPortfolio stockInPortfolio : portfolio) {
+			if (isInSector(stockInPortfolio, sector)) {
+				value += stockInPortfolio.getValue();
+			}
+		}
+		return value + cashAmount;
+	}
+
+	private boolean isInSector(StockInPortfolio stockInPortfolio, String sector) {
+		String stockSector = stockInPortfolio.getStock().getSector();
+		return stockSector.equals(sector);
+	}
+
+	public double calculateSectorWeight(String sector) {
+		double porfolioValue = portfolioValue();
+		double sectorValue = sectorValue(sector);
+		return sectorValue/porfolioValue;
 	}
 }
