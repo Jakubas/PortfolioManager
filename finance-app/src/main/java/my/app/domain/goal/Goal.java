@@ -1,5 +1,8 @@
 package my.app.domain.goal;
 
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -52,6 +55,8 @@ public class Goal {
     private Double length;
     
     private String risk;
+    
+    private Date startDate;
     
 	public Goal() {
 		
@@ -139,4 +144,90 @@ public class Goal {
 		this.risk = risk;
 	}
 	
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+	
+	public double[] getProgress() {
+		
+		//the current progress
+		double progressValue = 0; 
+		//the goal that is to be achieved
+		double progressMax = 0;
+		switch(type) {
+		case GROW_TO_AMOUNT:
+			progressValue = user.portfolioValue();
+			progressMax = amount;
+			break;
+		case INVEST_TIME_LENGTH:
+			progressValue = calculateElapsedTime();
+			progressMax = percentage;
+			break;
+		case MONTHLY_INVESTOR:
+			progressValue = user.portfolioValue();
+			progressMax = length;
+			break;
+		case MOVE:
+			progressValue = user.calculateSectorWeight(sector1);
+			progressValue = user.calculateSectorWeight(sector2);
+			progressMax = percentage;
+			break;
+		case RETIRE:
+			progressValue = calculateElapsedTime();
+			progressMax = length;
+			break;
+		case SECTOR:
+			progressValue = user.calculateSectorWeight(sector1);
+			progressMax = percentage;
+			break;
+		case RISK:
+			/*
+			risk 1(very low - 5(very high)
+			1 - 20%
+			2 - 40%
+			3 - 60%
+			4 - 80%
+			5 - 100%
+			medium to very high (3 to 5) - 60/100%
+			low to high (2 to 4) - 40/80%
+			high to low (4 to 2) - 80/40%
+			*/
+			progressMax = riskToNumber(risk);
+			break;
+		}
+		double progressPercentage = (progressValue/progressMax) * 100; 
+				
+		double[] progress = new double[3];
+		progress[0] = progressValue;
+		progress[1] = progressMax;
+		progress[2] = progressPercentage;
+		return progress;
+	}
+
+	//calculate the amount of time elapsed (in years) from the start date to today's date
+	private double calculateElapsedTime() {
+		Date currentDate = new Date();
+		long months = ChronoUnit.MONTHS.between(startDate.toInstant(), currentDate.toInstant());
+		return ((double) months/12.0);
+	}
+
+	private int riskToNumber(String risk) {
+		switch (risk) {
+		case "very low":
+			return 0;
+		case "low":
+			return 1;
+		case "medium":
+			return 3;
+		case "high":
+			return 4;
+		case "very high":
+			return 5;
+		}
+		return 0;
+	}
 }
