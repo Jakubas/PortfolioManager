@@ -2,6 +2,7 @@ package my.app.domain;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -125,7 +126,24 @@ public class User {
 	}
 	
 	public List<StockInPortfolio> getPortfolio() {
-		return portfolio;
+		//filter sold stock
+		List<StockInPortfolio> activePortfolio = new ArrayList<StockInPortfolio>();
+		for (StockInPortfolio sip : portfolio) {
+			if (!sip.isStockSold()) {
+				activePortfolio.add(sip);
+			}
+		}
+		return activePortfolio;
+	}
+	
+	public List<StockInPortfolio> getHistoricalPortfolio() {
+		List<StockInPortfolio> historicalPortfolio = new ArrayList<StockInPortfolio>();
+		for (StockInPortfolio sip : portfolio) {
+			if (sip.isStockSold()) {
+				historicalPortfolio.add(sip);
+			}
+		}
+		return historicalPortfolio;
 	}
 	
 	//the value of all investments in the user's portfolio
@@ -185,6 +203,4 @@ public class User {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
 }
