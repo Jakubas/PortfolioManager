@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import my.app.domain.goal.Goal;
+import my.app.risk.Risk;
 
 @Entity
 public class User {
@@ -160,8 +161,8 @@ public class User {
 	//the value of all investments in a given sector from a user's portfolio
 	public double sectorValue(String sector) {
 		double value = 0;
-		for (StockInPortfolio stockInPortfolio : portfolio) {
-			if (!stockInPortfolio.isStockSold() && isInSector(stockInPortfolio, sector)) {
+		for (StockInPortfolio stockInPortfolio : getPortfolio()) {
+			if (isInSector(stockInPortfolio, sector)) {
 				value += stockInPortfolio.getValue();
 			}
 		}
@@ -170,8 +171,8 @@ public class User {
 	
 	private double stockValue(Stock stock) {
 		double value = 0;
-		for (StockInPortfolio stockInPortfolio : portfolio) {
-			if (!stockInPortfolio.isStockSold() && isStock(stockInPortfolio, stock)) {
+		for (StockInPortfolio stockInPortfolio : getPortfolio()) {
+			if (isStock(stockInPortfolio, stock)) {
 				value += stockInPortfolio.getValue();
 			}
 		}
@@ -200,7 +201,6 @@ public class User {
 	}
 
 	public String calculatePortfolioRisk() {
-		// TODO Auto-generated method stub
-		return null;
+		return Risk.calculatePortfolioRisk(getPortfolio());
 	}
 }

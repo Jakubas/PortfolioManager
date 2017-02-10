@@ -2,6 +2,7 @@ package my.app.domain.goal;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import my.app.domain.User;
+import my.app.risk.RiskValues;
 
 @Entity
 public class Goal {
@@ -56,7 +58,13 @@ public class Goal {
     
     private String risk;
     
+    private String startRisk;
+    
     private Date startDate;
+    
+    private Double sector1StartWeight;
+    
+    private Double sector2StartWeight;
     
 	public Goal() {
 		
@@ -66,6 +74,18 @@ public class Goal {
 		this.user = user;
 		this.type = type;
 		this.goalStr = goalStr;
+		setTypeSpecificFields();
+	}
+
+	private void setTypeSpecificFields() {
+		if (type == Type.MOVE) {
+			sector1StartWeight = user.calculateSectorWeight(sector1);
+			sector2StartWeight = user.calculateSectorWeight(sector2);
+		} else if (type == Type.RETIRE || type == Type.INVEST_TIME_LENGTH) {
+			startDate = new Date();
+		} else if (type == Type.RISK) {
+			startRisk = user.calculatePortfolioRisk();
+		}
 	}
 
 	public int getId() {
@@ -152,58 +172,60 @@ public class Goal {
 		this.startDate = startDate;
 	}
 	
+	public Double getSector1StartWeight() {
+		return sector1StartWeight;
+	}
+	
+	public Double getSector2StartWeight() {
+		return sector2StartWeight;
+	}
+	
+	public String startRisk() {
+		return startRisk;
+	}
+	
 	public double[] getProgress() {
 		
 		//the current progress
 		double progressValue = 0; 
 		//the goal that is to be achieved
-		double progressMax = 0;
+		double progressGoal = 0;
 		switch(type) {
 		case GROW_TO_AMOUNT:
 			progressValue = user.portfolioValue();
-			progressMax = amount;
+			progressGoal = amount;
 			break;
 		case INVEST_TIME_LENGTH:
 			progressValue = calculateElapsedTime();
-			progressMax = percentage;
+			progressGoal = percentage;
 			break;
 		case MONTHLY_INVESTOR:
 			progressValue = user.portfolioValue();
-			progressMax = length;
+			progressGoal = length;
 			break;
 		case MOVE:
 			progressValue = user.calculateSectorWeight(sector1);
 			progressValue = user.calculateSectorWeight(sector2);
-			progressMax = percentage;
+			progressGoal = percentage;
 			break;
 		case RETIRE:
 			progressValue = calculateElapsedTime();
-			progressMax = length;
+			progressGoal = length;
 			break;
 		case SECTOR:
 			progressValue = user.calculateSectorWeight(sector1);
-			progressMax = percentage;
+			progressGoal = percentage;
 			break;
 		case RISK:
-			/*
-			risk 1(very low - 5(very high)
-			1 - 20%
-			2 - 40%
-			3 - 60%
-			4 - 80%
-			5 - 100%
-			medium to very high (3 to 5) - 60/100%
-			low to high (2 to 4) - 40/80%
-			high to low (4 to 2) - 80/40%
-			*/
-			progressMax = riskToNumber(risk);
+			progressValue = riskToNumber(user.calculatePortfolioRisk());
+			progressGoal = riskToNumber(risk);
 			break;
 		}
-		double progressPercentage = (progressValue/progressMax) * 100; 
+		double progressPercentage = Math.abs((progressValue/progressGoal) * 100); 
 				
 		double[] progress = new double[3];
 		progress[0] = progressValue;
-		progress[1] = progressMax;
+		progress[1] = progressGoal;
 		progress[2] = progressPercentage;
 		return progress;
 	}
@@ -216,17 +238,13 @@ public class Goal {
 	}
 
 	private int riskToNumber(String risk) {
-		switch (risk) {
-		case "very low":
-			return 0;
-		case "low":
-			return 1;
-		case "medium":
-			return 3;
-		case "high":
-			return 4;
-		case "very high":
-			return 5;
+		List<String> risks = RiskValues.RISKS;
+		int i = 1;
+		for(String risk2 : risks) {
+			if (risk.equals(risk2)) {
+				return i;
+			}
+			i++;
 		}
 		return 0;
 	}
