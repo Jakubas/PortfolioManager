@@ -48,6 +48,7 @@ public class PortfolioController {
 	@RequestMapping(value = "portfolio", method = RequestMethod.POST)
 	public String addToPortfolio(Model model, Principal principal,
 			@RequestParam("stockId") int stockId,
+			@RequestParam("amount") int amount,
 			@RequestParam(value = "buyDate", required = false) String buyDateStr) {
 		
 		String username = principal.getName();
@@ -64,7 +65,7 @@ public class PortfolioController {
 		} else {
 			buyDate = new Date();
 		}
-		StockInPortfolio sip = new StockInPortfolio(stock, user, buyDate);
+		StockInPortfolio sip = new StockInPortfolio(stock, user, amount, buyDate);
 		stockInPortfolioService.saveStockInPortfolio(sip);
 		return "redirect:stocks";
 	}
@@ -80,6 +81,7 @@ public class PortfolioController {
 	@RequestMapping(value = "portfolio/{stockInPortfolioId}", method = RequestMethod.PUT)
 	public String updateStockInPortfolio(RedirectAttributes ra, Principal principal,
 			@PathVariable("stockInPortfolioId") int id,
+			@RequestParam("amount") int amount,
 			@RequestParam("buyDate") String buyDateStr,
 			@RequestParam(value = "sellDate", required = false) String sellDateStr,
 			@RequestParam("buyPrice") Double buyPrice,
@@ -104,6 +106,7 @@ public class PortfolioController {
 			ra.addFlashAttribute("dateError2", true);
 			return "redirect:/portfolio/{stockInPortfolioId}";
 		}
+		sip.setAmount(amount);
 		if (!buyPrice.equals(prevBuyPrice)) {
 			sip.setBuyPrice(buyPrice);
 		}
@@ -112,5 +115,15 @@ public class PortfolioController {
 		}
 		stockInPortfolioService.updateStockInPortfolio(sip);
 		return "redirect:/portfolio";
+	}
+	
+	@RequestMapping(value = "portfolio/{stockInPortfolioId}", method = RequestMethod.DELETE)
+	public String deleteStockInPortfolio(Model model, Principal principal,
+			@PathVariable("stockInPortfolioId") int id) {
+		
+		StockInPortfolio sip = stockInPortfolioService.getStockInPortfolioById(id);
+		stockInPortfolioService.deleteStockInPortfolio(sip);
+		
+		return getPortfolio(model, principal);
 	}
 }

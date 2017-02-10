@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.format.annotation.NumberFormat.Style;
 
 import my.app.formatter.PercentageFormat;
 import my.app.stock_calculations.StockDataCalculations;
@@ -41,8 +43,10 @@ public class StockInPortfolio {
 	private Date sellDate;
 	
 	@NotNull
+	@NumberFormat(style = Style.NUMBER, pattern = "#,###.##")
 	private Double buyPrice;
 	
+	@NumberFormat(style = Style.NUMBER, pattern = "#,###.##")
 	private Double sellPrice;
 	
 	@NotNull
@@ -52,21 +56,30 @@ public class StockInPortfolio {
 	@PercentageFormat
 	private Double annualisedReturn;
 	
+	@NotNull
+	private int amount;
+	
+	@NotNull
+	@NumberFormat(style = Style.NUMBER, pattern = "#,###.##")
+	private double value;
+	
 	public StockInPortfolio() {
 		
 	}
 	
-	public StockInPortfolio(Stock stock, User user, Date buyDate) {
+	public StockInPortfolio(Stock stock, User user, int amount, Date buyDate) {
 		this.stock = stock;
 		this.user = user;
+		this.amount = amount;
 		this.buyDate = buyDate;
 		this.buyPrice = StockDataCalculations.findStockPriceOnDate(stock, buyDate);
 		calculateMetrics();
 	}
 
-	public StockInPortfolio(Stock stock, User user, Date buyDate, Date sellDate) {
+	public StockInPortfolio(Stock stock, User user, int amount, Date buyDate, Date sellDate) {
 		this.stock = stock;
 		this.user = user;
+		this.amount = amount;
 		this.buyDate = buyDate;
 		this.buyPrice = StockDataCalculations.findStockPriceOnDate(stock, buyDate);
 		this.sellDate = sellDate;
@@ -74,15 +87,16 @@ public class StockInPortfolio {
 		calculateMetrics();
 	}
 	
-	private void calculateMetrics() {
+	public void calculateMetrics() {
 		Double sellPrice = this.sellPrice;
 		Date sellDate = this.sellDate;
 		if (sellPrice == null) {
-			if (sellDate == null) {
-				sellPrice = stock.getLastTradePrice();
-			} else {
+			if (isStockSold()) {
+				//this is most likely never reached e.g. dead code
 				this.sellPrice = StockDataCalculations.findStockPriceOnDate(stock, sellDate);
 				sellPrice = this.sellPrice;
+			} else {
+				sellPrice = stock.getLastTradePrice();
 			}
 		}
 		double returnOnInvestment = (sellPrice - buyPrice)/buyPrice;
@@ -94,6 +108,11 @@ public class StockInPortfolio {
 		}
 		this.returnOnInvestment = returnOnInvestment;
 		this.annualisedReturn = annualisedReturn;
+		this.value = sellPrice * amount;
+	}
+	
+	public boolean isStockSold() {
+		return sellDate != null;
 	}
 	
 	public Date getBuyDate() {
@@ -164,5 +183,17 @@ public class StockInPortfolio {
 	
 	public Double getAnnualisedReturn() {
 		return annualisedReturn;
+	}
+	
+	public int getAmount() {
+		return amount;
+	}
+	
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+	
+	public double getValue() {
+		return value;
 	}
 }

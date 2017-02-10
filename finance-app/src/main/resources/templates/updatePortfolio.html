@@ -44,6 +44,11 @@
 		<form th:action="@{/portfolio/{id}/(id=${stockInPortfolio.id})}" method="post">
             <input type="hidden" name="_method" value="put" />
 			<div class="form-group">
+				<label>Amount</label>
+				<input type="number" class="form-control" max="2147483647" name="amount"
+				th:value="${stockInPortfolio.amount}" />
+			</div>
+			<div class="form-group">
 				<label>Date bought</label>
 				<input type="date" class="form-control" name="buyDate" required="true"
                 th:value="${{stockInPortfolio.buyDate}}" />
@@ -55,13 +60,13 @@
             </div>
             <div class="form-group">
                 <label>Buy price</label>
-                <input type="text" class="form-control" step="0.01" max="2147483647" name="buyPrice"
-                required="true" th:value="${stockInPortfolio.buyPrice}" />
+                <input type="number" class="form-control" step="0.01" name="buyPrice"
+                required="true" th:value="${{stockInPortfolio.buyPrice}}" />
             </div>
 			<div class="form-group">
 				<label>Sell price</label>
-				<input type="text" class="form-control" step="0.01" max="2147483647" name="sellPrice"
-                th:value="${stockInPortfolio.sellPrice}" />
+				<input type="number" class="form-control" step="0.01" name="sellPrice"
+                th:value="${{stockInPortfolio.sellPrice}}" />
 			</div>
 			<button type="submit" class="btn btn-default">Update</button>
 		</form>

@@ -35,43 +35,58 @@
 	  	</div>
     </nav>
 
-    <div class="container" th:each="stockInPortfolio : ${portfolio}">
-        <h3>
-            My Portfolio
-        </h3>
-        <div class="row" style="font-size:18px">
-            <div class="col-sm-2">
-                <a th:href="@{/stocks/{id}/(id=${stockInPortfolio.stock.id})}" th:text="${stockInPortfolio.stock.name}" />
-                <br />
-                Date Bought:
-                <br />
-                Date Sold:
-            </div>
-            <div class="col-sm-2">
-                <br />
-                <span th:text="${{stockInPortfolio.buyDate}}" />
-                <br />
-                <span th:text="${{stockInPortfolio.sellDate}} ? ${{stockInPortfolio.sellDate}} : 'N/A'" />
-            </div>
-            <div class="col-sm-2">
-                <span th:text="${stockInPortfolio.stock.ticker}" />
-                <br />
-                ROI:
-                <br />
-                Annualised:
-            </div>
-            <div class="col-sm-3">
-                <br />
-                <span th:text="${{stockInPortfolio.returnOnInvestment}}" />
-                <br />
-                <span th:text="${{stockInPortfolio.annualisedReturn}} ? ${{stockInPortfolio.annualisedReturn}} : 'N/A'" />
-            </div>
-        </div>
-		<form class="form-noborder" th:action="@{/portfolio/{id}/(id=${stockInPortfolio.id})}"
-		method="get">
-			<button type="submit" class="btn btn-link glyphicon glyphicon-edit" />
-		</form>
-	   	<br />
-    </div>
+	<div class="container">
+	<h3>
+		My Portfolio
+	</h3>
+	    <div th:each="stockInPortfolio : ${portfolio}">
+	        <div class="row" style="font-size:18px">
+	            <div class="col-sm-2">
+	                <a th:href="@{/stocks/{id}/(id=${stockInPortfolio.stock.id})}" th:text="${stockInPortfolio.stock.name}" />
+	                <br />
+	                Date Bought:
+	                <br />
+	                Date Sold:
+					<br />
+					Amount:
+	            </div>
+	            <div class="col-sm-2">
+	                <br />
+	                <span th:text="${{stockInPortfolio.buyDate}}" />
+	                <br />
+	                <span th:text="${{stockInPortfolio.sellDate}} ? ${{stockInPortfolio.sellDate}} : 'N/A'" />
+					<br />
+					<span th:text="${{stockInPortfolio.amount}}" />
+	            </div>
+	            <div class="col-sm-2">
+	                <span th:text="${stockInPortfolio.stock.ticker}" />
+	                <br />
+	                ROI:
+	                <br />
+	                Annualised:
+					<br />
+					Value:
+	            </div>
+	            <div class="col-sm-2">
+	                <br />
+	                <span th:text="${{stockInPortfolio.returnOnInvestment}}" />
+	                <br />
+	                <span th:text="${{stockInPortfolio.annualisedReturn}} ? ${{stockInPortfolio.annualisedReturn}} : 'N/A'" />
+					<br />
+					<span th:text="${{stockInPortfolio.value}}" />
+	            </div>
+				<form class="form-noborder" th:action="@{/portfolio/{id}/(id=${stockInPortfolio.id})}"
+				method="get">
+					<button type="submit" class="btn btn-link glyphicon glyphicon-edit" />
+				</form>
+				<form class="form-noborder" th:action="@{/portfolio/{id}/(id=${stockInPortfolio.id})}"
+				method="post">
+					<input type="hidden" name="_method" value="delete" />
+					<button type="submit" class="btn btn-link glyphicon glyphicon-remove" />
+				</form>
+	        </div>
+			<br />
+	    </div>
+	</div>
 </body>
 </html>
