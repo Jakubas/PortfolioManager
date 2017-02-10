@@ -47,7 +47,7 @@ public class User {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dob;
 	
-	private double cashAmount;
+	private Double cashAmount;
 	
 	@OneToMany(mappedBy = "user")
 	private List<Goal> goals;
@@ -112,11 +112,11 @@ public class User {
 		this.dob = dob;
 	}
 
-	public double getCashAmount() {
+	public Double getCashAmount() {
 		return cashAmount;
 	}
 
-	public void setCashAmount(Long cashAmount) {
+	public void setCashAmount(Double cashAmount) {
 		this.cashAmount = cashAmount;
 	}
 	
@@ -132,7 +132,9 @@ public class User {
 	public double portfolioValue() {
 		double value = 0;
 		for (StockInPortfolio stockInPortfolio : portfolio) {
-			value += stockInPortfolio.getValue();
+			if (!stockInPortfolio.isStockSold()) {
+				value += stockInPortfolio.getValue();
+			}
 		}
 		return value + cashAmount;
 	}
@@ -141,11 +143,25 @@ public class User {
 	public double sectorValue(String sector) {
 		double value = 0;
 		for (StockInPortfolio stockInPortfolio : portfolio) {
-			if (isInSector(stockInPortfolio, sector)) {
+			if (!stockInPortfolio.isStockSold() && isInSector(stockInPortfolio, sector)) {
 				value += stockInPortfolio.getValue();
 			}
 		}
-		return value + cashAmount;
+		return value;
+	}
+	
+	private double stockValue(Stock stock) {
+		double value = 0;
+		for (StockInPortfolio stockInPortfolio : portfolio) {
+			if (!stockInPortfolio.isStockSold() && isStock(stockInPortfolio, stock)) {
+				value += stockInPortfolio.getValue();
+			}
+		}
+		return value;
+	}
+
+	private boolean isStock(StockInPortfolio stockInPortfolio, Stock stock) {
+		return stockInPortfolio.getStock() == stock;
 	}
 
 	private boolean isInSector(StockInPortfolio stockInPortfolio, String sector) {
@@ -158,4 +174,17 @@ public class User {
 		double sectorValue = sectorValue(sector);
 		return sectorValue/porfolioValue;
 	}
+	
+	public double calculateStockWeight(Stock stock) {
+		double porfolioValue = portfolioValue();
+		double stockValue = stockValue(stock);
+		return stockValue/porfolioValue;
+	}
+
+	public String calculatePortfolioRisk() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 }
