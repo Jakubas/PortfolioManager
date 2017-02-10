@@ -17,7 +17,6 @@ public class RiskValues {
 	
 	@SuppressWarnings("serial")
 	public final static List<String> RISKS = new ArrayList<String>() {{
-		add(UNKNOWN);
 		add(VERY_LOW);
 		add(LOW); 
 		add(MEDIUM);

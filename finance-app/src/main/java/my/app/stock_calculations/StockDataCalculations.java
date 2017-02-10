@@ -10,6 +10,7 @@ import org.apache.commons.lang3.time.DateUtils;
 
 import my.app.domain.Stock;
 import my.app.domain.StockDailyInformation;
+import my.app.risk.RiskValues;
 
 //this class is used for various calculations regarding a stock, such as risk, annualised returns, etc.
 //annualisedReturns are estimates and may be off by a couple days
@@ -121,19 +122,19 @@ public class StockDataCalculations {
 	public static String calculateRisk(Double variance) {
 		double standardDeviation = Math.sqrt(variance)*100;
 		if (standardDeviation == 0) {
-			return "N/A";
+			return RiskValues.UNKNOWN;
 		} else if (standardDeviation < 10) {
-			return "very low risk";
+			return RiskValues.VERY_LOW;
 		} else if (standardDeviation < 20) {
-			return "low risk";
+			return RiskValues.LOW;
 		} else if (standardDeviation < 30) {
-			return "medium risk";
+			return RiskValues.MEDIUM;
 		} else if (standardDeviation < 40) {
-			return "medium-high risk";
+			return RiskValues.MEDIUM_HIGH;
 		} else if (standardDeviation < 50) {
-			return "high risk";
+			return RiskValues.HIGH;
 		} else {
-			return "very high risk";
+			return RiskValues.VERY_HIGH;
 		}
 	}
 	
