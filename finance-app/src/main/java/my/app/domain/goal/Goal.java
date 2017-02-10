@@ -1,5 +1,7 @@
 package my.app.domain.goal;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import my.app.controller.Utility;
 import my.app.domain.User;
 import my.app.risk.RiskValues;
 
@@ -197,11 +200,11 @@ public class Goal {
 			break;
 		case INVEST_TIME_LENGTH:
 			progressValue = calculateElapsedTime();
-			progressGoal = percentage;
+			progressGoal = length;
 			break;
 		case MONTHLY_INVESTOR:
 			progressValue = user.portfolioValue();
-			progressGoal = length;
+			progressGoal = amount;
 			break;
 		case MOVE:
 			progressValue = user.calculateSectorWeight(sector1);
@@ -233,7 +236,8 @@ public class Goal {
 	//calculate the amount of time elapsed (in years) from the start date to today's date
 	private double calculateElapsedTime() {
 		Date currentDate = new Date();
-		long months = ChronoUnit.MONTHS.between(startDate.toInstant(), currentDate.toInstant());
+		Period period = Period.between(Utility.fromDate(startDate), Utility.fromDate(currentDate)); 
+		int months = period.getMonths();
 		return ((double) months/12.0);
 	}
 

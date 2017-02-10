@@ -3,7 +3,15 @@
 <head>
 	<title>Investment App</title>
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-    <script th:inline="javascript">
+	<style>
+	.progress span {
+	    display: block;
+	    position: absolute;
+		color: black;
+	    width: 90%;
+	}
+	</style>
+	<script th:inline="javascript">
 	/*<![CDATA[*/
 	function expandForm() {
 		//set all form field divs be hidden and change their name to not interfere
@@ -103,9 +111,9 @@
         <div class="container" th:each="goal : ${goals}" >
             <h4 th:text ="${goal.goalStr}" />
             <div class="progress">
-              <div class="progress-bar" role="progressbar" aria-valuenow="200"
-              aria-valuemin="0" aria-valuemax="2000" style="width:50%">
-                200/2000
+              <div class="progress-bar" role="progressbar" th:aria-valuenow="${goal.getProgress()[2]}"
+              aria-valuemin="0" aria-valuemax="100" th:style="'width:' + ${goal.getProgress()[2]} +'%'">
+			  	<span th:text="${goal.getProgress()[2]} + '% (' + ${goal.getProgress()[0]} + '/' + ${goal.getProgress()[1]} + ')'" />
               </div>
             </div>
             <p>

@@ -155,7 +155,8 @@ public class User {
 				value += stockInPortfolio.getValue();
 			}
 		}
-		return value + cashAmount;
+		value = (cashAmount != null) ? value + cashAmount : value;
+		return value;
 	}
 	
 	//the value of all investments in a given sector from a user's portfolio
@@ -191,13 +192,13 @@ public class User {
 	public double calculateSectorWeight(String sector) {
 		double porfolioValue = portfolioValue();
 		double sectorValue = sectorValue(sector);
-		return sectorValue/porfolioValue;
+		return sectorValue/porfolioValue*100;
 	}
 	
 	public double calculateStockWeight(Stock stock) {
 		double porfolioValue = portfolioValue();
 		double stockValue = stockValue(stock);
-		return stockValue/porfolioValue;
+		return stockValue/porfolioValue*100;
 	}
 
 	public String calculatePortfolioRisk() {
