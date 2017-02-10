@@ -87,7 +87,7 @@ public class StockDataCalculations {
 		return calculateReturnInDateRange(stock, date, endDate);
 	}
 	
-	private static Double calculateReturnInDateRange(Stock stock, int numberOfDaysStart, int numberOfDaysEnd) {
+	public static Double calculateReturnInDateRange(Stock stock, int numberOfDaysStart, int numberOfDaysEnd) {
 		//date is initialised with the current time
 		Date currentDate = new Date();
 		Date startDate = subtractDaysFromDate(currentDate, numberOfDaysStart);
@@ -110,84 +110,6 @@ public class StockDataCalculations {
 	private static Double calculateReturn(double buyPrice, double sellPrice) {
 		double percentageChange = (sellPrice/buyPrice) - 1;
 		return percentageChange;
-	}
-	
-	//The risk is based on the last 10 years of historical data
-	//it is on a scale of 0 - 100, where 0 is very low risk and 100 is very high risk
-	public static String calculateRisk(Stock stock) {
-		double variance = calculateVariance(stock);
-		return calculateRisk(variance);
-	}
-	
-	public static String calculateRisk(Double variance) {
-		double standardDeviation = Math.sqrt(variance)*100;
-		if (standardDeviation == 0) {
-			return RiskValues.UNKNOWN;
-		} else if (standardDeviation < 10) {
-			return RiskValues.VERY_LOW;
-		} else if (standardDeviation < 20) {
-			return RiskValues.LOW;
-		} else if (standardDeviation < 30) {
-			return RiskValues.MEDIUM;
-		} else if (standardDeviation < 40) {
-			return RiskValues.MEDIUM_HIGH;
-		} else if (standardDeviation < 50) {
-			return RiskValues.HIGH;
-		} else {
-			return RiskValues.VERY_HIGH;
-		}
-	}
-	
-	public static double calculateVariance(Stock stock) {
-		//Calculate the yearly returns for the last 10 years
-		int yearlyReturnsLength = 10;
-		double[] yearlyReturns = new double[yearlyReturnsLength];
-		for(int i = 0; i < yearlyReturnsLength; i++) {
-			Double yearlyReturn = calculateReturnInDateRange(stock, i*365, (i+1)*365);
-			if (yearlyReturn == null) {
-				yearlyReturnsLength = i;
-				break;
-			}
-			yearlyReturns[i] = yearlyReturn;
-		}
-
-		//Calculate the average return.
-		double averageReturn = 0.0;
-		double cumulativeReturn = 0.0;
-		for (int i = 0; i < yearlyReturnsLength; i++) {
-			cumulativeReturn += yearlyReturns[i];
-		}
-		averageReturn = cumulativeReturn/yearlyReturnsLength;
-		
-		//calculate the sum of the squared differences
-		double sumOfSquaredDifferences = 0.0;
-		for (int i = 0; i < yearlyReturnsLength; i++) {
-			sumOfSquaredDifferences += Math.pow((yearlyReturns[i] - averageReturn), 2);
-		}
-
-		//calculate the variance
-		if (sumOfSquaredDifferences != 0 && yearlyReturnsLength != 0)
-			return sumOfSquaredDifferences/(yearlyReturnsLength - 1);
-		else
-			return 0;
-	}
-	
-	//bugs need to fix like in calculateVariance()
-	//not used anywhere
-	public static double calculateAverageReturn(Stock stock) {
-		//Calculate the yearly returns for the last 10 years
-		double[] yearlyReturns = new double[10];
-		for(int i = 0; i < 10; i++) {
-			yearlyReturns[i] = calculateReturnInDateRange(stock, i*365, (i+1)*365);
-		}
-		//Calculate the average return.
-		double averageReturn = 0.0;
-		double cumulativeReturn = 0.0;
-		for (int i = 0; i < yearlyReturns.length; i++) {
-			cumulativeReturn += yearlyReturns[i];
-		}
-		averageReturn = cumulativeReturn/yearlyReturns.length;
-		return averageReturn;
 	}
 	
 	private static StockDailyInformation findStockInformationForGivenDate(List<StockDailyInformation> stockInfos, Date date) {
