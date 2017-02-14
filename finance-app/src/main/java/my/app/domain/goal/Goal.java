@@ -261,8 +261,8 @@ public class Goal {
 		case SECTOR:
 			double currentPercentage = user.calculateSectorWeight(sector1);
 			double diff = Math.abs(percentage - currentPercentage);
-			double diffValue = (diff/100) * user.portfolioValue();
-			double percentageDiff = 1 - (percentage/currentPercentage);
+			String diffValue = String.format("%.2f", (diff/100) * user.portfolioValue());
+			String percentageDiff = String.format("%.2f", (1.0 - (percentage/currentPercentage))*100);
 			if (currentPercentage < percentage) {
 				tips.add("You need to increase holdings of " + sector1 + " sector by " + diff + "%");
 				
