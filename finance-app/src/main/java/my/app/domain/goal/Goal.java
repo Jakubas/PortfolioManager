@@ -230,39 +230,51 @@ public class Goal {
 		return progress;
 	}
 	
-//	public List<String> getTips() {
-//		List<String> tips = new ArrayList<String>();
-//		switch(type) {
-//		case GROW_TO_AMOUNT:
-//			tips.add("Based on your portfolio's historical performance you should reach this goal in x years");
-//			tips.add("Disclaimer: past performance does not guarantee future results");
-//			break;
-//		case INVEST_TIME_LENGTH:
-//			tips.add("x (years/months) have passed so far");
-//			break;
-//		case MONTHLY_INVESTOR:
-//			tips.add("Based on your monthly deposit amount and portfolio's historical performance you should reach this goal in x years");
-//			tips.add("Due to market volatility this is only an estimate. The lower the risk of your portfolio than the more accurate this estimate is");
-//			break;
-//		case MOVE:
-//			double currentPercentage = user.calculateSectorWeight(sector1);
-//			double diff = Math.abs(percentage - currentPercentage);
-//			if (currentPercentage < percentage) {
-//				tips.add("You need to increase holdings of " + sector1 + " sector by " + diff);
-//				tips.add("This can be accomplished by buying 100");
-//			} else {
-//				tips.add("You need to decrease holdings of " + sector1 + " sector by " + diff);
-//			}
-//			break;
-//		case RETIRE:
-//			break;
-//		case RISK:
-//			break;
-//		case SECTOR:
-//			break;
-//		}
-//		return "";
-//	}
+	public List<String> getTips() {
+		List<String> tips = new ArrayList<String>();
+		switch(type) {
+		case GROW_TO_AMOUNT:
+			user.annualisedPortfolioPerformance();
+			tips.add("Based on your portfolio's historical performance you should reach this goal in x years.");
+			tips.add("Disclaimer: past performance does not guarantee future results.");
+			break;
+		case INVEST_TIME_LENGTH:
+			tips.add("x (years/months) have passed so far");
+			break;
+		case MONTHLY_INVESTOR:
+			tips.add("Based on your monthly deposit amount and portfolio's historical performance you should reach this goal in x years.");
+			tips.add("Due to market volatility this is only an estimate. The lower the risk of your portfolio than the more accurate the estimate.");
+			break;
+		case MOVE:
+			break;
+		case RETIRE:
+			break;
+		case RISK:
+			String currentRisk = user.calculatePortfolioRisk();
+			tips.add("Current risk is: " + currentRisk);
+			if (riskToNumber(currentRisk) < riskToNumber(risk)) {
+				tips.add("To achieve this goal you need to buy riskier stock and sell some of your less risky stock holdings");
+			} else {
+				tips.add("To achieve this goal you need to sell some of your riskier stock holdings and buy less risky stock");
+			}
+			break;
+		case SECTOR:
+			double currentPercentage = user.calculateSectorWeight(sector1);
+			double diff = Math.abs(percentage - currentPercentage);
+			double diffValue = (diff/100) * user.portfolioValue();
+			double percentageDiff = 1 - (percentage/currentPercentage);
+			if (currentPercentage < percentage) {
+				tips.add("You need to increase holdings of " + sector1 + " sector by " + diff + "%");
+				
+				tips.add("This can be accomplished by buying " + percentageDiff + "% ($" + diffValue + ") more of stock in " + sector1 + " sector");
+			} else {
+				tips.add("You need to decrease holdings of " + sector1 + " sector by " + diff + "%");
+				tips.add("This can be accomplished by selling " + percentageDiff + "% ($" + diffValue + ") of your stock holdings in " + sector1 + " sector");
+			}
+			break;
+		}
+		return tips;
+	}
 
 	//calculate the amount of time elapsed (in years) from the start date to today's date
 	private double calculateElapsedTime() {
@@ -271,7 +283,7 @@ public class Goal {
 		int months = period.getMonths();
 		return ((double) months/12.0);
 	}
-
+	
 	private int riskToNumber(String risk) {
 		List<String> risks = RiskValues.RISKS;
 		int i = 1;
