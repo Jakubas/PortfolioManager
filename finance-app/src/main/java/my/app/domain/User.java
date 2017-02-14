@@ -150,7 +150,7 @@ public class User {
 	//the value of all investments in the user's portfolio
 	public double portfolioValue() {
 		double value = 0;
-		for (StockInPortfolio stockInPortfolio : portfolio) {
+		for (StockInPortfolio stockInPortfolio : getPortfolio()) {
 			if (!stockInPortfolio.isStockSold()) {
 				value += stockInPortfolio.getValue();
 			}
@@ -211,18 +211,14 @@ public class User {
 		return Risk.calculatePortfolioRisk(getPortfolio());
 	}
 
-//	public double annualisedPortfolioPerformance() {
-//		double annualisedPerformance = 0;
-//		int count = 0;
-//		for (StockInPortfolio stockInPortfolio : portfolio) {
-//			Double annualisedReturn = stockInPortfolio.getAnnualisedReturn();
-//			Double annualisedReturnWeighted = annualisedReturn * calculateHoldingWeight(stockInPortfolio); 
-//			annualisedPerformance += annualisedReturnWeighted;
-//			count++;
-//		}
-////		if (count != 0) { 
-////			annualisedPerformance = totalAnnualisedReturn/ (double) count;
-////		}
-//		return annualisedPerformance;
-//	}
+	//need to check this performance figure
+	public double annualisedPortfolioPerformance() {
+		double annualisedPerformance = 0;
+		for (StockInPortfolio stockInPortfolio : portfolio) {
+			Double annualisedReturn = stockInPortfolio.getAnnualisedReturn();
+			Double annualisedReturnWeighted = annualisedReturn * calculateHoldingWeight(stockInPortfolio); 
+			annualisedPerformance += annualisedReturnWeighted;
+		}
+		return annualisedPerformance;
+	}
 }
