@@ -75,16 +75,13 @@ public class Risk {
 	
 	//calculate the risk factor of a portfolio
 	public static String calculatePortfolioRisk(List<StockInPortfolio> portfolio) {
-		double count = 0;
-		double totalStockVarianceWeighted = 0;
+		double variance = 0;
 		for (StockInPortfolio sip : portfolio) {
 			Stock stock = sip.getStock();
 			double stockVariance = Risk.calculateVariance(stock);
-			double stockVarianceWeighted = stockVariance * sip.getUser().calculateStockWeight(stock);
-			count++;
-			totalStockVarianceWeighted += stockVarianceWeighted;
+			double stockVarianceWeighted = stockVariance * sip.getUser().calculateHoldingWeight(sip);
+			variance += stockVarianceWeighted;
 		}
-		double variance = totalStockVarianceWeighted/count;
 		return calculateRisk(variance);
 	}
 }

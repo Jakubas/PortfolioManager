@@ -200,8 +200,29 @@ public class User {
 		double stockValue = stockValue(stock);
 		return stockValue/porfolioValue*100;
 	}
+	
+	public double calculateHoldingWeight(StockInPortfolio stockInPortfolio) {
+		double porfolioValue = portfolioValue();
+		double holdingValue = stockInPortfolio.getValue();
+		return holdingValue/porfolioValue*100;
+	}
 
 	public String calculatePortfolioRisk() {
 		return Risk.calculatePortfolioRisk(getPortfolio());
 	}
+
+//	public double annualisedPortfolioPerformance() {
+//		double annualisedPerformance = 0;
+//		int count = 0;
+//		for (StockInPortfolio stockInPortfolio : portfolio) {
+//			Double annualisedReturn = stockInPortfolio.getAnnualisedReturn();
+//			Double annualisedReturnWeighted = annualisedReturn * calculateHoldingWeight(stockInPortfolio); 
+//			annualisedPerformance += annualisedReturnWeighted;
+//			count++;
+//		}
+////		if (count != 0) { 
+////			annualisedPerformance = totalAnnualisedReturn/ (double) count;
+////		}
+//		return annualisedPerformance;
+//	}
 }
