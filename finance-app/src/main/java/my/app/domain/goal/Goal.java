@@ -1,8 +1,7 @@
 package my.app.domain.goal;
 
-import java.time.LocalDate;
 import java.time.Period;
-import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -187,16 +186,16 @@ public class Goal {
 		return startRisk;
 	}
 	
-	public double[] getProgress() {
+	public Double[] getProgress() {
 		
 		//the current progress
-		double progressValue = 0; 
+		Double progressValue = null; 
 		//the goal that is to be achieved
-		double progressGoal = 0;
+		Double progressGoal = null;
 		switch(type) {
 		case GROW_TO_AMOUNT:
 			progressValue = user.portfolioValue();
-			progressGoal = amount;
+			progressGoal = Double.valueOf(amount);
 			break;
 		case INVEST_TIME_LENGTH:
 			progressValue = calculateElapsedTime();
@@ -204,12 +203,9 @@ public class Goal {
 			break;
 		case MONTHLY_INVESTOR:
 			progressValue = user.portfolioValue();
-			progressGoal = amount;
+			progressGoal = Double.valueOf(amount);
 			break;
 		case MOVE:
-			progressValue = user.calculateSectorWeight(sector1);
-			progressValue = user.calculateSectorWeight(sector2);
-			progressGoal = percentage;
 			break;
 		case RETIRE:
 			progressValue = calculateElapsedTime();
@@ -220,18 +216,53 @@ public class Goal {
 			progressGoal = percentage;
 			break;
 		case RISK:
-			progressValue = riskToNumber(user.calculatePortfolioRisk());
-			progressGoal = riskToNumber(risk);
 			break;
 		}
-		double progressPercentage = Math.abs((progressValue/progressGoal) * 100); 
-				
-		double[] progress = new double[3];
+		
+		Double progressPercentage = null;
+		if (progressValue != null && progressGoal != null) {
+			progressPercentage = Math.abs((progressValue/progressGoal) * 100); 
+		}		
+		Double[] progress = new Double[3];
 		progress[0] = progressValue;
 		progress[1] = progressGoal;
 		progress[2] = progressPercentage;
 		return progress;
 	}
+	
+//	public List<String> getTips() {
+//		List<String> tips = new ArrayList<String>();
+//		switch(type) {
+//		case GROW_TO_AMOUNT:
+//			tips.add("Based on your portfolio's historical performance you should reach this goal in x years");
+//			tips.add("Disclaimer: past performance does not guarantee future results");
+//			break;
+//		case INVEST_TIME_LENGTH:
+//			tips.add("x (years/months) have passed so far");
+//			break;
+//		case MONTHLY_INVESTOR:
+//			tips.add("Based on your monthly deposit amount and portfolio's historical performance you should reach this goal in x years");
+//			tips.add("Due to market volatility this is only an estimate. The lower the risk of your portfolio than the more accurate this estimate is");
+//			break;
+//		case MOVE:
+//			double currentPercentage = user.calculateSectorWeight(sector1);
+//			double diff = Math.abs(percentage - currentPercentage);
+//			if (currentPercentage < percentage) {
+//				tips.add("You need to increase holdings of " + sector1 + " sector by " + diff);
+//				tips.add("This can be accomplished by buying 100");
+//			} else {
+//				tips.add("You need to decrease holdings of " + sector1 + " sector by " + diff);
+//			}
+//			break;
+//		case RETIRE:
+//			break;
+//		case RISK:
+//			break;
+//		case SECTOR:
+//			break;
+//		}
+//		return "";
+//	}
 
 	//calculate the amount of time elapsed (in years) from the start date to today's date
 	private double calculateElapsedTime() {
