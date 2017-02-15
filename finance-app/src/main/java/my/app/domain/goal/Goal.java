@@ -1,7 +1,9 @@
 package my.app.domain.goal;
 
+import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -266,6 +268,21 @@ public class Goal {
 		case MOVE:
 			break;
 		case RETIRE:
+			double elapsedYears = calculateElapsedTime();
+			String elapsedYearsStr = String.format("%.0f", elapsedYears);
+			tips.add(elapsedYearsStr + " years have passed so far");
+			if (user.getDob() != null) {
+				long monthsToRetirement = Math.round((length - elapsedYears) * 12.0);
+				LocalDate retirementDay = LocalDate.now().plusMonths(monthsToRetirement);
+				LocalDate birthday = Utility.fromDate(user.getDob());
+				int ageOfRetirement = Period.between(birthday, retirementDay).getYears();
+				tips.add("You plan to retire at the age of " + ageOfRetirement);
+			} else {
+				long monthsToRetirement = Math.round((length - elapsedYears) * 12.0);
+				LocalDate retirementDay = LocalDate.now().plusMonths(monthsToRetirement);
+				int yearOfRetirement = retirementDay.getYear();
+				tips.add("You plan to retire in " + yearOfRetirement);
+			}
 			break;
 		case RISK:
 			String currentRisk = user.calculatePortfolioRisk();
