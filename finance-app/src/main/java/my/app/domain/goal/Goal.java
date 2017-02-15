@@ -234,15 +234,33 @@ public class Goal {
 		List<String> tips = new ArrayList<String>();
 		switch(type) {
 		case GROW_TO_AMOUNT:
-			user.annualisedPortfolioPerformance();
-			tips.add("Based on your portfolio's historical performance you should reach this goal in x years.");
-			tips.add("Disclaimer: past performance does not guarantee future results.");
+			double annualReturn = user.annualisedPortfolioPerformance();
+			double monthlyReturn = Math.pow((1 + annualReturn), (1.0/12.0)) - 1; 
+			double portfolioValue = user.portfolioValue();
+			Double yearsToReach = growthTime(portfolioValue, amount, monthlyReturn);
+			if (yearsToReach != null) {
+				String yearsToReachStr = String.format("%.1f", yearsToReach);
+				tips.add("Based on your portfolio's historical performance you should reach this goal in  " + yearsToReachStr + "  years.");
+				tips.add("Disclaimer: past performance does not guarantee future results.");
+			} else {
+				tips.add("This goal will take over 200 years to reach");
+			}
 			break;
 		case INVEST_TIME_LENGTH:
-			tips.add("x (years/months) have passed so far");
+			if (length < 1) {
+				String elapsedMonths = String.format("%.2f", calculateElapsedTime()*12);
+				tips.add(elapsedMonths + " months have passed so far");
+			} else {
+				String elapsedYears = String.format("%.1f", calculateElapsedTime());
+				tips.add(elapsedYears + " years have passed so far");
+			}
 			break;
 		case MONTHLY_INVESTOR:
-			tips.add("Based on your monthly deposit amount and portfolio's historical performance you should reach this goal in x years.");
+			annualReturn = user.annualisedPortfolioPerformance();
+			monthlyReturn = Math.pow((1 + annualReturn), (1/12)) - 1; 
+			portfolioValue = user.portfolioValue();
+			String yearsToReachStr = String.format("%.1f", growthTime(portfolioValue, amount, monthlyReturn, monthlyDepositAmount));
+			tips.add("Based on your monthly deposit amount and portfolio's historical performance you should reach this goal in " + yearsToReachStr + " years.");
 			tips.add("Due to market volatility this is only an estimate. The lower the risk of your portfolio than the more accurate the estimate.");
 			break;
 		case MOVE:
@@ -274,6 +292,30 @@ public class Goal {
 			break;
 		}
 		return tips;
+	}
+
+	//calculates the years required to reach the goal based on compounding monthly returns
+	private Double growthTime(double startAmount, double goalAmount, double monthlyReturn) {
+		return growthTime(startAmount, goalAmount, monthlyReturn, 0);
+	}
+	
+	//same as above but with an additional parameter for monthly deposits
+	private Double growthTime(double startAmount, double goalAmount, double monthlyReturn, double monthlyDeposit) {
+		monthlyReturn = monthlyReturn + 1;
+		//checks if return rate is negative
+		if (startAmount * monthlyReturn < startAmount) {
+			return null;
+		}
+		
+		//a maximum amount of 2400 months/200 years
+		int maxLength = 2400;
+		int i = 0;
+		for (; startAmount < goalAmount && i < maxLength; i++) {
+			startAmount = startAmount * monthlyReturn;
+			startAmount += monthlyDeposit;
+		}
+		Double result = (i < maxLength) ? (double) i/12 : null;
+		return result;
 	}
 
 	//calculate the amount of time elapsed (in years) from the start date to today's date
