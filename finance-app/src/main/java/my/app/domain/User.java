@@ -211,12 +211,12 @@ public class User {
 		return Risk.calculatePortfolioRisk(getPortfolio());
 	}
 
-	//need to check this performance figure
+	//based on current portfolio performance
 	public double annualisedPortfolioPerformance() {
 		double annualisedPerformance = 0;
-		for (StockInPortfolio stockInPortfolio : portfolio) {
+		for (StockInPortfolio stockInPortfolio : getPortfolio()) {
 			Double annualisedReturn = stockInPortfolio.getAnnualisedReturn();
-			Double annualisedReturnWeighted = annualisedReturn * calculateHoldingWeight(stockInPortfolio); 
+			Double annualisedReturnWeighted = annualisedReturn * (calculateHoldingWeight(stockInPortfolio)/100); 
 			annualisedPerformance += annualisedReturnWeighted;
 		}
 		return annualisedPerformance;
