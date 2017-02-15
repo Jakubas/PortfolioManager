@@ -146,6 +146,7 @@ public class GoalFactory {
 		case MOVE:
 			goal.setPercentage(percentage);
 			goal.setSector1(sector1);
+			goal.setSector2(sector2);
 			break;
 		case RETIRE:
 			goal.setLength(length);
@@ -156,8 +157,8 @@ public class GoalFactory {
 		case SECTOR:
 			goal.setPercentage(percentage);
 			goal.setSector1(sector1);
-			goal.setSector2(sector2);
 			break;
 		}
+		goal.setTypeSpecificFields();
 	}
 }

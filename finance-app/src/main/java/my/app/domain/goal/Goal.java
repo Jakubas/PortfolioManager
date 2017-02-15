@@ -78,10 +78,9 @@ public class Goal {
 		this.user = user;
 		this.type = type;
 		this.goalStr = goalStr;
-		setTypeSpecificFields();
 	}
 
-	private void setTypeSpecificFields() {
+	public void setTypeSpecificFields() {
 		if (type == Type.MOVE) {
 			sector1StartWeight = user.calculateSectorWeight(sector1);
 			sector2StartWeight = user.calculateSectorWeight(sector2);
@@ -266,6 +265,30 @@ public class Goal {
 			tips.add("Due to market volatility this is only an estimate. The lower the risk of your portfolio than the more accurate the estimate.");
 			break;
 		case MOVE:
+			double currentPercentage = user.calculateSectorWeight(sector1);
+			double goalPercentage = sector1StartWeight - percentage;
+			double diff = Math.abs(goalPercentage - currentPercentage);
+			String diffValue = String.format("%.2f", (diff/100) * user.portfolioValue());
+			String percentageDiff = String.format("%.2f", (1.0 - (goalPercentage/currentPercentage))*100);
+			if (currentPercentage < goalPercentage) {
+				tips.add("You need to increase holdings of " + sector1 + " sector by " + diff + "%");
+				tips.add("This can be accomplished by buying " + percentageDiff + "% ($" + diffValue + ") more of stock in " + sector1 + " sector");
+			} else {
+				tips.add("You need to decrease holdings of " + sector1 + " sector by " + diff + "%");
+				tips.add("This can be accomplished by selling " + percentageDiff + "% ($" + diffValue + ") of your stock holdings in " + sector1 + " sector");
+			}
+			currentPercentage = user.calculateSectorWeight(sector2);
+			goalPercentage = sector2StartWeight + percentage;
+			diff = Math.abs(goalPercentage - currentPercentage);
+			diffValue = String.format("%.2f", (diff/100) * user.portfolioValue());
+			percentageDiff = String.format("%.2f", (1.0 - (goalPercentage/currentPercentage))*100);
+			if (currentPercentage < goalPercentage) {
+				tips.add("You need to increase holdings of " + sector2 + " sector by " + diff + "%");
+				tips.add("This can be accomplished by buying " + percentageDiff + "% ($" + diffValue + ") more of stock in " + sector2 + " sector");
+			} else {
+				tips.add("You need to decrease holdings of " + sector2 + " sector by " + diff + "%");
+				tips.add("This can be accomplished by selling " + percentageDiff + "% ($" + diffValue + ") of your stock holdings in " + sector2 + " sector");
+			}
 			break;
 		case RETIRE:
 			double elapsedYears = calculateElapsedTime();
@@ -294,10 +317,10 @@ public class Goal {
 			}
 			break;
 		case SECTOR:
-			double currentPercentage = user.calculateSectorWeight(sector1);
-			double diff = Math.abs(percentage - currentPercentage);
-			String diffValue = String.format("%.2f", (diff/100) * user.portfolioValue());
-			String percentageDiff = String.format("%.2f", (1.0 - (percentage/currentPercentage))*100);
+			currentPercentage = user.calculateSectorWeight(sector1);
+			diff = Math.abs(percentage - currentPercentage);
+			diffValue = String.format("%.2f", (diff/100) * user.portfolioValue());
+			percentageDiff = String.format("%.2f", (1.0 - (percentage/currentPercentage))*100);
 			if (currentPercentage < percentage) {
 				tips.add("You need to increase holdings of " + sector1 + " sector by " + diff + "%");
 				
