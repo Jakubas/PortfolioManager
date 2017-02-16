@@ -5,16 +5,20 @@
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 </head>
 <body>
-    <nav class="navbar navbar-default">
+	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 		    <div class="navbar-header">
 		    	<a class="navbar-brand" href="#">Investment App</a>
 		    </div>
             <div class="nav navbar-left">
                 <ul class="nav navbar-nav">
-	            <li><a th:href="@{/}">Home</a></li>
-	            <li><a th:href="@{/stocks}">Stocks</a></li>
-                <li><a th:href="@{/login}">Login</a></li>
+	            <li><a href="/">Home</a></li>
+	            <li><a href="/stocks">Stocks</a></li>
+				<li class="active"><a href="/portfolio">Portfolio</a></li>
+				<li><a href="/portfolio/goals">Goals</a></li>
+				<li sec:authorize="isAuthenticated()"><a href="/profile">Profile</a></li>
+				<li sec:authorize="isAnonymous()"><a href="/register">Register</a></li>
+            	<li sec:authorize="isAnonymous()"><a href="/login">Login</a></li>
                 </ul>
             </div>
             <div class="navbar-collapse navbar-right collapse">
@@ -33,7 +37,7 @@
                 </ul>
             </div>
 	  	</div>
-    </nav>
+	</nav>
 
 	<div class="container">
 	<h3>
