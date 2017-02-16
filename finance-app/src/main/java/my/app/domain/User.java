@@ -216,6 +216,9 @@ public class User {
 		double annualisedPerformance = 0;
 		for (StockInPortfolio stockInPortfolio : getPortfolio()) {
 			Double annualisedReturn = stockInPortfolio.getAnnualisedReturn();
+			if (annualisedReturn == null) {
+				annualisedReturn = 0.0;
+			}
 			Double annualisedReturnWeighted = annualisedReturn * (calculateHoldingWeight(stockInPortfolio)/100); 
 			annualisedPerformance += annualisedReturnWeighted;
 		}
