@@ -90,7 +90,7 @@ public class User {
 		this.lastName = lastName;
 	}
 
-	public String getUserName() {
+	public String getUsername() {
 		return username;
 	}
 	

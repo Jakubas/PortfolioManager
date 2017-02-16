@@ -30,7 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		if (user == null) {
 			throw new UsernameNotFoundException("Username " + userName + " not found");
 		}
-		return new User(user.getUserName(), user.getPasswordHash(), getGrantedAuthorities(user));
+		return new User(user.getUsername(), user.getPasswordHash(), getGrantedAuthorities(user));
 	}
 	
 	public List<GrantedAuthority> getGrantedAuthorities(my.app.domains.User user) {

@@ -63,6 +63,6 @@ public class UserRestController {
 			@RequestParam(value = "makeAdmin") boolean makeAdmin) {
 		User user = userService.getUserById(userId);
 		userService.setAdmin(user, makeAdmin);
-		return user.getUserName() + ", isAdmin: " + userService.getUserById(userId).isAdmin();
+		return user.getUsername() + ", isAdmin: " + userService.getUserById(userId).isAdmin();
 	}
 }

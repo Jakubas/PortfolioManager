@@ -70,7 +70,7 @@ public class GoalController {
 		String username = principal.getName();
 		User user = userService.getUserByUsername(username);
 		System.out.println("-----------------------------");
-		System.out.println(user.getUserName());
+		System.out.println(user.getUsername());
 		System.out.println(goalTemplate);
 		System.out.println(percentage);
 		System.out.println(sector1);
