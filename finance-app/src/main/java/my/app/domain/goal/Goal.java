@@ -186,8 +186,9 @@ public class Goal {
 		return startRisk;
 	}
 	
-	public Double[] getProgress() {
+	public String[] getProgress() {
 		
+		String[] progress = new String[3];
 		//the current progress
 		Double progressValue = null; 
 		//the goal that is to be achieved
@@ -212,21 +213,38 @@ public class Goal {
 			progressGoal = length;
 			break;
 		case SECTOR:
-			progressValue = user.calculateSectorWeight(sector1);
-			progressGoal = percentage;
+			if (user.calculateSectorWeight(sector1) < percentage * 1.05) {
+				progressValue = user.calculateSectorWeight(sector1);
+				progressGoal = percentage; 
+			} else {
+				//progressGoal = user.calculateSectorWeight(sector1);
+				//progressValue = percentage; 
+				progress[0] = String.valueOf(user.calculateSectorWeight(sector1));
+				progress[1] = percentage.toString();
+				progress[2] = String.valueOf(Math.abs(percentage/user.calculateSectorWeight(sector1) * 100)); 
+			}
 			break;
 		case RISK:
 			break;
 		}
 		
+		
 		Double progressPercentage = null;
 		if (progressValue != null && progressGoal != null) {
-			progressPercentage = Math.abs((progressValue/progressGoal) * 100); 
-		}		
-		Double[] progress = new Double[3];
-		progress[0] = progressValue;
-		progress[1] = progressGoal;
-		progress[2] = progressPercentage;
+			progressPercentage = Math.abs(progressValue/progressGoal * 100); 
+		
+			String progressPercentageStr = null;
+			if (progressPercentage != null) {
+				if(progressPercentage >= 100) {
+					progressPercentageStr = "100";
+				} else {
+					progressPercentageStr = String.valueOf(progressPercentage);
+				}
+			}
+			progress[0] = progressValue.toString();
+			progress[1] = progressGoal.toString();
+			progress[2] = progressPercentageStr;
+		}
 		return progress;
 	}
 	
@@ -270,10 +288,10 @@ public class Goal {
 			String diffValue = String.format("%.2f", (diff/100) * user.portfolioValue());
 			String percentageDiff = String.format("%.2f", (1.0 - (goalPercentage/currentPercentage))*100);
 			if (currentPercentage < goalPercentage) {
-				tips.add("You need to increase your holdings in " + sector1 + " by " + diff + "%");
+				tips.add("You need to increase your portfolio weight in " + sector1 + " by " + diff + "%");
 				tips.add("This can be accomplished by buying $" + diffValue + " (" + percentageDiff + "%) of stock in the " + sector1 + " sector");
 			} else {
-				tips.add("You need to decrease your holdings in " + sector1 + " by " + diff + "%");
+				tips.add("You need to decrease your portfolio weight in " + sector1 + " by " + diff + "%");
 				tips.add("This can be accomplished by selling $" + diffValue + " (" + percentageDiff + "%) of your stock holdings in the " + sector1 + " sector");
 			}
 			currentPercentage = user.calculateSectorWeight(sector2);
@@ -282,10 +300,10 @@ public class Goal {
 			diffValue = String.format("%.2f", (diff/100) * user.portfolioValue());
 			percentageDiff = String.format("%.2f", (1.0 - (goalPercentage/currentPercentage))*100);
 			if (currentPercentage < goalPercentage) {
-				tips.add("You need to increase your holdings in " + sector2 + " by " + diff + "%");
+				tips.add("You need to increase your portfolio weight in " + sector2 + " by " + diff + "%");
 				tips.add("This can be accomplished by buying $" + diffValue + " (" + percentageDiff + "%) of stock in the " + sector2 + " sector");
 			} else {
-				tips.add("You need to decrease your holdings in " + sector2 + " sector by " + diff + "%");
+				tips.add("You need to decrease your portfolio weight in " + sector2 + " sector by " + diff + "%");
 				tips.add("This can be accomplished by selling $" + diffValue + " (" + percentageDiff + "%) of your stock holdings in the " + sector2 + " sector");
 			}
 			break;
@@ -321,11 +339,11 @@ public class Goal {
 			diffValue = String.format("%.2f", (diff/100) * user.portfolioValue());
 			percentageDiff = String.format("%.2f", (1.0 - (percentage/currentPercentage))*100);
 			if (currentPercentage < percentage) {
-				tips.add("You need to increase your holdings in " + sector1 + " by " + diff + "%");
+				tips.add("You need to increase your portfolio weight in " + sector1 + " by " + diff + "%");
 				
 				tips.add("This can be accomplished by buying $" + diffValue + " (" + percentageDiff + "%) of stock in the " + sector1 + " sector");
 			} else {
-				tips.add("You need to decrease your holdings in " + sector1 + " by " + diff + "%");
+				tips.add("You need to decrease your portfolio weight in " + sector1 + " by " + diff + "%");
 				tips.add("This can be accomplished by selling $" + diffValue + " (" + percentageDiff + "%) of your stock holdings in the " + sector1 + " sector");
 			}
 			break;
