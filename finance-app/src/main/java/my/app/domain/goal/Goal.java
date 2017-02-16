@@ -3,7 +3,6 @@ package my.app.domain.goal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -271,11 +270,11 @@ public class Goal {
 			String diffValue = String.format("%.2f", (diff/100) * user.portfolioValue());
 			String percentageDiff = String.format("%.2f", (1.0 - (goalPercentage/currentPercentage))*100);
 			if (currentPercentage < goalPercentage) {
-				tips.add("You need to increase holdings of " + sector1 + " sector by " + diff + "%");
-				tips.add("This can be accomplished by buying " + percentageDiff + "% ($" + diffValue + ") more of stock in " + sector1 + " sector");
+				tips.add("You need to increase your holdings in " + sector1 + " by " + diff + "%");
+				tips.add("This can be accomplished by buying $" + diffValue + " (" + percentageDiff + "%) of stock in the " + sector1 + " sector");
 			} else {
-				tips.add("You need to decrease holdings of " + sector1 + " sector by " + diff + "%");
-				tips.add("This can be accomplished by selling " + percentageDiff + "% ($" + diffValue + ") of your stock holdings in " + sector1 + " sector");
+				tips.add("You need to decrease your holdings in " + sector1 + " by " + diff + "%");
+				tips.add("This can be accomplished by selling $" + diffValue + " (" + percentageDiff + "%) of your stock holdings in the " + sector1 + " sector");
 			}
 			currentPercentage = user.calculateSectorWeight(sector2);
 			goalPercentage = sector2StartWeight + percentage;
@@ -283,11 +282,11 @@ public class Goal {
 			diffValue = String.format("%.2f", (diff/100) * user.portfolioValue());
 			percentageDiff = String.format("%.2f", (1.0 - (goalPercentage/currentPercentage))*100);
 			if (currentPercentage < goalPercentage) {
-				tips.add("You need to increase holdings of " + sector2 + " sector by " + diff + "%");
-				tips.add("This can be accomplished by buying " + percentageDiff + "% ($" + diffValue + ") more of stock in " + sector2 + " sector");
+				tips.add("You need to increase your holdings in " + sector2 + " by " + diff + "%");
+				tips.add("This can be accomplished by buying $" + diffValue + " (" + percentageDiff + "%) of stock in the " + sector2 + " sector");
 			} else {
-				tips.add("You need to decrease holdings of " + sector2 + " sector by " + diff + "%");
-				tips.add("This can be accomplished by selling " + percentageDiff + "% ($" + diffValue + ") of your stock holdings in " + sector2 + " sector");
+				tips.add("You need to decrease your holdings in " + sector2 + " sector by " + diff + "%");
+				tips.add("This can be accomplished by selling $" + diffValue + " (" + percentageDiff + "%) of your stock holdings in the " + sector2 + " sector");
 			}
 			break;
 		case RETIRE:
@@ -322,12 +321,12 @@ public class Goal {
 			diffValue = String.format("%.2f", (diff/100) * user.portfolioValue());
 			percentageDiff = String.format("%.2f", (1.0 - (percentage/currentPercentage))*100);
 			if (currentPercentage < percentage) {
-				tips.add("You need to increase holdings of " + sector1 + " sector by " + diff + "%");
+				tips.add("You need to increase your holdings in " + sector1 + " by " + diff + "%");
 				
-				tips.add("This can be accomplished by buying " + percentageDiff + "% ($" + diffValue + ") more of stock in " + sector1 + " sector");
+				tips.add("This can be accomplished by buying $" + diffValue + " (" + percentageDiff + "%) of stock in the " + sector1 + " sector");
 			} else {
-				tips.add("You need to decrease holdings of " + sector1 + " sector by " + diff + "%");
-				tips.add("This can be accomplished by selling " + percentageDiff + "% ($" + diffValue + ") of your stock holdings in " + sector1 + " sector");
+				tips.add("You need to decrease your holdings in " + sector1 + " by " + diff + "%");
+				tips.add("This can be accomplished by selling $" + diffValue + " (" + percentageDiff + "%) of your stock holdings in the " + sector1 + " sector");
 			}
 			break;
 		}
