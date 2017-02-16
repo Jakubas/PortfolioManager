@@ -43,7 +43,7 @@
             Update Portfolio for
             <span th:text="${stockInPortfolio.stock.name}" />
         </h3>
-        <p th:if="${dateError}" class="error">Incorrect date</p>
+        <p th:if="${dateError}" class="error">Incorrect date format</p>
         <p th:if="${dateError2}" class="error">Date is too early, stock wasn't listed yet</p>
 		<form th:action="@{/portfolio/{id}/(id=${stockInPortfolio.id})}" method="post">
             <input type="hidden" name="_method" value="put" />

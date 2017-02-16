@@ -3,6 +3,16 @@
 <head>
 	<title>Investment App</title>
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<script>
+		function showEditForm() {
+			var form = document.getElementById("editForm");
+			if (form.style.display == "none") {
+				form.style.display = "block";
+			} else {
+				form.style.display = "none";
+			}
+		}
+	</script>
 </head>
 <body>
 	<nav class="navbar navbar-default">
@@ -60,12 +70,32 @@
 				<br />
 				<span th:text="${user.lastName} ? ${user.lastName} : 'N/A'" />
 				<br />
-				<span th:text="${user.dob} ? ${user.dob} : 'N/A'" />
+				<span th:text="${user.dob} ? ${{user.dob}} : 'N/A'" />
 				<br />
-				<span th:text="${user.cashAmount} ? ${user.dob} : '0'" />
+				<span th:text="${user.cashAmount} ? '$' + ${user.cashAmount} : '0'" />
 				<br />
 			</div>
 		</div>
     </div>
+
+	<div class="container">
+		<p th:if="${dateError}" class="error">Incorrect date format</p>
+		<button id="editTrigger" type="button" class="btn btn-link glyphicon glyphicon-edit"
+		onclick="showEditForm()" style="display:block" />
+		<form id="editForm" class="form-noborder" action="/profile" method="post" style="display:none">
+			<div class="form-group">
+				<input type="hidden" name="userId" th:value="${user.id}" />
+				<label>First name</label>
+				<input type="text" class="form-control" name="firstName" required="true" th:value="${user.firstName}" />
+				<label>Last name</label>
+				<input type="text" class="form-control" name="lastName" th:value="${user.lastName}"/>
+				<label>Date of birth</label>
+				<input type="date" class="form-control" name="dob" th:value="${{user.dob}}" />
+				<label>Cash</label>
+				<input type="number" step="0.01" class="form-control" name="cashAmount" th:value="${user.cashAmount}" />
+				<button type="submit" class="btn btn-link glyphicon glyphicon-plus-sign"></button>
+			</div>
+		</form>
+	</div>
 </body>
 </html>
