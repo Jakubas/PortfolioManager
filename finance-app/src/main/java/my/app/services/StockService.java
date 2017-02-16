@@ -1,11 +1,11 @@
-package my.app.dao;
+package my.app.services;
 
 import java.util.List;
 
 import my.app.domains.Stock;
 
-public interface StockDAO {
-
+public interface StockService {
+	
 	void saveStock(Stock stock);
 	Stock getStockById(int id);
 	Stock getStockByName(String name);

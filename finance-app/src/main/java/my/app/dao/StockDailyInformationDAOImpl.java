@@ -10,7 +10,7 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import my.app.domain.StockDailyInformation;
+import my.app.domains.StockDailyInformation;
 
 @Repository
 @Transactional

@@ -9,7 +9,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import my.app.domain.StockInPortfolio;
+import my.app.domains.StockInPortfolio;
 
 @Repository
 @Transactional

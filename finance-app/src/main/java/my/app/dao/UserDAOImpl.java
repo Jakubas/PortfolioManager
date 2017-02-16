@@ -11,7 +11,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import my.app.domain.User;
+import my.app.domains.User;
 
 @Repository
 @Transactional

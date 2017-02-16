@@ -2,9 +2,9 @@ package my.app.risk;
 
 import java.util.List;
 
-import my.app.domain.Stock;
-import my.app.domain.StockInPortfolio;
-import my.app.stock_calculations.StockDataCalculations;
+import my.app.domains.Stock;
+import my.app.domains.StockInPortfolio;
+import my.app.stockcalculations.StockDataCalculations;
 
 public class Risk {
 

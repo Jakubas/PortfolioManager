@@ -2,7 +2,7 @@ package my.app.dao;
 
 import java.util.List;
 
-import my.app.domain.User;
+import my.app.domains.User;
 
 public interface UserDAO {
 

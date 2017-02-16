@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
-import my.app.domain.Stock;
+import my.app.domains.Stock;
 
 public class StockParserTwo {
 

@@ -1,10 +1,10 @@
-package my.app.dao;
+package my.app.services;
 
 import java.util.List;
 
 import my.app.domains.StockInPortfolio;
 
-public interface StockInPortfolioDAO {
+public interface StockInPortfolioService {
 
 	void saveStockInPortfolio(StockInPortfolio stockInPortfolio);
 	StockInPortfolio getStockInPortfolioById(int id);
