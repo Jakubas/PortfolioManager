@@ -56,7 +56,7 @@ public class UserDAOImpl implements UserDAO {
 
 	public void updateUser(User user) {
 		Session session = sessionFactory.getCurrentSession();
-		session.update(user);
+		session.merge(user);
 	}
 
 	public void deleteUser(User user) {
