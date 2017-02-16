@@ -119,7 +119,12 @@ public class StockInPortfolio {
 		return buyDate;
 	}
 
-	public void setBuyDate(Date buyDate) throws DateTimeException {
+	public void setBuyDate(Date buyDate) {
+		this.buyDate = buyDate;
+		calculateMetrics();
+	}
+	
+	public void setBuyDateAndPrice(Date buyDate) throws DateTimeException {
 		Double buyPrice = StockDataCalculations.findStockPriceOnDate(stock, buyDate);
 		if (buyPrice == null) {
 			throw new DateTimeException("Date is too early");
@@ -133,7 +138,12 @@ public class StockInPortfolio {
 		return sellDate;
 	}
 
-	public void setSellDate(Date sellDate) throws DateTimeException {
+	public void setSellDate(Date sellDate) {
+		this.sellDate = sellDate;
+		calculateMetrics();
+	}
+	
+	public void setSellDateAndPrice(Date sellDate) throws DateTimeException {
 		if (sellDate != null) {
 			Double sellPrice = StockDataCalculations.findStockPriceOnDate(stock, buyDate);
 			if (sellPrice == null) {
@@ -146,7 +156,7 @@ public class StockInPortfolio {
 			this.sellDate = null;
 		}
 	}
-
+	
 	public Double getBuyPrice() {
 		return buyPrice;
 	}

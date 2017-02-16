@@ -6,6 +6,7 @@ import java.time.DateTimeException;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,7 +47,7 @@ public class PortfolioController {
 	}
 	
 	@RequestMapping(value = "portfolio", method = RequestMethod.POST)
-	public String addToPortfolio(Model model, Principal principal,
+	public String addToPortfolio(RedirectAttributes ra, Principal principal,
 			@RequestParam("stockId") int stockId,
 			@RequestParam("amount") int amount,
 			@RequestParam(value = "buyDate", required = false) String buyDateStr) {
@@ -55,19 +56,19 @@ public class PortfolioController {
 		User user = userService.getUserByUsername(username); 
 		Stock stock = stockService.getStockById(stockId);
 		Date buyDate;
-		if (buyDateStr != null) {
+		if (buyDateStr != "") {
 			try {
 				buyDate = Utility.stringToDate(buyDateStr);
 			} catch (ParseException e) {
-				model.addAttribute("dateError", true);
-				return "stocks";
+				ra.addFlashAttribute("dateError", true);
+				return "redirect:/stocks";
 			}
 		} else {
 			buyDate = new Date();
 		}
 		StockInPortfolio sip = new StockInPortfolio(stock, user, amount, buyDate);
 		stockInPortfolioService.saveStockInPortfolio(sip);
-		return "redirect:stocks";
+		return "redirect:/stocks";
 	}
 	
 	@RequestMapping(value = "portfolio/{stockInPortfolioId}", method = RequestMethod.GET)
@@ -98,20 +99,38 @@ public class PortfolioController {
 			return "redirect:/portfolio/{stockInPortfolioId}";
 		}
 		
-		Double prevBuyPrice = sip.getBuyPrice();
 		try {
-			sip.setBuyDate(buyDate);
-			sip.setSellDate(sellDate);
+			sip.setAmount(amount);
+			if (DateUtils.isSameDay(sip.getBuyDate(), buyDate)) {
+				if (Math.abs(buyPrice - sip.getBuyPrice()) >= 0.01) {
+					sip.setBuyPrice(buyPrice);
+				}
+			} else if (Math.abs(buyPrice - sip.getBuyPrice()) >= 0.01) {
+				sip.setBuyDate(buyDate);
+				sip.setBuyPrice(buyPrice);
+			} else {
+				//remove this when price is autofilled on client side
+				sip.setBuyDateAndPrice(buyDate);
+			}
+			if (sellDate == null) {
+				sip.setSellDate(null);
+			} else if (sip.getSellDate() != null && DateUtils.isSameDay(sip.getBuyDate(), buyDate)) {
+				if (sellPrice != null && sip.getSellPrice() != null && 
+				    Math.abs(sellPrice - sip.getSellPrice()) >= 0.01) {
+					sip.setSellPrice(sellPrice);
+				}
+			} else if (sellPrice != null && sip.getSellPrice() != null && 
+					   Math.abs(sellPrice - sip.getSellPrice()) >= 0.01) {
+				sip.setSellDate(buyDate);
+				sip.setSellPrice(buyPrice);
+			} else {
+				//remove this when price is autofilled on client side
+				sip.setSellDateAndPrice(buyDate);
+			}
+		//remove this catch when price is autofilled on client side
 		} catch (DateTimeException e) {
 			ra.addFlashAttribute("dateError2", true);
 			return "redirect:/portfolio/{stockInPortfolioId}";
-		}
-		sip.setAmount(amount);
-		if (!buyPrice.equals(prevBuyPrice)) {
-			sip.setBuyPrice(buyPrice);
-		}
-		if (sellPrice == null || !sellPrice.equals(sip.getSellPrice())) {
-			sip.setSellPrice(sellPrice);
 		}
 		stockInPortfolioService.updateStockInPortfolio(sip);
 		return "redirect:/portfolio";
