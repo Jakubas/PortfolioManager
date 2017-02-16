@@ -43,6 +43,7 @@ public class PortfolioController {
 		User user = userService.getUserByUsername(username);
 		List<StockInPortfolio> portfolio = user.getPortfolio();
 		model.addAttribute("portfolio", portfolio);
+		model.addAttribute("user", user);
 		return "portfolio";
 	}
 	
