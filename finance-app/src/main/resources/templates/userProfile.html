@@ -40,7 +40,32 @@
 	</nav>
 
     <div class="container">
-
+		<div class="row" style="font-size:18px">
+			<div class="col-md-2">
+				Username:
+				<br />
+				First name:
+				<br />
+				Last name:
+				<br />
+				Date of birth:
+				<br />
+				Cash:
+				<br />
+			</div>
+			<div class="col-md-2">
+				<span th:text="${user.username}" />
+				<br />
+				<span th:text="${user.firstName}" />
+				<br />
+				<span th:text="${user.lastName} ? ${user.lastName} : 'N/A'" />
+				<br />
+				<span th:text="${user.dob} ? ${user.dob} : 'N/A'" />
+				<br />
+				<span th:text="${user.cashAmount} ? ${user.dob} : '0'" />
+				<br />
+			</div>
+		</div>
     </div>
 </body>
 </html>
