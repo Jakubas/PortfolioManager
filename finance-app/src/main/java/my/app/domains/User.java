@@ -161,6 +161,9 @@ public class User {
 	
 	//the value of all investments in a given sector from a user's portfolio
 	public double sectorValue(String sector) {
+		if (sector == "Cash") {
+			return cashAmount;
+		}
 		double value = 0;
 		for (StockInPortfolio stockInPortfolio : getPortfolio()) {
 			if (isInSector(stockInPortfolio, sector)) {

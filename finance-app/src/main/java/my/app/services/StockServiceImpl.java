@@ -53,6 +53,7 @@ public class StockServiceImpl implements StockService {
 	@Override
 	public List<String> getSectors() {
 		List<String> sectors = dao.getSectors();
+		sectors.add("Cash");
 		return sectors;
 	}
 }
