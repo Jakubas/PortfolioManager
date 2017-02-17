@@ -192,7 +192,8 @@ public class StockInPortfolio {
 	}
 	
 	public Double getAnnualisedReturn() {
-		return annualisedReturn;
+		Double result = annualisedReturn != null ? annualisedReturn : 0;
+		return result;
 	}
 	
 	public int getAmount() {
@@ -205,5 +206,16 @@ public class StockInPortfolio {
 	
 	public double getValue() {
 		return value;
+	}
+	
+	@NumberFormat(style = Style.NUMBER, pattern = "#,###.00")
+	public double getGain() {
+		return returnOnInvestment * buyPrice * amount;
+	}
+	
+	@NumberFormat(style = Style.NUMBER, pattern = "#,##0.00")
+	//this is the absolute price difference between the buy and sell values 
+	public double getDifference() {
+		return Math.abs(returnOnInvestment * buyPrice * amount);
 	}
 }

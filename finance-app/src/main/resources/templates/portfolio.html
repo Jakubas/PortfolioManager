@@ -107,7 +107,7 @@
 	            <div class="col-sm-2">
 	                <span th:text="${stockInPortfolio.stock.ticker}" />
 	                <br />
-	                ROI:
+	                <span th:text="${stockInPortfolio.getGain()} >= 0 ? 'Gain:' : 'Loss:'" />
 	                <br />
 	                Annualised:
 					<br />
@@ -115,7 +115,7 @@
 	            </div>
 	            <div class="col-sm-2">
 	                <br />
-	                <span th:text="${{stockInPortfolio.returnOnInvestment}}" />
+					<span th:text="'$' + ${{stockInPortfolio.getDifference()}}" />
 	                <br />
 	                <span th:text="${{stockInPortfolio.annualisedReturn}} ? ${{stockInPortfolio.annualisedReturn}} : 'N/A'" />
 					<br />
