@@ -85,7 +85,64 @@
 		<h3>
 			Portfolio Holdings
 		</h3>
-	    <div th:each="stockInPortfolio : ${portfolio}">
+		<!-- List<List<StockInPortfolio>> -->
+	    <div th:each="holdings : ${groupedPortfolio}">
+			<div class="row" th:if="${holdings[0]}" style="font-size:18px">
+				<div class="col-md-2">
+					<a th:href="@{/stocks/{id}/(id=${holdings[0].stock.id})}" th:text="${holdings[0].stock.name}" />
+					<br />
+					Amount:
+					<br />
+					<span th:text="${portfolioService.getGain(holdings)} >= 0 ? 'Gain:' : 'Loss:'" />
+				</div>
+				<div class="col-md-2">
+					<br />
+					<span th:text="'$' + ${{portfolioService.getStockAmount(holdings)}}" />
+					<br />
+					<span th:text="'$' + ${{portfolioService.getDifference(holdings)}}" />
+				</div>
+				<div class="col-md-2">
+					<span th:text="${holdings[0].stock.ticker}" />
+					<br />
+					Annualised:
+					<br />
+					Value:
+				</div>
+				<div class="col-md-2">
+					<br />
+					<span th:text="'$' + ${{portfolioService.getAnnualisedReturn(holdings)}}" />
+					<br />
+					<span th:text="'$' + ${{portfolioService.getValue(holdings)}}" />
+				</div>
+			</div>
+			<div th:each="holding : ${holdings}" class="row">
+
+				<div class="col-md-2">
+					Amount: <span th:text="${holding.amount}" />
+				</div>
+				<div class="col-md-2">
+					Date bought: <span th:text="${{holding.buyDate}}" />
+				</div>
+				<div class="col-md-2">
+					<span th:text="${holding.sellDate} ? 'Date sold:' : ' '" />
+					<span th:text="${{holding.sellDate}}" />
+				</div>
+				<form class="form-noborder" th:action="@{/portfolio/{id}/(id=${holding.id})}"
+				method="get" style="padding-top:0px; padding-bottom:0px">
+					<button type="submit" class="btn btn-link glyphicon glyphicon-edit" style="padding-top:0px; padding-bottom:0px; border-top:0px; border-bottom:0px"/>
+				</form>
+				<!--form class="form-noborder" th:action="@{/portfolio/{id}/(id=${holding.id})}"
+				method="post">
+					<input type="hidden" name="_method" value="delete" />
+					<button type="submit" class="btn btn-link glyphicon glyphicon-remove" />
+				</form-->
+			</div>
+			<br />
+		</div>
+			<!--
+			<span th:text="${{stockInPortfolio.buyDate}}" />
+			<span th:text="${{stockInPortfolio.sellDate}} ? ${{stockInPortfolio.sellDate}} : 'N/A'" />
+
 	        <div class="row" style="font-size:18px">
 	            <div class="col-sm-2">
 	                <a th:href="@{/stocks/{id}/(id=${stockInPortfolio.stock.id})}" th:text="${stockInPortfolio.stock.name}" />
@@ -132,7 +189,11 @@
 				</form>
 	        </div>
 			<br />
-	    </div>
+		</div>
+		-->
+		<h3>
+			Archived Portfolio Holdings
+		</h3>
 	</div>
 </body>
 </html>

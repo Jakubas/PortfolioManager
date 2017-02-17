@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import my.app.domains.Stock;
 import my.app.domains.StockInPortfolio;
 import my.app.domains.User;
+import my.app.services.PortfolioService;
 import my.app.services.StockInPortfolioService;
 import my.app.services.StockService;
 import my.app.services.UserService;
@@ -29,12 +30,15 @@ public class PortfolioController {
 	private final StockInPortfolioService stockInPortfolioService;
 	private final UserService userService;
 	private final StockService stockService;
+	private final PortfolioService portfolioService;
 	
 	@Autowired
-	public PortfolioController(StockInPortfolioService stockInPortfolioService, UserService userService, StockService stockService) {
+	public PortfolioController(StockInPortfolioService stockInPortfolioService, 
+			UserService userService, StockService stockService, PortfolioService portfolioService) {
 		this.stockInPortfolioService = stockInPortfolioService;
 		this.userService = userService;
 		this.stockService = stockService;
+		this.portfolioService = portfolioService;
 	}
 	
 	@RequestMapping(value = "portfolio", method = RequestMethod.GET)
@@ -42,10 +46,11 @@ public class PortfolioController {
 		String username = principal.getName();
 		User user = userService.getUserByUsername(username);
 		List<StockInPortfolio> portfolio = user.getPortfolio();
-		List<String> sectors = stockService.getSectors();
+		List<List<StockInPortfolio>> groupedPortfolio = portfolioService.groupPortfolio(portfolio);
 		model.addAttribute("user", user);
-		model.addAttribute("portfolio", portfolio);
-		model.addAttribute("sectors", sectors);
+		model.addAttribute("groupedPortfolio", groupedPortfolio);
+		model.addAttribute("portfolioService", portfolioService);
+		model.addAttribute("sectors", stockService.getSectors());
 		return "portfolio";
 	}
 	
