@@ -162,6 +162,9 @@ public class User {
 	//the value of all investments in a given sector from a user's portfolio
 	public double sectorValue(String sector) {
 		if (sector == "Cash") {
+			if (cashAmount == null) {
+				return 0;
+			} 
 			return cashAmount;
 		}
 		double value = 0;
@@ -193,21 +196,24 @@ public class User {
 	}
 
 	public double calculateSectorWeight(String sector) {
-		double porfolioValue = portfolioValue();
+		double portfolioValue = portfolioValue();
 		double sectorValue = sectorValue(sector);
-		return sectorValue/porfolioValue*100;
+		double result = (portfolioValue != 0.0) ? sectorValue/portfolioValue*100 : 0;
+		return result;
 	}
 	
 	public double calculateStockWeight(Stock stock) {
-		double porfolioValue = portfolioValue();
+		double portfolioValue = portfolioValue();
 		double stockValue = stockValue(stock);
-		return stockValue/porfolioValue*100;
+		double result = (portfolioValue != 0.0) ? stockValue/portfolioValue*100 : 0;
+		return result;
 	}
 	
 	public double calculateHoldingWeight(StockInPortfolio stockInPortfolio) {
-		double porfolioValue = portfolioValue();
+		double portfolioValue = portfolioValue();
 		double holdingValue = stockInPortfolio.getValue();
-		return holdingValue/porfolioValue*100;
+		double result = (portfolioValue != 0.0) ? holdingValue/portfolioValue*100 : 0;
+		return result;
 	}
 
 	public String calculatePortfolioRisk() {
