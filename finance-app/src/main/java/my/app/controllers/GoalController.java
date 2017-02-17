@@ -41,8 +41,10 @@ public class GoalController {
 	}
 	
 	@RequestMapping(value = "portfolio/goals", method = RequestMethod.GET)
-	public String getGoals(Model model) {
-		List<Goal> goals = goalService.getGoals();
+	public String getGoals(Principal principal, Model model) {
+		String username = principal.getName();
+		User user = userService.getUserByUsername(username);
+		List<Goal> goals = user.getGoals();
 		List<String> goalTemplates = GoalTemplates.GOAL_TEMPLATES;
 		Map<String, Type> goalToTypeMapping = GoalTemplates.GOAL_TO_TYPE_MAPPING;
 		List<String> sectors = stockService.getSectors();
