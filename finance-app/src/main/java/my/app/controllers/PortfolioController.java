@@ -42,8 +42,10 @@ public class PortfolioController {
 		String username = principal.getName();
 		User user = userService.getUserByUsername(username);
 		List<StockInPortfolio> portfolio = user.getPortfolio();
-		model.addAttribute("portfolio", portfolio);
+		List<String> sectors = stockService.getSectors();
 		model.addAttribute("user", user);
+		model.addAttribute("portfolio", portfolio);
+		model.addAttribute("sectors", sectors);
 		return "portfolio";
 	}
 	

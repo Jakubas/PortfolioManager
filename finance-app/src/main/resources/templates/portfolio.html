@@ -40,23 +40,51 @@
 	</nav>
 
 	<div class="container">
-	<h3>
-		My Portfolio
-	</h3>
-		<div th:if="${user.cashAmount}" class="row" style="font-size:18px">
-			<div class="col-sm-2">
-				Cash
-				<br />
-				Amount:
+		<div class="row">
+			<div class="col-sm-4">
+				<h3>
+					My Portfolio
+				</h3>
 			</div>
-			<div class="col-sm-2">
-				<br />
-				<span th:text="'$' + ${user.cashAmount}" />
+			<div class="col-sm-6">
+				<h3>
+					Portfolio Weightings
+				</h3>
 			</div>
-			<br />
-			<br />
-			<br />
 		</div>
+		<section style="font-size:18px">
+			<div class="row">
+				<div class="col-sm-2">
+					Portfolio Value:
+					<br />
+					Cash Balance:
+				</div>
+				<div class="col-sm-2">
+					<span th:text="'$' + ${user.portfolioValue()}" />
+					<br />
+					<span th:text="'$' + ${user.cashAmount}" />
+				</div>
+				<div class="col-sm-6">
+					<div class="row">
+						<div class="col-sm-4" style="font-size:12px">
+							<div th:each="sector : ${sectors}">
+								<span th:text="${sector}" />
+								<br />
+							</div>
+						</div>
+						<div class="col-sm-4" style="font-size:12px">
+							<div th:each="sector : ${sectors}">
+								<span th:text="${#numbers.formatDecimal(user.calculateSectorWeight(sector),1,2,'POINT')} + '%'" />
+								<br />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<h3>
+			Portfolio Holdings
+		</h3>
 	    <div th:each="stockInPortfolio : ${portfolio}">
 	        <div class="row" style="font-size:18px">
 	            <div class="col-sm-2">
