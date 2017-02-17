@@ -1,0 +1,107 @@
+package my.app.services;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.format.annotation.NumberFormat.Style;
+import org.springframework.stereotype.Service;
+
+import my.app.domains.StockInPortfolio;
+
+@Service
+public class PortfolioServiceImpl implements PortfolioService {
+
+	@Override
+	public List<List<StockInPortfolio>> groupPortfolio(List<StockInPortfolio> portfolio) {
+		List<List<StockInPortfolio>> groupedPortfolio = groupPortfolioByStocks(portfolio);
+		return groupedPortfolio;
+	}
+	
+	/*
+	 * group a portfolio by their underlying holdings. Each unique holding has a list of 
+	 * all stockInPortfolio which represent that holding. 
+	 * The list of the lists of these holdings is what is returned.
+	 */
+	private List<List<StockInPortfolio>> groupPortfolioByStocks(List<StockInPortfolio> portfolio) {
+		List<List<StockInPortfolio>> groupedPortfolio = new ArrayList<List<StockInPortfolio>>();
+		List<String> traversed = new ArrayList<String>();
+		for (int i = 0; i < portfolio.size(); i++) {
+			StockInPortfolio holding = portfolio.get(i);
+			String ticker = holding.getStock().getTicker();
+			if (!traversed.contains(ticker)) {
+				List<StockInPortfolio> subPortfolio = new ArrayList<StockInPortfolio>();
+				subPortfolio.add(holding);
+				traversed.add(ticker);
+				for (int j = i + 1; j < portfolio.size(); j++) {
+					StockInPortfolio holding2 = portfolio.get(j);
+					if (ticker.equals(holding2.getStock().getTicker())) {
+						subPortfolio.add(holding2);
+					}
+				}
+				groupedPortfolio.add(subPortfolio);
+			}
+		}
+		return groupedPortfolio;
+	}
+
+	@Override
+	public List<Date> getBuyDates(List<StockInPortfolio> portfolio) {
+		List<Date> buyDates = new ArrayList<Date>();
+		for (StockInPortfolio holding : portfolio) {
+			buyDates.add(holding.getBuyDate());
+		}
+		return buyDates;
+	}
+
+	@Override
+	public List<Date> getSellDates(List<StockInPortfolio> portfolio) {
+		List<Date> sellDates = new ArrayList<Date>();
+		for (StockInPortfolio holding : portfolio) {
+			sellDates.add(holding.getSellDate());
+		}
+		return sellDates;
+	}
+
+	@Override
+	public int getStockAmount(List<StockInPortfolio> portfolio) {
+		int amount = 0;
+		for (StockInPortfolio holding : portfolio) {
+			amount += holding.getAmount();
+		}
+		return amount;
+	}
+	
+	@Override
+	@NumberFormat(style = Style.NUMBER, pattern = "#,##0.00")
+	public double getGain(List<StockInPortfolio> portfolio) {
+		double gain = 0;
+		for (StockInPortfolio holding : portfolio) {
+			gain += holding.getReturnOnInvestment() * holding.getBuyPrice() * holding.getAmount();
+		}
+		return gain;
+	}
+	
+	@Override
+	@NumberFormat(style = Style.NUMBER, pattern = "#,##0.00")
+	public double getDifference(List<StockInPortfolio> portfolio) {
+		double difference = Math.abs(getGain(portfolio));
+		return difference;
+	}
+	
+	@Override
+	public double getAnnualisedReturn(List<StockInPortfolio> portfolio) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getValue(List<StockInPortfolio> portfolio) {
+		double value = 0;
+		for (StockInPortfolio holding : portfolio) {
+			value += holding.getValue();
+		}
+		return value;
+	}
+}
