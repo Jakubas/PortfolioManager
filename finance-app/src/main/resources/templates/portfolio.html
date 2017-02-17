@@ -60,9 +60,9 @@
 					Cash Balance:
 				</div>
 				<div class="col-sm-2">
-					<span th:text="'$' + ${user.portfolioValue()}" />
+					<span th:text="'$' + ${#numbers.formatDecimal(user.portfolioValue(),1,2,'POINT')}" />
 					<br />
-					<span th:text="'$' + ${user.cashAmount}" />
+					<span th:text="${user.cashAmount} ? '$' + ${#numbers.formatDecimal(user.cashAmount,1,2,'POINT')} : '0'" />
 				</div>
 				<div class="col-sm-6">
 					<div class="row">

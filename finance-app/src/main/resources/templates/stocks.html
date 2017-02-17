@@ -55,14 +55,18 @@
 			<button th:id="stockTrigger + ${stock.id}" type="button" class="btn btn-link glyphicon glyphicon-plus-sign"
 			th:onclick="'javascript:showStockAmountField(\'' + ${stock.id} + '\');'" style="display:block" />
 			<form th:id="addStockForm + ${stock.id}" class="form-noborder" action="/portfolio" method="post" style="display:none">
+				<input type="hidden" name="stockId" th:value="${stock.id}" />
 				<div class="form-group">
-					<input type="hidden" name="stockId" th:value="${stock.id}" />
-					<label>Amount of stock*</label>
+					<label>Amount of stock</label>
 					<input type="number" class="form-control" step="1" name="amount" required="true" />
-					<label>Date bought</label>
-					<input type="date" class="form-control" name="buyDate" />
-					<button type="submit" class="btn btn-link glyphicon glyphicon-plus-sign"></button>
 				</div>
+				<div class="form-group">
+					<label>Date bought (optional field)</label>
+					<input type="date" class="form-control" name="buyDate" />
+				</div>
+				<!--button type="submit" class="btn btn-link glyphicon glyphicon-plus-sign"></button-->
+				<button type="submit" class="btn btn-primary" style="display:block;">Add to portfolio</button>
+
 			</form>
 			<span th:text="${stock.ticker}" />
 		</h4>

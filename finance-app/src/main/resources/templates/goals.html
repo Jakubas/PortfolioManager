@@ -11,7 +11,7 @@
 	    width: 90%;
 	}
 	</style>
-	<script th:inline="javascript">
+	<script>
 	/*<![CDATA[*/
 	function expandForm() {
 		//set all form field divs be hidden and change their name to not interfere
@@ -55,6 +55,7 @@
 
 		}
 		showInput('0-1', "");
+		document.getElementById('0-1').scrollIntoView();
 	}
 	function showInput(id, targetName) {
 		var e = document.getElementById(id);
