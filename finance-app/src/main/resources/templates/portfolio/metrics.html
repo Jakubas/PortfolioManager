@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Investment App</title>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		google.load('visualization', '1.0', {
+			'packages' : [ 'corechart' ]
+		});
+		google.setOnLoadCallback(drawPieChart);
+		function drawPieChart() {
+			var data = new google.visualization.DataTable();
+			data.addColumn('string', 'Topping');
+			data.addColumn('number', 'Slices');
+			var sectors = [[${sectors}]];
+			var weights = [[${weights}]];
+			for (i = 0; i < sectors.length; i++) {
+				var sector = sectors[i];
+				var weight = weights[i];
+				data.addRow([sector, weight]);
+			}
+			var options = {
+				'title' : 'Portfolio Weighting by Sector',
+				is3D : true,
+				pieSliceText: 'label',
+				tooltip :  {showColorCode: true},
+				'width' : 900,
+				'height' : 675
+			};
+			var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+			chart.draw(data, options);
+		}
+		/*]]>*/
+	</script>
+</head>
+<body>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+		    <div class="navbar-header">
+		    	<a class="navbar-brand" href="#">Investment App</a>
+		    </div>
+            <div class="nav navbar-left">
+                <ul class="nav navbar-nav">
+		            <li><a href="/">Home</a></li>
+		            <li><a href="/stocks">Stocks</a></li>
+					<li><a href="/portfolio">Portfolio</a></li>
+					<li><a href="/portfolio/goals">Goals</a></li>
+					<li class="active"><a href="/portfolio/metrics">Metrics</a></li>
+					<li sec:authorize="isAuthenticated()"><a href="/profile">Profile</a></li>
+					<li sec:authorize="isAnonymous()"><a href="/register">Register</a></li>
+	            	<li sec:authorize="isAnonymous()"><a href="/login">Login</a></li>
+                </ul>
+            </div>
+            <div class="navbar-collapse navbar-right collapse">
+                <ul sec:authorize="isAuthenticated()" class="nav navbar-nav">
+                    <li>
+                        <a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+                        <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                            <input hidden="true" type="submit" value="Sign Out"/>
+                        </form>
+                    </li>
+                    <li>
+                        <a>
+                            Welcome, <span sec:authentication="name"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+	  	</div>
+	</nav>
+    <div class="container">
+		<div id="chart_div"></div>
+	</div>
+</body>
+</html>
