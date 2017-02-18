@@ -88,28 +88,30 @@
 		<!-- List<List<StockInPortfolio>> -->
 	    <div th:each="holdings : ${groupedPortfolio}">
 			<div class="row" th:if="${holdings[0]}" style="font-size:18px">
-				<div class="col-md-2">
+				<div class="col-md-4">
 					<a th:href="@{/stocks/{id}/(id=${holdings[0].stock.id})}" th:text="${holdings[0].stock.name}" />
-					<br />
+				</div>
+				<div class="col-md-4">
+					<span th:text="${holdings[0].stock.ticker}" />
+				</div>
+			</div>
+			<div class="row" th:if="${holdings[0]}" style="font-size:18px">
+				<div class="col-md-2">
 					Amount:
 					<br />
 					<span th:text="${portfolioService.getGain(holdings)} >= 0 ? 'Gain:' : 'Loss:'" />
 				</div>
 				<div class="col-md-2">
-					<br />
 					<span th:text="'$' + ${{portfolioService.getStockAmount(holdings)}}" />
 					<br />
 					<span th:text="'$' + ${{portfolioService.getDifference(holdings)}}" />
 				</div>
 				<div class="col-md-2">
-					<span th:text="${holdings[0].stock.ticker}" />
-					<br />
 					Annualised:
 					<br />
 					Value:
 				</div>
 				<div class="col-md-2">
-					<br />
 					<span th:text="'$' + ${{portfolioService.getAnnualisedReturn(holdings)}}" />
 					<br />
 					<span th:text="'$' + ${{portfolioService.getValue(holdings)}}" />
