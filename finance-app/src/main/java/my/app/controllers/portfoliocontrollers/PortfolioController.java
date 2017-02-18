@@ -1,4 +1,4 @@
-package my.app.controllers;
+package my.app.controllers.portfoliocontrollers;
 
 import java.security.Principal;
 import java.text.ParseException;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import my.app.controllers.Utility;
 import my.app.domains.Stock;
 import my.app.domains.StockInPortfolio;
 import my.app.domains.User;
@@ -57,7 +58,7 @@ public class PortfolioController {
 		model.addAttribute("portfolioService", portfolioService);
 		model.addAttribute("sectors", sectors);
 		model.addAttribute("weights", weights);
-		return "portfolio";
+		return "portfolio/portfolio";
 	}
 	
 	@RequestMapping(value = "portfolio", method = RequestMethod.POST)
@@ -90,7 +91,7 @@ public class PortfolioController {
 			@PathVariable("stockInPortfolioId") int id) {
 		StockInPortfolio sip = stockInPortfolioService.getStockInPortfolioById(id);
 		model.addAttribute("stockInPortfolio", sip);
-		return "updatePortfolio";
+		return "portfolio/updatePortfolio";
 	}
 			
 	@RequestMapping(value = "portfolio/{stockInPortfolioId}", method = RequestMethod.PUT)

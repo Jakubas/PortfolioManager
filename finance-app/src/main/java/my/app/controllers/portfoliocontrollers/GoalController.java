@@ -1,4 +1,4 @@
-package my.app.controllers;
+package my.app.controllers.portfoliocontrollers;
 
 import java.security.Principal;
 import java.util.List;
@@ -54,7 +54,7 @@ public class GoalController {
 		model.addAttribute("typeMap", goalToTypeMapping);
 		model.addAttribute("sectors", sectors);
 		model.addAttribute("risks", risks);
-		return "goals";
+		return "portfolio/goals";
 	}
 	 
 	@RequestMapping(value = "portfolio/goals", method = RequestMethod.POST) 
@@ -88,9 +88,9 @@ public class GoalController {
 			goal = goalFactory.getGoal(user, goalTemplate, percentage, sector1, sector2, monthlyDepositAmount, amount, length, risk, monthsOrYears);
 		} catch (InvalidDataException e) {
 			model.addAttribute("error", true);
-			return "goals";
+			return "portfolio/goals";
 		}
 		goalService.saveGoal(goal);
-		return "redirect:goals";
+		return "redirect:portfolio/goals";
 	}
 }
