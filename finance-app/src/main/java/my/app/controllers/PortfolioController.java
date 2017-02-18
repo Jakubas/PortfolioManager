@@ -47,10 +47,16 @@ public class PortfolioController {
 		User user = userService.getUserByUsername(username);
 		List<StockInPortfolio> portfolio = user.getPortfolio();
 		List<List<StockInPortfolio>> groupedPortfolio = portfolioService.groupPortfolio(portfolio);
+		List<String> sectors = stockService.getSectors();
+		double[] weights =  new double[sectors.size()];
+		for (int i = 0; i < sectors.size(); i++) {
+			weights[i] = user.calculateSectorWeight(sectors.get(i));
+		}
 		model.addAttribute("user", user);
 		model.addAttribute("groupedPortfolio", groupedPortfolio);
 		model.addAttribute("portfolioService", portfolioService);
-		model.addAttribute("sectors", stockService.getSectors());
+		model.addAttribute("sectors", sectors);
+		model.addAttribute("weights", weights);
 		return "portfolio";
 	}
 	

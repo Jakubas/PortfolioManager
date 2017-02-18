@@ -3,6 +3,37 @@
 <head>
 	<title>Investment App</title>
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		google.load('visualization', '1.0', {
+	    	'packages' : [ 'corechart' ]
+	  	});
+  		google.setOnLoadCallback(drawPieChart);
+		function drawPieChart() {
+			var data = new google.visualization.DataTable();
+			data.addColumn('string', 'Topping');
+			data.addColumn('number', 'Slices');
+			var sectors = [[${sectors}]];
+			var weights = [[${weights}]];
+			for (i = 0; i < sectors.length; i++) {
+				var sector = sectors[i];
+				var weight = weights[i];
+				data.addRow([sector, weight]);
+			}
+			var options = {
+				'title' : 'Portfolio Weighting by Sector',
+				is3D : true,
+				pieSliceText: 'label',
+				tooltip :  {showColorCode: true},
+				'width' : 1000,
+				'height' : 300
+			};
+			var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+			chart.draw(data, options);
+		}
+	    /*]]>*/
+	</script>
 </head>
 <body>
 	<nav class="navbar navbar-default">
@@ -42,50 +73,33 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-4">
-				<h3>
-					My Portfolio
-				</h3>
-			</div>
-			<div class="col-sm-6">
-				<h3>
-					Portfolio Weightings
-				</h3>
-			</div>
-		</div>
-		<section style="font-size:18px">
-			<div class="row">
-				<div class="col-sm-2">
-					Portfolio Value:
-					<br />
-					Cash Balance:
+				<div class="row">
+					<div class="col-sm-6">
+						<h3>
+							My Portfolio
+						</h3>
+					</div>
 				</div>
-				<div class="col-sm-2">
-					<span th:text="'$' + ${#numbers.formatDecimal(user.portfolioValue(),1,2,'POINT')}" />
-					<br />
-					<span th:text="${user.cashAmount} ? '$' + ${#numbers.formatDecimal(user.cashAmount,1,2,'POINT')} : '0'" />
-				</div>
-				<div class="col-sm-6">
-					<div class="row">
-						<div class="col-sm-4" style="font-size:12px">
-							<div th:each="sector : ${sectors}">
-								<span th:text="${sector}" />
-								<br />
-							</div>
-						</div>
-						<div class="col-sm-4" style="font-size:12px">
-							<div th:each="sector : ${sectors}">
-								<span th:text="${#numbers.formatDecimal(user.calculateSectorWeight(sector),1,2,'POINT')} + '%'" />
-								<br />
-							</div>
-						</div>
+				<div class="row" style="font-size:18px">
+					<div class="col-sm-6">
+						Portfolio Value:
+						<br />
+						Cash Balance:
+					</div>
+					<div class="col-sm-6">
+						<span th:text="'$' + ${#numbers.formatDecimal(user.portfolioValue(),1,2,'POINT')}" />
+						<br />
+						<span th:text="${user.cashAmount} ? '$' + ${#numbers.formatDecimal(user.cashAmount,1,2,'POINT')} : '0'" />
 					</div>
 				</div>
 			</div>
-		</section>
+			<div class="col-sm-8">
+				<div id="chart_div"></div>
+			</div>
+		</div>
 		<h3>
 			Portfolio Holdings
 		</h3>
-		<!-- List<List<StockInPortfolio>> -->
 	    <div th:each="holdings : ${groupedPortfolio}">
 			<div class="row" th:if="${holdings[0]}" style="font-size:18px">
 				<div class="col-md-4">
@@ -141,58 +155,6 @@
 			</div>
 			<br />
 		</div>
-			<!--
-			<span th:text="${{stockInPortfolio.buyDate}}" />
-			<span th:text="${{stockInPortfolio.sellDate}} ? ${{stockInPortfolio.sellDate}} : 'N/A'" />
-
-	        <div class="row" style="font-size:18px">
-	            <div class="col-sm-2">
-	                <a th:href="@{/stocks/{id}/(id=${stockInPortfolio.stock.id})}" th:text="${stockInPortfolio.stock.name}" />
-	                <br />
-	                Date Bought:
-	                <br />
-	                Date Sold:
-					<br />
-					Amount:
-	            </div>
-	            <div class="col-sm-2">
-	                <br />
-	                <span th:text="${{stockInPortfolio.buyDate}}" />
-	                <br />
-	                <span th:text="${{stockInPortfolio.sellDate}} ? ${{stockInPortfolio.sellDate}} : 'N/A'" />
-					<br />
-					<span th:text="${{stockInPortfolio.amount}}" />
-	            </div>
-	            <div class="col-sm-2">
-	                <span th:text="${stockInPortfolio.stock.ticker}" />
-	                <br />
-	                <span th:text="${stockInPortfolio.getGain()} >= 0 ? 'Gain:' : 'Loss:'" />
-	                <br />
-	                Annualised:
-					<br />
-					Value:
-	            </div>
-	            <div class="col-sm-2">
-	                <br />
-					<span th:text="'$' + ${{stockInPortfolio.getDifference()}}" />
-	                <br />
-	                <span th:text="${{stockInPortfolio.annualisedReturn}} ? ${{stockInPortfolio.annualisedReturn}} : 'N/A'" />
-					<br />
-					<span th:text="${{stockInPortfolio.value}}" />
-	            </div>
-				<form class="form-noborder" th:action="@{/portfolio/{id}/(id=${stockInPortfolio.id})}"
-				method="get">
-					<button type="submit" class="btn btn-link glyphicon glyphicon-edit" />
-				</form>
-				<form class="form-noborder" th:action="@{/portfolio/{id}/(id=${stockInPortfolio.id})}"
-				method="post">
-					<input type="hidden" name="_method" value="delete" />
-					<button type="submit" class="btn btn-link glyphicon glyphicon-remove" />
-				</form>
-	        </div>
-			<br />
-		</div>
-		-->
 		<h3>
 			Archived Portfolio Holdings
 		</h3>
