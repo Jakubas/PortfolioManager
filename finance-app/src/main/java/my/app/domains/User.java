@@ -137,6 +137,10 @@ public class User {
 		return activePortfolio;
 	}
 	
+	public List<StockInPortfolio> getEntirePortfolio() {
+		return portfolio;
+	}
+	
 	public List<StockInPortfolio> getHistoricalPortfolio() {
 		List<StockInPortfolio> historicalPortfolio = new ArrayList<StockInPortfolio>();
 		for (StockInPortfolio sip : portfolio) {

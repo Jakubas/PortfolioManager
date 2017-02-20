@@ -1,5 +1,6 @@
 package my.app.services;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -15,4 +16,7 @@ public interface PortfolioService {
 	double getDifference(List<StockInPortfolio> portfolio);
 	double getAnnualisedReturn(List<StockInPortfolio> portfolio);
 	double getValue(List<StockInPortfolio> portfolio);
+	double getValueOnDate(List<StockInPortfolio> portfolio, Date date);
+	Date getEarliestDateIn(List<StockInPortfolio> portfolio);
+	
 }

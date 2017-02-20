@@ -1,6 +1,9 @@
 package my.app.controllers.portfoliocontrollers;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import my.app.controllers.Utility;
+import my.app.domains.StockInPortfolio;
 import my.app.domains.User;
 import my.app.services.PortfolioService;
 import my.app.services.StockInPortfolioService;
@@ -37,15 +42,30 @@ public class MetricsController {
 	public String getPortfolioMetrics(Model model, Principal principal) {
 		String username = principal.getName();
 		User user = userService.getUserByUsername(username);
-//		List<StockInPortfolio> portfolio = user.getPortfolio();
 		List<String> sectors = stockService.getSectors();
 		double[] weights =  new double[sectors.size()];
 		for (int i = 0; i < sectors.size(); i++) {
 			weights[i] = user.calculateSectorWeight(sectors.get(i));
 		}
+		double[] dayValues = getDayValues(user);
 		model.addAttribute("sectors", sectors);
 		model.addAttribute("weights", weights);
-		System.out.println("ss");
+		model.addAttribute("dayValues", dayValues);
 		return "portfolio/metrics";
+	}
+	
+	public double[] getDayValues(User user) {
+		List<StockInPortfolio> portfolio = user.getEntirePortfolio(); 
+		Date earliestDate = portfolioService.getEarliestDateIn(portfolio);
+		LocalDate earliestDate2 = Utility.fromDate(earliestDate);
+		int daysBetween = (int) ChronoUnit.DAYS.between(earliestDate.toInstant(), new Date().toInstant());
+		
+		double[] values = new double[daysBetween/28];
+		for (int i = 0; i < values.length; i++) {
+			System.out.println(i + " / " + values.length);
+			double value = portfolioService.getValueOnDate(portfolio, Utility.toDate(earliestDate2.plusDays(1).plusMonths(i)));
+			values[i] = value;
+		}
+		return values;
 	}
 }

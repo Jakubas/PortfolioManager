@@ -20,12 +20,15 @@ public class Utility {
 		return date;
 	}
 	
-
 	/*
 	 * Source: http://www.java2s.com/Tutorials/Java/Data_Type_How_to/Date_Convert/Convert_java_util_Date_to_LocalDate.htm
 	 */
 	public static LocalDate fromDate(Date date) {
 		Instant instant = Instant.ofEpochMilli(date.getTime());
 	    return LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
+	}
+	
+	public static Date toDate(LocalDate localDate) {
+		return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 	}
 }

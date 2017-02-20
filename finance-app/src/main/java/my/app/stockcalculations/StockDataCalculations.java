@@ -114,7 +114,9 @@ public class StockDataCalculations {
 	
 	public static Double findStockPriceOnDate(Stock stock, Date date) {
 		List<StockDailyInformation> stockInfos = stock.getStockDailyInformations();
-		return findStockInformationForGivenDate(stockInfos, date).getAdjustedClose();
+		StockDailyInformation stockInfo = findStockInformationForGivenDate(stockInfos, date);
+		Double result = stockInfo != null ? stockInfo.getAdjustedClose() : null;
+		return result;
 	}
 	
 	private static StockDailyInformation findStockInformationForGivenDate(List<StockDailyInformation> stockInfos, Date date) {
@@ -132,17 +134,23 @@ public class StockDataCalculations {
 			//stock data does not go that far back so we return null
 			return null;
 		}
-		return findStockInformationForGivenDateHelper(stockInfos, subtractDaysFromDate(date, 1));
+		return findStockInformationForGivenDateHelper(stockInfos, subtractDaysFromDate(date, 1), 1);
 	}
 	
-	private static StockDailyInformation findStockInformationForGivenDateHelper(List<StockDailyInformation> stockInfos, Date date) {
+	private static StockDailyInformation findStockInformationForGivenDateHelper(
+			List<StockDailyInformation> stockInfos, Date date, int dayCounter) {
 		for (StockDailyInformation stockInfo : stockInfos) {
 			Date stockInfoDate = stockInfo.getDate();
 			if (DateUtils.isSameDay(stockInfoDate, date)) {
 				return stockInfo;
 			}
 		}
-		return findStockInformationForGivenDateHelper(stockInfos, subtractDaysFromDate(date, 1));
+		if (dayCounter == 60) {
+			//we went back 60 days and didn't find any price data, so the stock wasn't listed
+			//anywhere near the date that we are searching for.
+			return null;
+		}
+		return findStockInformationForGivenDateHelper(stockInfos, subtractDaysFromDate(date, 1), dayCounter++);
 	}
 	
 	private static Date subtractDaysFromDate(Date date, int numberOfDays) {	

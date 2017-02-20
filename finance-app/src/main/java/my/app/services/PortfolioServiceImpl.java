@@ -9,6 +9,7 @@ import org.springframework.format.annotation.NumberFormat.Style;
 import org.springframework.stereotype.Service;
 
 import my.app.domains.StockInPortfolio;
+import my.app.stockcalculations.StockDataCalculations;
 
 @Service
 public class PortfolioServiceImpl implements PortfolioService {
@@ -103,5 +104,42 @@ public class PortfolioServiceImpl implements PortfolioService {
 			value += holding.getValue();
 		}
 		return value;
+	}
+	
+	@Override
+	public double getValueOnDate(List<StockInPortfolio> portfolio, Date date) {
+		double value = 0;
+		System.out.println(date);
+		for (StockInPortfolio holding : portfolio) {
+			value += getHoldingValueOnDate(holding, date);
+		}
+		return value;
+	}
+	
+	private double getHoldingValueOnDate(StockInPortfolio holding, Date date) {
+		if (isHeldOn(holding, date)) {
+			Double price = StockDataCalculations.findStockPriceOnDate(holding.getStock(), date);
+			double value = price != null ? price * holding.getAmount() : 0;
+//			System.out.println(value);
+			return value;
+		}
+		return 0;
+	}
+	
+	//returns true if the holding was held (owned) on the date provided, otherwise returns false
+	private boolean isHeldOn(StockInPortfolio holding, Date date) {
+		return holding.getBuyDate().before(date) && 
+				(holding.getSellDate() == null || holding.getSellDate().after(date));
+	}
+
+	@Override
+	public Date getEarliestDateIn(List<StockInPortfolio> portfolio) {
+		Date earliestDate = new Date();
+		for (StockInPortfolio holding : portfolio) {
+			if (holding.getBuyDate().before(earliestDate)) {
+				earliestDate = holding.getBuyDate();
+			}
+		}
+		return earliestDate;
 	}
 }
