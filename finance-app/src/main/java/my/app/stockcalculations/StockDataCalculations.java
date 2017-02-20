@@ -112,6 +112,11 @@ public class StockDataCalculations {
 		return percentageChange;
 	}
 	
+	public static Double findStockPriceOnDate(Stock stock, Date date) {
+		List<StockDailyInformation> stockInfos = stock.getStockDailyInformations();
+		return findStockInformationForGivenDate(stockInfos, date).getAdjustedClose();
+	}
+	
 	private static StockDailyInformation findStockInformationForGivenDate(List<StockDailyInformation> stockInfos, Date date) {
 		Date earliestDate = new Date();
 		for (StockDailyInformation stockInfo : stockInfos) {
@@ -124,10 +129,20 @@ public class StockDataCalculations {
 			}
 		}
 		if (earliestDate.after(date)) {
+			//stock data does not go that far back so we return null
 			return null;
 		}
-		//check if date we are searching for is >= Jan 1 1970
-		return findStockInformationForGivenDate(stockInfos, subtractDaysFromDate(date, 1));
+		return findStockInformationForGivenDateHelper(stockInfos, subtractDaysFromDate(date, 1));
+	}
+	
+	private static StockDailyInformation findStockInformationForGivenDateHelper(List<StockDailyInformation> stockInfos, Date date) {
+		for (StockDailyInformation stockInfo : stockInfos) {
+			Date stockInfoDate = stockInfo.getDate();
+			if (DateUtils.isSameDay(stockInfoDate, date)) {
+				return stockInfo;
+			}
+		}
+		return findStockInformationForGivenDateHelper(stockInfos, subtractDaysFromDate(date, 1));
 	}
 	
 	private static Date subtractDaysFromDate(Date date, int numberOfDays) {	
@@ -135,25 +150,5 @@ public class StockDataCalculations {
 		LocalDateTime tenDaysAgo = ldt.minusDays(numberOfDays);
 		Date adjustedDate = Date.from(tenDaysAgo.atZone(ZoneId.systemDefault()).toInstant());
 		return adjustedDate;
-	}
-	
-	public static Double findStockPriceOnDate(Stock stock, Date date) {
-		List<StockDailyInformation> stockInfos = stock.getStockDailyInformations();
-		Date earliestDate = new Date();
-		for (StockDailyInformation stockInfo : stockInfos) {
-			Date stockInfoDate = stockInfo.getDate();
-			if (stockInfoDate.before(earliestDate)) {
-				earliestDate = stockInfoDate;
-			}
-			if (DateUtils.isSameDay(stockInfoDate, date)) {
-				return stockInfo.getAdjustedClose();
-			}
-		}
-		if (earliestDate.after(date)) {
-			//stock data does not go that far back so we return null
-			return null;
-		}
-		//check if date we are searching for is >= Jan 1 1970
-		return findStockInformationForGivenDate(stockInfos, subtractDaysFromDate(date, 1)).getAdjustedClose();
 	}
 }
