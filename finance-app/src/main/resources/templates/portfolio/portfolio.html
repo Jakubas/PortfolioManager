@@ -116,7 +116,7 @@
 					<span th:text="${portfolioService.getGain(holdings)} >= 0 ? 'Gain:' : 'Loss:'" />
 				</div>
 				<div class="col-md-2">
-					<span th:text="'$' + ${{portfolioService.getStockAmount(holdings)}}" />
+					<span th:text="${{portfolioService.getStockAmount(holdings)}}" />
 					<br />
 					<span th:text="'$' + ${{portfolioService.getDifference(holdings)}}" />
 				</div>

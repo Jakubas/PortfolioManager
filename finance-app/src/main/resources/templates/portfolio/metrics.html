@@ -10,13 +10,14 @@
 			'packages' : [ 'corechart' ]
 		});
 		google.setOnLoadCallback(drawPieChart);
+		google.setOnLoadCallback(drawValueChart);
 		function drawPieChart() {
 			var data = new google.visualization.DataTable();
 			data.addColumn('string', 'Topping');
 			data.addColumn('number', 'Slices');
 			var sectors = [[${sectors}]];
 			var weights = [[${weights}]];
-			for (i = 0; i < sectors.length; i++) {
+			for (var i = 0; i < sectors.length; i++) {
 				var sector = sectors[i];
 				var weight = weights[i];
 				data.addRow([sector, weight]);
@@ -29,7 +30,26 @@
 				'width' : 900,
 				'height' : 675
 			};
-			var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+			var chart = new google.visualization.PieChart(document.getElementById('pie_chart_div'));
+			chart.draw(data, options);
+		}
+
+		function drawValueChart() {
+	    	var data = new google.visualization.DataTable();
+			data.addColumn('number', 'Month');
+			data.addColumn('number', 'Value');
+			var dayValues = [[${dayValues}]];
+			for (var i = 0; i < dayValues.length; i++) {
+				var value = dayValues[i];
+				data.addRow([i, value]);
+			}
+			var options = {
+          		title: 'Portfolio Value Over Time',
+          		subtitle: 'On a monthly basis',
+	        	width: 900,
+	        	height: 675
+      		};
+			var chart = new google.visualization.LineChart(document.getElementById('value_chart_div'));
 			chart.draw(data, options);
 		}
 		/*]]>*/
@@ -71,7 +91,10 @@
 	  	</div>
 	</nav>
     <div class="container">
-		<div id="chart_div"></div>
+		<div id="pie_chart_div"></div>
+	</div>
+	<div class="container">
+		<div id="value_chart_div"></div>
 	</div>
 </body>
 </html>
