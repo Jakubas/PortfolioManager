@@ -9,12 +9,12 @@ import my.app.services.StockMetricsService;
 import my.app.services.StockService;
 import my.app.stockcalculations.StockDataCalculations;
 
-public class UpdateStockCalculations {
+public class UpdateStockMetrics {
 	
 	private final StockMetricsService stockMetricsService;
 	private final StockService stockService;
 	
-	public UpdateStockCalculations(StockMetricsService stockMetricsService, StockService stockService) {
+	public UpdateStockMetrics(StockMetricsService stockMetricsService, StockService stockService) {
 		this.stockMetricsService = stockMetricsService;
 		this.stockService = stockService;
 	}

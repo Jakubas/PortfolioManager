@@ -8,6 +8,7 @@ import my.app.domains.portfolio.PortfolioDailyInformation;
 public interface PortfolioDailyInformationService {
 
 	void savePortfolioDailyInformation(PortfolioDailyInformation pdi);
+	void savePortfolioDailyInformations(List<PortfolioDailyInformation> pdis);
 	PortfolioDailyInformation getPortfolioDailyInformationById(int id);
 	PortfolioDailyInformation getPortfolioDailyInformationByDate(LocalDate date);
 	List<PortfolioDailyInformation> getPortfolioDailyInformations();

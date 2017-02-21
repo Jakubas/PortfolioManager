@@ -8,10 +8,12 @@ import javax.transaction.Transactional;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Example;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import my.app.domains.StockDailyInformation;
 import my.app.domains.portfolio.PortfolioDailyInformation;
 
 @Repository
@@ -29,6 +31,17 @@ public class PortfolioDailyInformationDAOImpl implements PortfolioDailyInformati
 	public void savePortfolioDailyInformation(PortfolioDailyInformation pdi) {
 		Session session = sessionFactory.getCurrentSession();
 		session.persist(pdi);
+	}
+	
+	public void savePortfolioDailyInformations(List<PortfolioDailyInformation> pdis) {
+		Session session = sessionFactory.getCurrentSession();
+		Transaction tx = session.beginTransaction();
+		for (PortfolioDailyInformation pid : pdis) {
+			session.save(pid);
+		}
+		session.flush();
+		session.clear();
+		tx.commit();
 	}
 
 	@Override

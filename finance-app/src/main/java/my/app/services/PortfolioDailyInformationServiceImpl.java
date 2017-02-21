@@ -25,6 +25,11 @@ public class PortfolioDailyInformationServiceImpl implements PortfolioDailyInfor
 	}
 
 	@Override
+	public void savePortfolioDailyInformations(List<PortfolioDailyInformation> pdis) {
+		dao.savePortfolioDailyInformations(pdis);
+	}
+	
+	@Override
 	public PortfolioDailyInformation getPortfolioDailyInformationById(int id) {
 		return dao.getPortfolioDailyInformationById(id);
 	}
