@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import my.app.dao.PortfolioDailyInformationDAO;
+import my.app.domains.User;
 import my.app.domains.portfolio.PortfolioDailyInformation;
 
 @Service
@@ -35,8 +36,8 @@ public class PortfolioDailyInformationServiceImpl implements PortfolioDailyInfor
 	}
 
 	@Override
-	public PortfolioDailyInformation getPortfolioDailyInformationByDate(LocalDate date) {
-		return dao.getPortfolioDailyInformationByDate(date);
+	public PortfolioDailyInformation getPortfolioDailyInformationByDate(LocalDate date, User user) {
+		return dao.getPortfolioDailyInformationByDate(date, user);
 	}
 
 	@Override

@@ -30,16 +30,22 @@ public class PortfolioDailyInformation {
 	private User user;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@Column(unique = true)
 	private LocalDate date;
 	
 	private double cashAmount;
 	
 	private double value;
 	
-	public PortfolioDailyInformation(User user, LocalDate date) {
+	private int day;
+	
+	public PortfolioDailyInformation(User user, LocalDate date, int day) {
 		this.user = user;
 		this.date = date;
+		update(day);
+	}
+	
+	public void update(int day) {
+		this.day = day;
 		if (date.equals(LocalDate.now())) {
 			this.cashAmount = user.getCashAmount();
 		} else {
@@ -59,6 +65,10 @@ public class PortfolioDailyInformation {
 		return user;
 	}
 
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
 	public LocalDate getDate() {
 		return date;
 	}
@@ -79,5 +89,9 @@ public class PortfolioDailyInformation {
 
 	public double getValue() {
 		return value;
+	}
+	
+	public int getDay() {
+		return day;
 	}
 }

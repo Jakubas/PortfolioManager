@@ -10,10 +10,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Example;
+import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import my.app.domains.StockDailyInformation;
+import my.app.domains.User;
 import my.app.domains.portfolio.PortfolioDailyInformation;
 
 @Repository
@@ -36,8 +39,8 @@ public class PortfolioDailyInformationDAOImpl implements PortfolioDailyInformati
 	public void savePortfolioDailyInformations(List<PortfolioDailyInformation> pdis) {
 		Session session = sessionFactory.getCurrentSession();
 		Transaction tx = session.beginTransaction();
-		for (PortfolioDailyInformation pid : pdis) {
-			session.save(pid);
+		for (PortfolioDailyInformation pdi : pdis) {
+			session.saveOrUpdate(pdi);
 		}
 		session.flush();
 		session.clear();
@@ -52,16 +55,17 @@ public class PortfolioDailyInformationDAOImpl implements PortfolioDailyInformati
 	}
 	
 	@Override
-	public PortfolioDailyInformation getPortfolioDailyInformationByDate(LocalDate date) {
+	public PortfolioDailyInformation getPortfolioDailyInformationByDate(LocalDate date, User user) {
 		Session session = sessionFactory.getCurrentSession();
+		
 		Criteria cr = session.createCriteria(PortfolioDailyInformation.class);
 		PortfolioDailyInformation pdi = new PortfolioDailyInformation();
-		cr = cr.add(Example.create(pdi));
-		if (!cr.list().isEmpty()) {
-			return (PortfolioDailyInformation) cr.uniqueResult();
-		} else {
-			return null;
-		}
+		pdi.setDate(date);
+		pdi.setUser(user);
+		cr.add(Restrictions.eq("date", date));
+		cr.add(Restrictions.eq("user", user));
+		pdi = (PortfolioDailyInformation) cr.uniqueResult();
+		return pdi;
 	}
 
 	@SuppressWarnings("unchecked")
