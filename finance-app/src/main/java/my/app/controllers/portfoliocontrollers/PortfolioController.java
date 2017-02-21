@@ -46,7 +46,7 @@ public class PortfolioController {
 	public String getPortfolio(Model model, Principal principal) {
 		String username = principal.getName();
 		User user = userService.getUserByUsername(username);
-		List<StockInPortfolio> portfolio = user.getPortfolio();
+		List<StockInPortfolio> portfolio = user.getActivePortfolio();
 		List<List<StockInPortfolio>> groupedPortfolio = portfolioService.groupPortfolio(portfolio);
 		List<String> sectors = stockService.getSectors();
 		double[] weights =  new double[sectors.size()];

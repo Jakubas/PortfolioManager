@@ -126,7 +126,7 @@ public class User {
 		return goals;
 	}
 	
-	public List<StockInPortfolio> getPortfolio() {
+	public List<StockInPortfolio> getActivePortfolio() {
 		//filter sold stock
 		List<StockInPortfolio> activePortfolio = new ArrayList<StockInPortfolio>();
 		for (StockInPortfolio sip : portfolio) {
@@ -137,7 +137,7 @@ public class User {
 		return activePortfolio;
 	}
 	
-	public List<StockInPortfolio> getEntirePortfolio() {
+	public List<StockInPortfolio> getPortfolio() {
 		return portfolio;
 	}
 	
@@ -154,7 +154,7 @@ public class User {
 	//the value of all investments in the user's portfolio
 	public double portfolioValue() {
 		double value = 0;
-		for (StockInPortfolio stockInPortfolio : getPortfolio()) {
+		for (StockInPortfolio stockInPortfolio : getActivePortfolio()) {
 			if (!stockInPortfolio.isStockSold()) {
 				value += stockInPortfolio.getValue();
 			}
@@ -172,7 +172,7 @@ public class User {
 			return cashAmount;
 		}
 		double value = 0;
-		for (StockInPortfolio stockInPortfolio : getPortfolio()) {
+		for (StockInPortfolio stockInPortfolio : getActivePortfolio()) {
 			if (isInSector(stockInPortfolio, sector)) {
 				value += stockInPortfolio.getValue();
 			}
@@ -182,7 +182,7 @@ public class User {
 	
 	private double stockValue(Stock stock) {
 		double value = 0;
-		for (StockInPortfolio stockInPortfolio : getPortfolio()) {
+		for (StockInPortfolio stockInPortfolio : getActivePortfolio()) {
 			if (isStock(stockInPortfolio, stock)) {
 				value += stockInPortfolio.getValue();
 			}
@@ -221,13 +221,13 @@ public class User {
 	}
 
 	public String calculatePortfolioRisk() {
-		return Risk.calculatePortfolioRisk(getPortfolio());
+		return Risk.calculatePortfolioRisk(getActivePortfolio());
 	}
 
 	//based on current portfolio performance
 	public double annualisedPortfolioPerformance() {
 		double annualisedPerformance = 0;
-		for (StockInPortfolio stockInPortfolio : getPortfolio()) {
+		for (StockInPortfolio stockInPortfolio : getActivePortfolio()) {
 			Double annualisedReturn = stockInPortfolio.getAnnualisedReturn();
 			if (annualisedReturn == null) {
 				annualisedReturn = 0.0;

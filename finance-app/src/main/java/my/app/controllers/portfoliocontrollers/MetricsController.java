@@ -56,7 +56,7 @@ public class MetricsController {
 	}
 	
 	public double[] getDayValues(User user) {
-		List<StockInPortfolio> portfolio = user.getEntirePortfolio(); 
+		List<StockInPortfolio> portfolio = user.getPortfolio(); 
 		LocalDate earliestDate = portfolioService.getEarliestDateIn(portfolio);
 		int daysBetween = Period.between(earliestDate, LocalDate.now()).getDays();
 		double[] values = new double[daysBetween/28];
