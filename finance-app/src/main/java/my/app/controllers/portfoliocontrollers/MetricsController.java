@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import my.app.controllers.Utility;
 import my.app.domains.User;
+import my.app.domains.portfolio.PortfolioDailyInformation;
 import my.app.domains.portfolio.StockInPortfolio;
 import my.app.services.PortfolioService;
 import my.app.services.StockInPortfolioService;
@@ -56,15 +57,23 @@ public class MetricsController {
 	}
 	
 	public double[] getDayValues(User user) {
-		List<StockInPortfolio> portfolio = user.getPortfolio(); 
-		LocalDate earliestDate = portfolioService.getEarliestDateIn(portfolio);
-		int daysBetween = Period.between(earliestDate, LocalDate.now()).getDays();
-		double[] values = new double[daysBetween/28];
-		for (int i = 0; i < values.length; i++) {
-			System.out.println(i + " / " + values.length);
-			double value = portfolioService.getValueOnDate(portfolio, earliestDate.plusDays(i*28));
+		List<PortfolioDailyInformation> pids = user.getPortfolioDailyInformations();
+		double[] values = new double[pids.size()];
+		for (int i = 0; i < pids.size(); i++) {
+			PortfolioDailyInformation pid = pids.get(i);
+			double value = pid.getValue();
 			values[i] = value;
 		}
 		return values;
+//		List<StockInPortfolio> portfolio = user.getPortfolio(); 
+//		LocalDate earliestDate = portfolioService.getEarliestDateIn(portfolio);
+//		int daysBetween = Period.between(earliestDate, LocalDate.now()).getDays();
+//		double[] values = new double[daysBetween/28];
+//		for (int i = 0; i < values.length; i++) {
+//			System.out.println(i + " / " + values.length);
+//			double value = portfolioService.getValueOnDate(portfolio, earliestDate.plusDays(i*28));
+//			values[i] = value;
+//		}
+//		return values;
 	}
 }

@@ -19,6 +19,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import my.app.domains.portfolio.PortfolioDailyInformation;
 import my.app.domains.portfolio.StockInPortfolio;
 import my.app.domains.portfolio.goal.Goal;
 import my.app.risk.Risk;
@@ -59,6 +60,9 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private List<StockInPortfolio> portfolio;
 
+	@OneToMany(mappedBy = "user")
+	private List<PortfolioDailyInformation> pids;
+	
 	public User() {
 		
 	}
@@ -237,5 +241,9 @@ public class User {
 			annualisedPerformance += annualisedReturnWeighted;
 		}
 		return annualisedPerformance;
+	}
+	
+	public List<PortfolioDailyInformation> getPortfolioDailyInformations() {
+		return pids;
 	}
 }
