@@ -109,7 +109,6 @@ public class PortfolioServiceImpl implements PortfolioService {
 	@Override
 	public double getValueOnDate(List<StockInPortfolio> portfolio, LocalDate date) {
 		double value = 0;
-		System.out.println(date);
 		for (StockInPortfolio holding : portfolio) {
 			value += getHoldingValueOnDate(holding, date);
 		}
@@ -120,7 +119,6 @@ public class PortfolioServiceImpl implements PortfolioService {
 		if (isHeldOn(holding, date)) {
 			Double price = StockDataCalculations.findStockPriceOnDate(holding.getStock(), date);
 			double value = price != null ? price * holding.getAmount() : 0;
-//			System.out.println(value);
 			return value;
 		}
 		return 0;
@@ -128,8 +126,8 @@ public class PortfolioServiceImpl implements PortfolioService {
 	
 	//returns true if the holding was held (owned) on the date provided, otherwise returns false
 	private boolean isHeldOn(StockInPortfolio holding, LocalDate date) {
-		return holding.getBuyDate().isBefore(date) && 
-				(holding.getSellDate() == null || holding.getSellDate().isAfter(date));
+		return (holding.getBuyDate().isBefore(date) || holding.getBuyDate().equals(date)) && 
+			   (holding.getSellDate() == null || holding.getSellDate().isAfter(date));
 	}
 
 	@Override
