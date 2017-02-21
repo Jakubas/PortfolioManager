@@ -2,7 +2,7 @@ package my.app.controllers.usercontrollers;
 
 import java.security.Principal;
 import java.text.ParseException;
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,7 +47,7 @@ public class ProfileController {
 			user.setLastName(lastName);
 		}
 		if (!dobStr.isEmpty()) {
-			Date dob;
+			LocalDate dob;
 			try {
 				dob = Utility.stringToDate(dobStr);
 			} catch (ParseException e) {

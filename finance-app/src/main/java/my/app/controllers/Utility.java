@@ -1,7 +1,6 @@
 package my.app.controllers;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,9 +13,8 @@ public class Utility {
 		
 	}
 	
-	public static Date stringToDate(String dateStr) throws ParseException {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = sdf.parse(dateStr);
+	public static LocalDate stringToDate(String dateStr) throws ParseException {
+		LocalDate date = LocalDate.parse(dateStr);
 		return date;
 	}
 	

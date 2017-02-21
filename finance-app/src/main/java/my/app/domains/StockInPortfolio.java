@@ -1,7 +1,7 @@
 package my.app.domains;
 
 import java.time.DateTimeException;
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,10 +37,10 @@ public class StockInPortfolio {
 	
 	@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date buyDate;
+	private LocalDate buyDate;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date sellDate;
+	private LocalDate sellDate;
 	
 	@NotNull
 	@NumberFormat(style = Style.NUMBER, pattern = "#,###.##")
@@ -67,7 +67,7 @@ public class StockInPortfolio {
 		
 	}
 	
-	public StockInPortfolio(Stock stock, User user, int amount, Date buyDate) {
+	public StockInPortfolio(Stock stock, User user, int amount, LocalDate buyDate) {
 		this.stock = stock;
 		this.user = user;
 		this.amount = amount;
@@ -76,7 +76,7 @@ public class StockInPortfolio {
 		calculateMetrics();
 	}
 
-	public StockInPortfolio(Stock stock, User user, int amount, Date buyDate, Date sellDate) {
+	public StockInPortfolio(Stock stock, User user, int amount, LocalDate buyDate, LocalDate sellDate) {
 		this.stock = stock;
 		this.user = user;
 		this.amount = amount;
@@ -89,7 +89,7 @@ public class StockInPortfolio {
 	
 	public void calculateMetrics() {
 		Double sellPrice = this.sellPrice;
-		Date sellDate = this.sellDate;
+		LocalDate sellDate = this.sellDate;
 		if (sellPrice == null) {
 			if (isStockSold()) {
 				//this is most likely never reached e.g. dead code
@@ -102,7 +102,7 @@ public class StockInPortfolio {
 		double returnOnInvestment = (sellPrice - buyPrice)/buyPrice;
 		Double annualisedReturn;
 		if (sellDate == null) {
-			annualisedReturn = StockDataCalculations.calculateAnnualisedReturn(buyDate, new Date(), buyPrice, sellPrice);
+			annualisedReturn = StockDataCalculations.calculateAnnualisedReturn(buyDate, LocalDate.now(), buyPrice, sellPrice);
 		} else {
 			annualisedReturn = StockDataCalculations.calculateAnnualisedReturn(stock, buyDate, sellDate);
 		}
@@ -115,16 +115,16 @@ public class StockInPortfolio {
 		return sellDate != null;
 	}
 	
-	public Date getBuyDate() {
+	public LocalDate getBuyDate() {
 		return buyDate;
 	}
 
-	public void setBuyDate(Date buyDate) {
+	public void setBuyDate(LocalDate buyDate) {
 		this.buyDate = buyDate;
 		calculateMetrics();
 	}
 	
-	public void setBuyDateAndPrice(Date buyDate) throws DateTimeException {
+	public void setBuyDateAndPrice(LocalDate buyDate) throws DateTimeException {
 		Double buyPrice = StockDataCalculations.findStockPriceOnDate(stock, buyDate);
 		if (buyPrice == null) {
 			throw new DateTimeException("Date is too early");
@@ -134,16 +134,16 @@ public class StockInPortfolio {
 		calculateMetrics();
 	}
 
-	public Date getSellDate() {
+	public LocalDate getSellDate() {
 		return sellDate;
 	}
 
-	public void setSellDate(Date sellDate) {
+	public void setSellDate(LocalDate sellDate) {
 		this.sellDate = sellDate;
 		calculateMetrics();
 	}
 	
-	public void setSellDateAndPrice(Date sellDate) throws DateTimeException {
+	public void setSellDateAndPrice(LocalDate sellDate) throws DateTimeException {
 		if (sellDate != null) {
 			Double sellPrice = StockDataCalculations.findStockPriceOnDate(stock, buyDate);
 			if (sellPrice == null) {

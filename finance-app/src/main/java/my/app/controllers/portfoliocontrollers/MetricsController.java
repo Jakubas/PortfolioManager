@@ -2,6 +2,7 @@ package my.app.controllers.portfoliocontrollers;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
@@ -56,14 +57,12 @@ public class MetricsController {
 	
 	public double[] getDayValues(User user) {
 		List<StockInPortfolio> portfolio = user.getEntirePortfolio(); 
-		Date earliestDate = portfolioService.getEarliestDateIn(portfolio);
-		LocalDate earliestDate2 = Utility.fromDate(earliestDate);
-		int daysBetween = (int) ChronoUnit.DAYS.between(earliestDate.toInstant(), new Date().toInstant());
-		
+		LocalDate earliestDate = portfolioService.getEarliestDateIn(portfolio);
+		int daysBetween = Period.between(earliestDate, LocalDate.now()).getDays();
 		double[] values = new double[daysBetween/28];
 		for (int i = 0; i < values.length; i++) {
 			System.out.println(i + " / " + values.length);
-			double value = portfolioService.getValueOnDate(portfolio, Utility.toDate(earliestDate2.plusDays(1).plusMonths(i)));
+			double value = portfolioService.getValueOnDate(portfolio, earliestDate.plusDays(i*28));
 			values[i] = value;
 		}
 		return values;

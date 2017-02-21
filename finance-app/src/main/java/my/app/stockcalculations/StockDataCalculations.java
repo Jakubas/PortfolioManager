@@ -1,16 +1,11 @@
 package my.app.stockcalculations;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
-
-import org.apache.commons.lang3.time.DateUtils;
 
 import my.app.domains.Stock;
 import my.app.domains.StockDailyInformation;
-import my.app.risk.RiskValues;
 
 //this class is used for various calculations regarding a stock, such as risk, annualised returns, etc.
 //annualisedReturns are estimates and may be off by a couple days
@@ -58,7 +53,7 @@ public class StockDataCalculations {
 		return calculateAnnualisedReturn(cumulativeReturn, numberOfDays);
 	}
 	
-	public static Double calculateAnnualisedReturn(Stock stock, Date buyDate, Date sellDate) {
+	public static Double calculateAnnualisedReturn(Stock stock, LocalDate buyDate, LocalDate sellDate) {
 		Double cumulativeReturn = calculateReturnInDateRange(stock, sellDate, buyDate);
 		if (cumulativeReturn == null)
 			return null;
@@ -66,36 +61,36 @@ public class StockDataCalculations {
 		return calculateAnnualisedReturn(cumulativeReturn, numberOfDays);
 	}
 	
-	public static Double calculateAnnualisedReturn(Date buyDate, Date sellDate,
+	public static Double calculateAnnualisedReturn(LocalDate buyDate, LocalDate sellDate,
 												   double buyPrice, double sellPrice) {
 		Double cumulativeReturn = calculateReturn(buyPrice, sellPrice);
 		if (cumulativeReturn == null)
 			return null;
 		int numberOfDays = (int) daysBetweenDates(buyDate, sellDate);
-		System.out.println(numberOfDays);
 		return calculateAnnualisedReturn(cumulativeReturn, numberOfDays);
 	}
 	
-	public static long daysBetweenDates(Date startDate, Date endDate) {
-	    return ChronoUnit.DAYS.between(startDate.toInstant(), endDate.toInstant());
+	public static long daysBetweenDates(LocalDate startDate, LocalDate endDate) {
+		Period period = Period.between(startDate, endDate);
+	    return period.getDays();
 	}
 	
 	private static Double calculateReturn(Stock stock, int numberOfDays) {
 		//date is initialised with the current time
-		Date date = new Date();
-		Date endDate = subtractDaysFromDate(date, numberOfDays);
-		return calculateReturnInDateRange(stock, date, endDate);
+		LocalDate today = LocalDate.now();
+		LocalDate endDate = subtractDaysFromDate(today, numberOfDays);
+		return calculateReturnInDateRange(stock, today, endDate);
 	}
 	
 	public static Double calculateReturnInDateRange(Stock stock, int numberOfDaysStart, int numberOfDaysEnd) {
 		//date is initialised with the current time
-		Date currentDate = new Date();
-		Date startDate = subtractDaysFromDate(currentDate, numberOfDaysStart);
-		Date endDate = subtractDaysFromDate(currentDate, numberOfDaysEnd);
+		LocalDate today = LocalDate.now();
+		LocalDate startDate = subtractDaysFromDate(today, numberOfDaysStart);
+		LocalDate endDate = subtractDaysFromDate(today, numberOfDaysEnd);
 		return calculateReturnInDateRange(stock, startDate, endDate);
 	}
 	
-	private static Double calculateReturnInDateRange(Stock stock, Date sellDate, Date buyDate) {
+	private static Double calculateReturnInDateRange(Stock stock, LocalDate sellDate, LocalDate buyDate) {
 		List<StockDailyInformation> stockInfos = stock.getStockDailyInformations();
 		StockDailyInformation sellStockInfo = findStockInformationForGivenDate(stockInfos, sellDate);
 		StockDailyInformation buyStockInfo = findStockInformationForGivenDate(stockInfos, buyDate);
@@ -112,25 +107,25 @@ public class StockDataCalculations {
 		return percentageChange;
 	}
 	
-	public static Double findStockPriceOnDate(Stock stock, Date date) {
+	public static Double findStockPriceOnDate(Stock stock, LocalDate date) {
 		List<StockDailyInformation> stockInfos = stock.getStockDailyInformations();
 		StockDailyInformation stockInfo = findStockInformationForGivenDate(stockInfos, date);
 		Double result = stockInfo != null ? stockInfo.getAdjustedClose() : null;
 		return result;
 	}
 	
-	private static StockDailyInformation findStockInformationForGivenDate(List<StockDailyInformation> stockInfos, Date date) {
-		Date earliestDate = new Date();
+	private static StockDailyInformation findStockInformationForGivenDate(List<StockDailyInformation> stockInfos, LocalDate date) {
+		LocalDate earliestDate = LocalDate.now();
 		for (StockDailyInformation stockInfo : stockInfos) {
-			Date stockInfoDate = stockInfo.getDate();
-			if (stockInfoDate.before(earliestDate)) {
+			LocalDate stockInfoDate = stockInfo.getDate();
+			if (stockInfoDate.isBefore(earliestDate)) {
 				earliestDate = stockInfoDate;
 			}
-			if (DateUtils.isSameDay(stockInfoDate, date)) {
+			if (stockInfoDate.equals(date)) {
 				return stockInfo;
 			}
 		}
-		if (earliestDate.after(date)) {
+		if (earliestDate.isAfter(date)) {
 			//stock data does not go that far back so we return null
 			return null;
 		}
@@ -138,10 +133,10 @@ public class StockDataCalculations {
 	}
 	
 	private static StockDailyInformation findStockInformationForGivenDateHelper(
-			List<StockDailyInformation> stockInfos, Date date, int dayCounter) {
+			List<StockDailyInformation> stockInfos, LocalDate date, int dayCounter) {
 		for (StockDailyInformation stockInfo : stockInfos) {
-			Date stockInfoDate = stockInfo.getDate();
-			if (DateUtils.isSameDay(stockInfoDate, date)) {
+			LocalDate stockInfoDate = stockInfo.getDate();
+			if (stockInfoDate.equals(date)) {
 				return stockInfo;
 			}
 		}
@@ -153,10 +148,7 @@ public class StockDataCalculations {
 		return findStockInformationForGivenDateHelper(stockInfos, subtractDaysFromDate(date, 1), dayCounter++);
 	}
 	
-	private static Date subtractDaysFromDate(Date date, int numberOfDays) {	
-		LocalDateTime ldt = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
-		LocalDateTime tenDaysAgo = ldt.minusDays(numberOfDays);
-		Date adjustedDate = Date.from(tenDaysAgo.atZone(ZoneId.systemDefault()).toInstant());
-		return adjustedDate;
+	private static LocalDate subtractDaysFromDate(LocalDate date, int numberOfDays) {	
+		return date.minusDays(numberOfDays);
 	}
 }

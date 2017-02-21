@@ -4,8 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 import my.app.domains.Stock;
 import my.app.domains.StockDailyInformation;
@@ -52,7 +52,7 @@ public class HistoricalDataParser {
 		String[] lines = parser.splitLine(line);
 		
 		int i = 0;		
-		Date date = parser.parseDate(lines[i++]);
+		LocalDate date = parser.parseDate(lines[i++]);
 		double open = parser.parseDouble(lines[i++]);
 		double high = parser.parseDouble(lines[i++]);
 		double low = parser.parseDouble(lines[i++]);

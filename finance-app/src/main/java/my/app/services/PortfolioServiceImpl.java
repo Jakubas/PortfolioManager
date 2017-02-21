@@ -1,7 +1,7 @@
 package my.app.services;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.format.annotation.NumberFormat;
@@ -48,8 +48,8 @@ public class PortfolioServiceImpl implements PortfolioService {
 	}
 
 	@Override
-	public List<Date> getBuyDates(List<StockInPortfolio> portfolio) {
-		List<Date> buyDates = new ArrayList<Date>();
+	public List<LocalDate> getBuyDates(List<StockInPortfolio> portfolio) {
+		List<LocalDate> buyDates = new ArrayList<LocalDate>();
 		for (StockInPortfolio holding : portfolio) {
 			buyDates.add(holding.getBuyDate());
 		}
@@ -57,8 +57,8 @@ public class PortfolioServiceImpl implements PortfolioService {
 	}
 
 	@Override
-	public List<Date> getSellDates(List<StockInPortfolio> portfolio) {
-		List<Date> sellDates = new ArrayList<Date>();
+	public List<LocalDate> getSellDates(List<StockInPortfolio> portfolio) {
+		List<LocalDate> sellDates = new ArrayList<LocalDate>();
 		for (StockInPortfolio holding : portfolio) {
 			sellDates.add(holding.getSellDate());
 		}
@@ -107,7 +107,7 @@ public class PortfolioServiceImpl implements PortfolioService {
 	}
 	
 	@Override
-	public double getValueOnDate(List<StockInPortfolio> portfolio, Date date) {
+	public double getValueOnDate(List<StockInPortfolio> portfolio, LocalDate date) {
 		double value = 0;
 		System.out.println(date);
 		for (StockInPortfolio holding : portfolio) {
@@ -116,7 +116,7 @@ public class PortfolioServiceImpl implements PortfolioService {
 		return value;
 	}
 	
-	private double getHoldingValueOnDate(StockInPortfolio holding, Date date) {
+	private double getHoldingValueOnDate(StockInPortfolio holding, LocalDate date) {
 		if (isHeldOn(holding, date)) {
 			Double price = StockDataCalculations.findStockPriceOnDate(holding.getStock(), date);
 			double value = price != null ? price * holding.getAmount() : 0;
@@ -127,16 +127,16 @@ public class PortfolioServiceImpl implements PortfolioService {
 	}
 	
 	//returns true if the holding was held (owned) on the date provided, otherwise returns false
-	private boolean isHeldOn(StockInPortfolio holding, Date date) {
-		return holding.getBuyDate().before(date) && 
-				(holding.getSellDate() == null || holding.getSellDate().after(date));
+	private boolean isHeldOn(StockInPortfolio holding, LocalDate date) {
+		return holding.getBuyDate().isBefore(date) && 
+				(holding.getSellDate() == null || holding.getSellDate().isAfter(date));
 	}
 
 	@Override
-	public Date getEarliestDateIn(List<StockInPortfolio> portfolio) {
-		Date earliestDate = new Date();
+	public LocalDate getEarliestDateIn(List<StockInPortfolio> portfolio) {
+		LocalDate earliestDate = LocalDate.now();
 		for (StockInPortfolio holding : portfolio) {
-			if (holding.getBuyDate().before(earliestDate)) {
+			if (holding.getBuyDate().isBefore(earliestDate)) {
 				earliestDate = holding.getBuyDate();
 			}
 		}

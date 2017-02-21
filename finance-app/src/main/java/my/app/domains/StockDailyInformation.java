@@ -1,6 +1,6 @@
 package my.app.domains;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +22,7 @@ public class StockDailyInformation {
 	
 	@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date date;
+	private LocalDate date;
 	
 	@NotNull
 	private double open;
@@ -51,7 +51,7 @@ public class StockDailyInformation {
 		
 	}
 	
-	public StockDailyInformation(Date date, double open, double close, double high,
+	public StockDailyInformation(LocalDate date, double open, double close, double high,
 			double low, int volume, double adjustedClose, Stock stock) {
 		this.date = date;
 		this.open = open;
@@ -67,7 +67,7 @@ public class StockDailyInformation {
 		return id;
 	}
 	
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 	
@@ -107,7 +107,7 @@ public class StockDailyInformation {
             return true;
 
         StockDailyInformation stockInfo = (StockDailyInformation) obj;
-        if (date.getTime() == stockInfo.getDate().getTime() && open == stockInfo.getOpen() &&
+        if (date.equals(stockInfo.getDate()) && open == stockInfo.getOpen() &&
         	close == stockInfo.getClose() && high == stockInfo.getHigh() &&
         	low == stockInfo.getLow() && volume == stockInfo.getVolume()) {
         	return true;
@@ -119,7 +119,7 @@ public class StockDailyInformation {
     @Override
     public int hashCode() {
     	HashCodeBuilder builder = new HashCodeBuilder();
-    	builder.append(date.getTime());
+    	builder.append(date);
     	builder.append(open);
     	builder.append(close);
     	builder.append(high);

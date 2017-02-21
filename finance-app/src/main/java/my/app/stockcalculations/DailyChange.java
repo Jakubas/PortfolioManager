@@ -1,7 +1,7 @@
 package my.app.stockcalculations;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -9,19 +9,19 @@ import my.app.domains.StockDailyInformation;
 
 public class DailyChange {
 
-	private Date date;
+	private LocalDate date;
 	private double percentageChange;
 	
-	public DailyChange(Date date, double percentageChange) {
+	public DailyChange(LocalDate date, double percentageChange) {
 		this.date = date;
 		this.percentageChange = percentageChange;
 	}
 	
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 	
-	public void setDate(Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 	
@@ -47,14 +47,14 @@ public class DailyChange {
 	}
 	
 	//removes all information that comes before the start date. So the date range is current date to startDate 
-	private List<DailyChange> filterByDate(List<DailyChange> dailyChanges, Date startDate) {
+	private List<DailyChange> filterByDate(List<DailyChange> dailyChanges, LocalDate startDate) {
 		
 		Iterator<DailyChange> it = dailyChanges.iterator();
 		while (it.hasNext()) {
 			DailyChange dailyChange = it.next();
-			Date dailyChangeDate = dailyChange.getDate();
+			LocalDate dailyChangeDate = dailyChange.getDate();
 			//if the date is before the startDate then we remove it
-			if (dailyChangeDate.before(startDate)) {
+			if (dailyChangeDate.isBefore(startDate)) {
 				it.remove();
 			}
 		}

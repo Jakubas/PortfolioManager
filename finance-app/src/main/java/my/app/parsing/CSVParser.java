@@ -1,8 +1,7 @@
 package my.app.parsing;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.regex.Pattern;
 
 public class CSVParser {
@@ -39,12 +38,11 @@ public class CSVParser {
 		return stockStrsArray;
 	}
 	
-	public Date parseDate(String dateStr) throws Exception {
+	public LocalDate parseDate(String dateStr) throws Exception {
 		String datePattern = "([0-9]+)-([0-9]+)-([0-9]+)";  
 		boolean match = Pattern.matches(datePattern, dateStr);
 		if (match) {
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-			Date date = formatter.parse(dateStr);
+			LocalDate date =  LocalDate.parse(dateStr);
 			return date;
 		} else {
 			throw new Exception();

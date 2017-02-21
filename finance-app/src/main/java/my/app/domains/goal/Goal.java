@@ -3,7 +3,6 @@ package my.app.domains.goal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -14,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
-import my.app.controllers.Utility;
 import my.app.domains.User;
 import my.app.risk.RiskValues;
 
@@ -63,7 +61,7 @@ public class Goal {
     
     private String startRisk;
     
-    private Date startDate;
+    private LocalDate startDate;
     
     private Double sector1StartWeight;
     
@@ -84,7 +82,7 @@ public class Goal {
 			sector1StartWeight = user.calculateSectorWeight(sector1);
 			sector2StartWeight = user.calculateSectorWeight(sector2);
 		} else if (type == Type.RETIRE || type == Type.INVEST_TIME_LENGTH) {
-			startDate = new Date();
+			startDate = LocalDate.now();
 		} else if (type == Type.RISK) {
 			startRisk = user.calculatePortfolioRisk();
 		}
@@ -166,11 +164,11 @@ public class Goal {
 		this.risk = risk;
 	}
 	
-	public Date getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 	
@@ -314,7 +312,7 @@ public class Goal {
 			if (user.getDob() != null) {
 				long monthsToRetirement = Math.round((length - elapsedYears) * 12.0);
 				LocalDate retirementDay = LocalDate.now().plusMonths(monthsToRetirement);
-				LocalDate birthday = Utility.fromDate(user.getDob());
+				LocalDate birthday = user.getDob();
 				int ageOfRetirement = Period.between(birthday, retirementDay).getYears();
 				tips.add("You plan to retire at the age of " + ageOfRetirement);
 			} else {
@@ -377,8 +375,8 @@ public class Goal {
 
 	//calculate the amount of time elapsed (in years) from the start date to today's date
 	private double calculateElapsedTime() {
-		Date currentDate = new Date();
-		Period period = Period.between(Utility.fromDate(startDate), Utility.fromDate(currentDate)); 
+		LocalDate today = LocalDate.now();
+		Period period = Period.between(startDate, today); 
 		int months = period.getMonths();
 		return ((double) months/12.0);
 	}

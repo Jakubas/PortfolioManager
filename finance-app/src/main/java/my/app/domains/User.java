@@ -2,8 +2,8 @@ package my.app.domains;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -47,7 +47,7 @@ public class User {
 	private boolean isAdmin;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dob;
+	private LocalDate dob;
 	
 	private Double cashAmount;
 	
@@ -106,12 +106,12 @@ public class User {
 		this.isAdmin = isAdmin;
 	}
 	
-	public Date getDob() {
+	public LocalDate getDob() {
 		return dob;
 	}
 
-	public void setDob(Date dob) {
-		this.dob = dob;
+	public void setDob(LocalDate dob2) {
+		this.dob = dob2;
 	}
 
 	public Double getCashAmount() {

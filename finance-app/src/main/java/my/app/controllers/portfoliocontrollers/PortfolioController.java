@@ -3,7 +3,7 @@ package my.app.controllers.portfoliocontrollers;
 import java.security.Principal;
 import java.text.ParseException;
 import java.time.DateTimeException;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.apache.commons.lang3.time.DateUtils;
@@ -70,7 +70,7 @@ public class PortfolioController {
 		String username = principal.getName();
 		User user = userService.getUserByUsername(username); 
 		Stock stock = stockService.getStockById(stockId);
-		Date buyDate;
+		LocalDate buyDate;
 		if (buyDateStr != "") {
 			try {
 				buyDate = Utility.stringToDate(buyDateStr);
@@ -79,7 +79,7 @@ public class PortfolioController {
 				return "redirect:/stocks";
 			}
 		} else {
-			buyDate = new Date();
+			buyDate = LocalDate.now();
 		}
 		StockInPortfolio sip = new StockInPortfolio(stock, user, amount, buyDate);
 		stockInPortfolioService.saveStockInPortfolio(sip);
@@ -103,8 +103,8 @@ public class PortfolioController {
 			@RequestParam("buyPrice") Double buyPrice,
 			@RequestParam(value = "sellPrice", required = false) Double sellPrice) {
 		StockInPortfolio sip = stockInPortfolioService.getStockInPortfolioById(id);
-		Date buyDate;
-		Date sellDate = null;
+		LocalDate buyDate;
+		LocalDate sellDate = null;
 		try {
 			buyDate = Utility.stringToDate(buyDateStr);
 			if (!sellDateStr.isEmpty())
@@ -116,7 +116,7 @@ public class PortfolioController {
 		
 		try {
 			sip.setAmount(amount);
-			if (DateUtils.isSameDay(sip.getBuyDate(), buyDate)) {
+			if (sip.getBuyDate().equals(buyDate)) {
 				if (Math.abs(buyPrice - sip.getBuyPrice()) >= 0.01) {
 					sip.setBuyPrice(buyPrice);
 				}
@@ -129,7 +129,7 @@ public class PortfolioController {
 			}
 			if (sellDate == null) {
 				sip.setSellDate(null);
-			} else if (sip.getSellDate() != null && DateUtils.isSameDay(sip.getBuyDate(), buyDate)) {
+			} else if (sip.getSellDate() != null && sip.getBuyDate().equals(buyDate)) {
 				if (sellPrice != null && sip.getSellPrice() != null && 
 				    Math.abs(sellPrice - sip.getSellPrice()) >= 0.01) {
 					sip.setSellPrice(sellPrice);
