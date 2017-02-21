@@ -1,4 +1,4 @@
-package my.app.domains.goal;
+package my.app.domains.portfolio.goal;
 
 import java.util.List;
 import java.util.Map;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import com.sun.media.sound.InvalidDataException;
 
 import my.app.domains.User;
-import my.app.domains.goal.Goal.Type;
+import my.app.domains.portfolio.goal.Goal.Type;
 import my.app.services.StockService;
 
 @Component

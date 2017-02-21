@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import my.app.dao.GoalDAO;
-import my.app.domains.goal.Goal;
+import my.app.domains.portfolio.goal.Goal;
 
 @Service
 public class GoalServiceImpl implements GoalService {

@@ -2,7 +2,7 @@ package my.app.dao;
 
 import java.util.List;
 
-import my.app.domains.goal.Goal;
+import my.app.domains.portfolio.goal.Goal;
 
 public interface GoalDAO {
 

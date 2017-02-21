@@ -18,8 +18,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import my.app.controllers.Utility;
 import my.app.domains.Stock;
-import my.app.domains.StockInPortfolio;
 import my.app.domains.User;
+import my.app.domains.portfolio.StockInPortfolio;
 import my.app.services.PortfolioService;
 import my.app.services.StockInPortfolioService;
 import my.app.services.StockService;

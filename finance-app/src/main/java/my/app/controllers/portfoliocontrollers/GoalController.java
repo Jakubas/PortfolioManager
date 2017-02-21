@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.sun.media.sound.InvalidDataException;
 
 import my.app.domains.User;
-import my.app.domains.goal.Goal;
-import my.app.domains.goal.GoalFactory;
-import my.app.domains.goal.GoalTemplates;
-import my.app.domains.goal.Goal.Type;
+import my.app.domains.portfolio.goal.Goal;
+import my.app.domains.portfolio.goal.GoalFactory;
+import my.app.domains.portfolio.goal.GoalTemplates;
+import my.app.domains.portfolio.goal.Goal.Type;
 import my.app.risk.RiskValues;
 import my.app.services.GoalService;
 import my.app.services.StockService;

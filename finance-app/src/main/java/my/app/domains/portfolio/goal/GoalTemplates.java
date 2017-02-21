@@ -1,11 +1,11 @@
-package my.app.domains.goal;
+package my.app.domains.portfolio.goal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import my.app.domains.goal.Goal.Type;
+import my.app.domains.portfolio.goal.Goal.Type;
 
 public class GoalTemplates {
 

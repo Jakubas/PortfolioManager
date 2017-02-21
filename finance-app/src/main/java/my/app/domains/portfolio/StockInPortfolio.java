@@ -1,4 +1,4 @@
-package my.app.domains;
+package my.app.domains.portfolio;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -15,6 +15,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.format.annotation.NumberFormat.Style;
 
+import my.app.domains.Stock;
+import my.app.domains.User;
 import my.app.formatter.PercentageFormat;
 import my.app.stockcalculations.StockDataCalculations;
 

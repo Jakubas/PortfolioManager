@@ -19,7 +19,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import my.app.domains.goal.Goal;
+import my.app.domains.portfolio.StockInPortfolio;
+import my.app.domains.portfolio.goal.Goal;
 import my.app.risk.Risk;
 
 @Entity

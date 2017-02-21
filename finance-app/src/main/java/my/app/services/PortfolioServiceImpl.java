@@ -8,7 +8,7 @@ import org.springframework.format.annotation.NumberFormat;
 import org.springframework.format.annotation.NumberFormat.Style;
 import org.springframework.stereotype.Service;
 
-import my.app.domains.StockInPortfolio;
+import my.app.domains.portfolio.StockInPortfolio;
 import my.app.stockcalculations.StockDataCalculations;
 
 @Service

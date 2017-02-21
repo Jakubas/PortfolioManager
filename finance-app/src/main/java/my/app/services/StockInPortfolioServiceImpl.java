@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import my.app.dao.StockInPortfolioDAO;
-import my.app.domains.StockInPortfolio;
+import my.app.domains.portfolio.StockInPortfolio;
 
 @Service
 public class StockInPortfolioServiceImpl implements StockInPortfolioService {

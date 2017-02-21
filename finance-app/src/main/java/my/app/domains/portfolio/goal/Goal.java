@@ -1,4 +1,4 @@
-package my.app.domains.goal;
+package my.app.domains.portfolio.goal;
 
 import java.time.LocalDate;
 import java.time.Period;

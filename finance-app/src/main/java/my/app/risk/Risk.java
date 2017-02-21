@@ -3,7 +3,7 @@ package my.app.risk;
 import java.util.List;
 
 import my.app.domains.Stock;
-import my.app.domains.StockInPortfolio;
+import my.app.domains.portfolio.StockInPortfolio;
 import my.app.stockcalculations.StockDataCalculations;
 
 public class Risk {

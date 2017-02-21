@@ -2,7 +2,7 @@ package my.app.services;
 
 import java.util.List;
 
-import my.app.domains.StockInPortfolio;
+import my.app.domains.portfolio.StockInPortfolio;
 
 public interface StockInPortfolioService {
 
