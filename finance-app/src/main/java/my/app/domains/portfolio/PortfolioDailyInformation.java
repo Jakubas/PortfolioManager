@@ -51,12 +51,20 @@ public class PortfolioDailyInformation {
 	
 	public PortfolioDailyInformation() { }
 
+	public int getId() {
+		return id;
+	}
+	
 	public User getUser() {
 		return user;
 	}
 
 	public LocalDate getDate() {
 		return date;
+	}
+	
+	public void setDate(LocalDate date) {
+		this.date = date;
 	}
 
 	public double getCashAmount() {
