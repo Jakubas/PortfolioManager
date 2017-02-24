@@ -52,7 +52,7 @@ public class UpdatePortfolioDailyInformation {
 					pdis.add(pdi);
 				} else {
 					PortfolioDailyInformation prevPdi = pdi;
-//					pdi.update(pdi, i);
+					pdi.update(i);
 //					System.out.println(!pdi.equals(prevPdi));
 					if (!pdi.equals(prevPdi)) {
 						pdiService.updatePortfolioDailyInformation(pdi);

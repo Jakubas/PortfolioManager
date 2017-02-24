@@ -3,13 +3,88 @@
 <head>
 	<title>Investment App</title>
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-	<script th:inline="javascript">
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" />
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
 		function showStockAmountField(stockId) {
 			var button = document.getElementById("stockTrigger" + stockId);
 			button.style.display = "none";
 			var form = document.getElementById("addStockForm" + stockId);
 			form.style.display = "block";
 		}
+		function sortAlphabetically() {
+			var stockDivs = $("div.stock");
+
+			var stockDivsSorted = stockDivs;
+			if (stockDivs.length >= 2) {
+				if ($(stockDivs[0]).find("a").text().toLowerCase() > $(stockDivs[1]).find("a").text().toLowerCase()) {
+					stockDivsSorted = stockDivs.sort(function (a, b) {
+						return $(a).find("a").text().toLowerCase() > $(b).find("a").text().toLowerCase() ? 1 : -1;
+					});
+				} else {
+					stockDivsSorted = stockDivs.sort(function (a, b) {
+						return $(a).find("a").text().toLowerCase() < $(b).find("a").text().toLowerCase() ? 1 : -1;
+		    		});
+				}
+			}
+	    	$("#master").html(stockDivsSorted);
+		}
+		function sortByMarketCap() {
+			var stockDivs = $("div.stock");
+			var stockDivsSorted = stockDivs;
+			if (stockDivs.length >= 2) {
+				if ($.trim($(stockDivs[0]).find(".marketcap").text()).slice(0, -1) > $.trim($(stockDivs[1]).find(".marketcap").text()).slice(0, -1)) {
+					stockDivsSorted = stockDivs.sort(function (a, b) {
+						if ($.trim($(a).find(".marketcap").text()) == "N/A") { return 1; }
+						var valueA = parseFloat($.trim($(a).find(".marketcap").text()).slice(0, -1));
+						var valueB = parseFloat($.trim($(b).find(".marketcap").text()).slice(0, -1));
+						if (valueA > valueB) return 1;
+						if (valueA < valueB) return -1;
+						return 0;
+					});
+				} else {
+					stockDivsSorted = stockDivs.sort(function (a, b) {
+						if ($.trim($(a).find(".marketcap").text()) == "N/A") { return 1; }
+						var valueA = parseFloat($.trim($(a).find(".marketcap").text()).slice(0, -1));
+						var valueB = parseFloat($.trim($(b).find(".marketcap").text()).slice(0, -1));
+						if (valueA < valueB) return 1;
+						if (valueA > valueB) return -1;
+						return 0;
+		    		});
+				}
+			}
+	    	$("#master").html(stockDivsSorted);
+		}
+		function sortByAnnualisedReturn() {
+			var stockDivs = $("div.stock");
+			var stockDivsSorted = stockDivs;
+			//alert(parseFloat($.trim($(stockDivs[0]).find(".return").text())));
+			if (stockDivs.length >= 2) {
+				if (parseFloat($.trim($(stockDivs[0]).find(".return").text())) > parseFloat($.trim($(stockDivs[1]).find(".return").text()))) {
+					stockDivsSorted = stockDivs.sort(function (a, b) {
+						if ($.trim($(a).find(".return").text()) == "N/A") { return 1; }
+						var valueA = parseFloat($.trim($(a).find(".return").text()));
+						var valueB = parseFloat($.trim($(b).find(".return").text()));
+						if (valueA > valueB) return 1;
+						if (valueA < valueB) return -1;
+						return 0;
+					});
+				} else {
+					stockDivsSorted = stockDivs.sort(function (a, b) {
+						if ($.trim($(a).find(".return").text()) == "N/A") { return 1; }
+						var valueA = parseFloat($.trim($(a).find(".return").text()));
+						var valueB = parseFloat($.trim($(b).find(".return").text()));
+						if (valueA < valueB) return 1;
+						if (valueA > valueB) return -1;
+						return 0;
+					});
+				}
+			}
+			$("#master").html(stockDivsSorted);
+		}
+		$(document).ready(function() {
+		});
+		/*]]>*/
 	</script>
 </head>
 <body>
@@ -47,56 +122,63 @@
 	  	</div>
 	</nav>
 
-	<div class="container" th:each="stock : ${stocks}" >
-		<h3>
-			<a th:href="@{/stocks/{id}/(id=${stock.id})}" th:text="${stock.name}" />
-		</h3>
-		<h4>
-			<button th:id="stockTrigger + ${stock.id}" type="button" class="btn btn-link glyphicon glyphicon-plus-sign"
-			th:onclick="'javascript:showStockAmountField(\'' + ${stock.id} + '\');'" style="display:block" />
-			<form th:id="addStockForm + ${stock.id}" class="form-noborder" action="/portfolio" method="post" style="display:none">
-				<input type="hidden" name="stockId" th:value="${stock.id}" />
-				<div class="form-group">
-					<label>Amount of stock</label>
-					<input type="number" class="form-control" step="1" name="amount" required="true" />
-				</div>
-				<div class="form-group">
-					<label>Date bought (optional field)</label>
-					<input type="date" class="form-control" name="buyDate" />
-				</div>
-				<!--button type="submit" class="btn btn-link glyphicon glyphicon-plus-sign"></button-->
-				<button type="submit" class="btn btn-primary" style="display:block;">Add to portfolio</button>
+	<div class="container">
+		<button onclick="sortAlphabetically()" id="alphBnt">Sort Alphabetically</button>
+		<button onclick="sortByMarketCap()" id="capBnt">Sort By Market Cap</button>
+		<button onclick="sortByAnnualisedReturn()" id="returnBtn">Sort By Annualised Return</button>
+	</div>
+	<div id="master">
+		<div class="stock container" th:each="stock : ${stocks}">
+			<h3>
+				<a th:href="@{/stocks/{id}/(id=${stock.id})}" th:text="${stock.name}" />
+			</h3>
+			<h4>
+				<button th:id="stockTrigger + ${stock.id}" type="button" class="btn btn-link glyphicon glyphicon-plus-sign"
+				th:onclick="'javascript:showStockAmountField(\'' + ${stock.id} + '\');'" style="display:block" />
+				<form th:id="addStockForm + ${stock.id}" class="form-noborder" action="/portfolio" method="post" style="display:none">
+					<input type="hidden" name="stockId" th:value="${stock.id}" />
+					<div class="form-group">
+						<label>Amount of stock</label>
+						<input type="number" class="form-control" step="1" name="amount" required="true" />
+					</div>
+					<div class="form-group">
+						<label>Date bought (optional field)</label>
+						<input type="date" class="form-control" name="buyDate" />
+					</div>
+					<!--button type="submit" class="btn btn-link glyphicon glyphicon-plus-sign"></button-->
+					<button type="submit" class="btn btn-primary" style="display:block;">Add to portfolio</button>
 
-			</form>
-			<span th:text="${stock.ticker}" />
-		</h4>
-		<h4 th:text ="${stock.sector}" />
-		<div class ="row">
-			<div class ="col-sm-2">
-				Price
+				</form>
+				<span th:text="${stock.ticker}" />
+			</h4>
+			<h4 class="sector" th:text ="${stock.sector}" />
+			<div class ="row">
+				<div class ="col-sm-2">
+					Price
+				</div>
+				<div class ="col-sm-2">
+					<span th:text="${stock.lastTradePrice}" />
+				</div>
+				<div class ="col-sm-2">
+					Market Cap
+				</div>
+				<div class ="marketcap col-sm-2">
+					<span th:text="${stock.marketCap}" />
+				</div>
 			</div>
-			<div class ="col-sm-2">
-				<span th:text="${stock.lastTradePrice}" />
-			</div>
-			<div class ="col-sm-2">
-				Market Cap
-			</div>
-			<div class ="col-sm-2">
-				<span th:text="${stock.marketCap}" />
-			</div>
-		</div>
-		<div class ="row">
-			<div class ="col-sm-2">
-				P/E Ratio
-			</div>
-			<div class ="col-sm-2">
-				<span th:text="${stock.getPERatio()} ? ${stock.getPERatio()} : 'N/A'" />
-			</div>
-			<div class ="col-sm-2">
-				10 Yr Annualised Return
-			</div>
-			<div class ="col-sm-2">
-				<span th:text="${stock.stockMetrics.tenYearAnnualisedReturn}" />
+			<div class ="row">
+				<div class ="col-sm-2">
+					P/E Ratio
+				</div>
+				<div class ="col-sm-2">
+					<span th:text="${stock.getPERatio()} ? ${stock.getPERatio()} : 'N/A'" />
+				</div>
+				<div class ="col-sm-2">
+					10 Yr Annualised Return
+				</div>
+				<div class ="return col-sm-2">
+					<span th:text="${stock.stockMetrics.tenYearAnnualisedReturn}" />
+				</div>
 			</div>
 		</div>
 	</div>
