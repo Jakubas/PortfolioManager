@@ -14,15 +14,17 @@ public class UpdateStockInformation {
 	
 	private final StockDailyInformationService stockInformationService;
 	private final StockService stockService;
+	private final String rootDir;
 	
-	public UpdateStockInformation(StockDailyInformationService stockInformationService, StockService stockService) {
+	public UpdateStockInformation(String rootDir, StockDailyInformationService stockInformationService, StockService stockService) {
 		this.stockInformationService = stockInformationService;
 		this.stockService = stockService;
+		this.rootDir = rootDir;
 	}
 	
 	//rootDir = "/home/daniel/fyp/data/"
-	public void updateStocks(String rootDir, boolean downloadCSVs) {
-		List<Stock> stocks = StockInformationReader.retrieveBaseStockInformation(rootDir, downloadCSVs);
+	public void updateStocks(boolean downloadCSVs) {
+		List<Stock> stocks = StockInformationReader.parseBaseStockInformation(rootDir, downloadCSVs);
 		List<Stock> stocksInDatabase = stockService.getStocks();
 		ArrayList<String> tickersInDatabase = stocksToTickers(stocksInDatabase);
 		
@@ -43,21 +45,21 @@ public class UpdateStockInformation {
 		}
 	}
 
-	public void updateStockInformation(String rootDir, boolean downloadCurrentData, boolean downloadHistoricalData) {
+	public void updateStockInformation(boolean downloadCurrentData, boolean downloadHistoricalData) {
 		
-//		if (downloadHistoricalData) {
-//			StockInformationDownloader.downloadStockInformation("/home/daniel/fyp/data/");
-//		}
-//		updateStocks(rootDir, downloadCurrentData);
+		if (downloadHistoricalData) {
+			StockInformationDownloader.downloadStockInformation("/home/daniel/fyp/data/");
+		}
+		updateStocks(downloadCurrentData);
 
 		List<Stock> stocks = stockService.getStocks();		
 		for (int i = 0; i < stocks.size(); i++) {
-			updateHistoricalPrices(stocks.get(i), rootDir);
+			updateHistoricalPrices(stocks.get(i));
 			System.out.println((i+1) + "/" + stocks.size() + " CSVs parsed into database");
 		}
 	}
 	
-	private void updateHistoricalPrices(Stock stock, String rootDir) {
+	private void updateHistoricalPrices(Stock stock) {
 		
 		//parse the CSV file containing the historical stock data into objects
 		String stockInformationFilePath = rootDir + stock.getTicker() + ".csv";

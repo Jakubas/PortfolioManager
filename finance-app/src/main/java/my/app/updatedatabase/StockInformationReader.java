@@ -8,7 +8,7 @@ import my.app.parsing.StockParserTwo;
 
 public class StockInformationReader {
 
-	public static List<Stock> retrieveBaseStockInformation(String rootDir, boolean downloadCSVs) {
+	public static List<Stock> parseBaseStockInformation(String rootDir, boolean downloadCSVs) {
 		String filePath = rootDir + "stock_base_info.csv";
 		StockParser stockParser = new StockParser();
 		StockParserTwo stockParserTwo = new StockParserTwo();
