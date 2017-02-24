@@ -48,17 +48,16 @@ public class HistoricalDataParser {
 	}
 	
 	private StockDailyInformation parseStockInformation(Stock stock, String line) throws Exception {
-		CSVParser parser = new CSVParser();
-		String[] lines = parser.splitLine(line);
+		String[] lines = CSVParser.splitLine(line);
 		
 		int i = 0;		
-		LocalDate date = parser.parseDate(lines[i++]);
-		double open = parser.parseDouble(lines[i++]);
-		double high = parser.parseDouble(lines[i++]);
-		double low = parser.parseDouble(lines[i++]);
-		double close = parser.parseDouble(lines[i++]);
-		int volume = parser.parseInt(lines[i++]);
-		double adjustedClose = parser.parseDouble(lines[i++]);
+		LocalDate date = CSVParser.parseDate(lines[i++]);
+		double open = CSVParser.parseDouble(lines[i++]);
+		double high = CSVParser.parseDouble(lines[i++]);
+		double low = CSVParser.parseDouble(lines[i++]);
+		double close = CSVParser.parseDouble(lines[i++]);
+		int volume = CSVParser.parseInt(lines[i++]);
+		double adjustedClose = CSVParser.parseDouble(lines[i++]);
 		
 		StockDailyInformation stockInformation = 
 				new StockDailyInformation(date, open, close, high, low, volume, adjustedClose, stock);

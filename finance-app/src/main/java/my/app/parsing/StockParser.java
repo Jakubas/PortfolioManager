@@ -49,8 +49,7 @@ public class StockParser {
 	private Stock parseStock(String line) throws Exception {
 		int i = 0;
 //		String[] stockStr = line.split(",");
-		CSVParser parser = new CSVParser();
-		String[] stockStrs = parser.splitLine(line);
+		String[] stockStrs = CSVParser.splitLine(line);
 		String ticker = parseTicker(stockStrs[i++]);
 		String name = stockStrs[i++];
 		String sector = stockStrs[i];

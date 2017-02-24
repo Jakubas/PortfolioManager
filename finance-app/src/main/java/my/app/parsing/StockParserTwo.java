@@ -57,13 +57,12 @@ public class StockParserTwo {
 
 	private Stock addStockInformation(String line, Stock stock) throws Exception {
 		int i = 0;
-		CSVParser parser = new CSVParser();
-		String[] stockStrs = parser.splitLine(line);
-		stock.setLastTradePrice(parser.parseDouble(stockStrs[i++]));
+		String[] stockStrs = CSVParser.splitLine(line);
+		stock.setLastTradePrice(CSVParser.parseDouble(stockStrs[i++]));
 		String peRatio = stockStrs[i++];
 		if (!peRatio.equals("N/A")) {
 			System.out.println(peRatio);
-			stock.setPERatio(parser.parseDouble(peRatio));
+			stock.setPERatio(CSVParser.parseDouble(peRatio));
 		} else {
 			stock.setPERatio(null);
 		}

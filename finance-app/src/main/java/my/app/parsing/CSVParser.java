@@ -6,8 +6,10 @@ import java.util.regex.Pattern;
 
 public class CSVParser {
 
+	private CSVParser() {}
+	
 	//This method splits a line from a comma separated values file into an array of strings
-	public String[] splitLine(String line) {
+	public static String[] splitLine(String line) {
 		
 		StringBuffer buffer = new StringBuffer();
 		ArrayList<String> stockStrs = new ArrayList<String>();
@@ -38,7 +40,7 @@ public class CSVParser {
 		return stockStrsArray;
 	}
 	
-	public LocalDate parseDate(String dateStr) throws Exception {
+	public static LocalDate parseDate(String dateStr) throws Exception {
 		String datePattern = "([0-9]+)-([0-9]+)-([0-9]+)";  
 		boolean match = Pattern.matches(datePattern, dateStr);
 		if (match) {
@@ -49,12 +51,12 @@ public class CSVParser {
 		}
 	}
 	
-	public boolean isDouble(String doubleStr) {
+	public static boolean isDouble(String doubleStr) {
 		String doublePattern = "([0-9]+)(.?)([0-9]+)?";
 		return Pattern.matches(doublePattern, doubleStr);
 	}
 	
-	public double parseDouble(String doubleStr) throws Exception {
+	public static double parseDouble(String doubleStr) throws Exception {
 		if (isDouble(doubleStr)) {
 			return Double.valueOf(doubleStr);
 		} else {
@@ -62,7 +64,7 @@ public class CSVParser {
 		}
 	}
 	
-	public int parseInt(String intStr) throws Exception {
+	public static int parseInt(String intStr) throws Exception {
 		String intPattern = "([0-9]+)";
 		boolean match = Pattern.matches(intPattern, intStr);
 		if (match) {
