@@ -35,7 +35,8 @@ public class Dividend {
 	
 	public Dividend() {}
 	
-	public Dividend(LocalDate date, double amount) {
+	public Dividend(Stock stock, LocalDate date, double amount) {
+		this.stock = stock;
 		this.date = date;
 		this.amount = amount;
 	}

@@ -51,6 +51,17 @@ public class CSVParser {
 		}
 	}
 	
+	public static LocalDate parseDateWithoutDashes(String dateStr) throws Exception {
+		String datePattern = "([0-9]+)";
+		boolean match = Pattern.matches(datePattern, dateStr);
+		if (match && dateStr.length() == 8) {
+			LocalDate date =  LocalDate.parse(dateStr);
+			return date;
+		} else {
+			throw new Exception();
+		}
+	}
+	
 	public static boolean isDouble(String doubleStr) {
 		String doublePattern = "([0-9]+)(.?)([0-9]+)?";
 		return Pattern.matches(doublePattern, doubleStr);

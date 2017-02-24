@@ -38,7 +38,8 @@ public class StockSplit {
 	
 	public StockSplit() {}
 	
-	public StockSplit(LocalDate date, String split) {
+	public StockSplit(Stock stock, LocalDate date, String split) {
+		this.stock = stock;
 		this.date = date;
 		this.splitRatio = splitToRatio(split);
 		this.split = split;
