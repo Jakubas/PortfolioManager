@@ -16,7 +16,7 @@ public class CorporateActionParser {
 
 	private CorporateActionParser() {}
 	
-	public List<Dividend> parseCSVToDividends(Stock stock, String filePath) {
+	public static List<Dividend> parseCSVToDividends(Stock stock, String filePath) {
 		BufferedReader reader = null;
 		List<Dividend> dividends = new ArrayList<Dividend>();
 		
@@ -53,7 +53,7 @@ public class CorporateActionParser {
 		return dividends;
 	}
 
-	public List<StockSplit> parseCSVToStockSplits(Stock stock, String filePath) {
+	public static List<StockSplit> parseCSVToStockSplits(Stock stock, String filePath) {
 		BufferedReader reader = null;
 		List<StockSplit> stockSplits = new ArrayList<StockSplit>();
 		
@@ -90,7 +90,7 @@ public class CorporateActionParser {
 		return stockSplits;
 	}
 	
-	private Dividend parseDividend(Stock stock, String line) throws Exception {
+	private static Dividend parseDividend(Stock stock, String line) throws Exception {
 		String[] lines = CSVParser.splitLine(line);
 		
 		int i = 0;	
@@ -104,7 +104,7 @@ public class CorporateActionParser {
 		return null;
 	}
 	
-	private StockSplit parseStockSplit(Stock stock, String line) throws Exception {
+	private static StockSplit parseStockSplit(Stock stock, String line) throws Exception {
 		String[] lines = CSVParser.splitLine(line);
 		
 		int i = 0;	
