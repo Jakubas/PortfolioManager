@@ -45,7 +45,9 @@ public class UpdateStockInformation {
 		}
 	}
 
-	public void updateStockInformation(boolean downloadCurrentData, boolean downloadHistoricalData) {
+	//currentData is data such as current price & market cap
+	//historicalData is parsed to StockDailyInformation
+	public void updateStockDailyInformation(boolean downloadCurrentData, boolean downloadHistoricalData) {
 		
 		if (downloadHistoricalData) {
 			StockInformationDownloader.downloadStockInformation("/home/daniel/fyp/data/");
