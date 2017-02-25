@@ -1,5 +1,7 @@
 package my.app.updatedatabase;
 
+import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 import my.app.domains.Stock;
@@ -53,21 +55,46 @@ public class UpdateCorporateActions {
 	
 	public void downloadCorporateActions(String ticker, String filePath) {
 		String urlPrefix = "http://ichart.finance.yahoo.com/x?s=";
-		String urlSuffix = "&a=00&b=2&c=1962&d=04&e=25&f=2011&g=v&y=0&z=30000";
+		String urlSuffix = "&a=1&b=1&c=1900&d=1&e=1&f=2099&g=v&y=0&z=30000";
 		DownloadUtility.downloadFile(urlPrefix + ticker + urlSuffix, filePath);
 	}
 
 	private void updateDividends(Stock stock, String filePath) {
 		List<Dividend> dividends = CorporateActionParser.parseCSVToDividends(stock, filePath);
+		dividends.sort(Comparator.comparing(Dividend::getDate));
+		
+		List<Dividend> dividendsInDatabase = dividendService.getDividends();
+		double totalToDate = 0;
 		for (Dividend dividend : dividends) {
-			dividendService.saveDividend(dividend);
+			LocalDate date = dividend.getDate();
+			double amount = dividend.getAmount();
+			totalToDate += amount;
+			if (dividendsInDatabase.stream().anyMatch(o -> 
+			o.getStock().getId() == stock.getId() && o.getDate().equals(date) && o.getAmount() == amount)) {
+				continue;
+			} else {
+				dividend.setTotalToDate(totalToDate);
+				dividendService.saveDividend(dividend);
+			}
 		}
 	}
 	
 	private void updateStockSplits(Stock stock, String filePath) {
 		List<StockSplit> stockSplits = CorporateActionParser.parseCSVToStockSplits(stock, filePath);
+		stockSplits.sort(Comparator.comparing(StockSplit::getDate));
+		List<StockSplit> stockSplitsInDatabase = stockSplitService.getStockSplits();
+		double splitRatioToDate = 1;
 		for (StockSplit stockSplit : stockSplits) {
-			stockSplitService.saveStockSplit(stockSplit);
+			LocalDate date = stockSplit.getDate();
+			String split = stockSplit.getSplit();
+			splitRatioToDate *= stockSplit.getSplitRatio();
+			if (stockSplitsInDatabase.stream().anyMatch(o -> 
+			o.getStock().getId() == stock.getId() && o.getDate().equals(date) && o.getSplit().equals(split))) {
+				continue;
+			} else {
+				stockSplit.setSplitRatioToDate(splitRatioToDate);
+				stockSplitService.saveStockSplit(stockSplit);
+			}
 		}
 	}
 }

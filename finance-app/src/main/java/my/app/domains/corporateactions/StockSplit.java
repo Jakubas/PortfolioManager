@@ -68,11 +68,11 @@ public class StockSplit {
 		return splitRatio;
 	}
 	
-	public double getTotalToDate() {
+	public double getSplitRatioToDate() {
 		return splitRatioToDate;
 	}
 
-	public void setTotalToDate(double splitRatioToDate) {
+	public void setSplitRatioToDate(double splitRatioToDate) {
 		this.splitRatioToDate = splitRatioToDate;
 	}
 

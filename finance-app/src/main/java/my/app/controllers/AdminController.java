@@ -54,7 +54,7 @@ public class AdminController {
 		String rootDir = "/home/daniel/fyp/data/";
 		UpdateStockInformation usi = 
 				new UpdateStockInformation(rootDir, stockDailyInformationService, stockService);
-		usi.updateStockDailyInformation(true, false);
+		usi.updateStockDailyInformation(true, true);
 		return "redirect:/admin";
 	}
 	
@@ -63,7 +63,7 @@ public class AdminController {
 		String rootDir = "/home/daniel/fyp/data/";
 		UpdateCorporateActions uca = 
 				new UpdateCorporateActions(rootDir, dividendService, stockSplitService, stockService);
-		uca.updateCorporateActions(true);
+		uca.updateCorporateActions(false);
 		return "redirect:/admin";
 	}
 }
