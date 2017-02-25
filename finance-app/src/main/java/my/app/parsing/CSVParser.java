@@ -53,8 +53,11 @@ public class CSVParser {
 	
 	public static LocalDate parseDateWithoutDashes(String dateStr) throws Exception {
 		String datePattern = "([0-9]+)";
+		dateStr = dateStr.trim();
 		boolean match = Pattern.matches(datePattern, dateStr);
 		if (match && dateStr.length() == 8) {
+			//yyyyMMdd to yyyy-MM-dd
+			dateStr = new StringBuilder(dateStr).insert(4, "-").insert(7, "-").toString();
 			LocalDate date =  LocalDate.parse(dateStr);
 			return date;
 		} else {
