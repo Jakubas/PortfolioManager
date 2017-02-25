@@ -12,6 +12,9 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
 
+import my.app.domains.corporateactions.Dividend;
+import my.app.domains.corporateactions.StockSplit;
+
 @Entity
 public class Stock {
 
@@ -34,6 +37,12 @@ public class Stock {
 	@OneToOne(mappedBy = "stock")
 	@Cascade(value=org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private StockMetrics stockMetrics;
+	
+	@OneToMany(mappedBy = "stock")
+	private List<StockSplit> stockSplits;
+	
+	@OneToMany(mappedBy = "stock")
+	private List<Dividend> dividends;
 	
 	private String marketCap;
 	
