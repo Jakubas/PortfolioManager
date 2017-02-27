@@ -84,6 +84,14 @@ public class Stock {
 	public StockMetrics getStockMetrics() {
 		return stockMetrics;
 	}
+	
+	public List<StockSplit> getStockSplits() {
+		return stockSplits;
+	}
+
+	public List<Dividend> getDividends() {
+		return dividends;
+	}
 
 	public String getMarketCap() {
 		return marketCap;
