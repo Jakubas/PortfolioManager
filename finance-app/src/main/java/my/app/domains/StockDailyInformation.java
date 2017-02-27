@@ -39,8 +39,17 @@ public class StockDailyInformation {
 	@NotNull
 	private int volume;
 	
+	//the closing price adjusted by dividends (reinvested back into the stock) and stock splits
 	@NotNull
 	private double adjustedClose;
+	
+	//The closing price adjusted by dividends (not reinvested) and stock splits
+	@NotNull
+	private double adjCloseDivNotReinvested;
+	
+	//The closing price adjusted by stock splits (dividends are ignored)
+	@NotNull
+	private double adjCloseStockSplits;
 	
 	@NotNull
 	@ManyToOne
@@ -65,6 +74,10 @@ public class StockDailyInformation {
 	
 	public int getId() {
 		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public LocalDate getDate() {
@@ -99,7 +112,24 @@ public class StockDailyInformation {
 		return stock;
 	}
 	
-    @Override
+	
+    public double getAdjCloseDivNotReinvested() {
+		return adjCloseDivNotReinvested;
+	}
+
+	public void setAdjCloseDivNotReinvested(double adjCloseDivNotReinvested) {
+		this.adjCloseDivNotReinvested = adjCloseDivNotReinvested;
+	}
+
+	public double getAdjCloseStockSplits() {
+		return adjCloseStockSplits;
+	}
+
+	public void setAdjCloseStockSplits(double adjCloseStockSplits) {
+		this.adjCloseStockSplits = adjCloseStockSplits;
+	}
+
+	@Override
     public boolean equals(Object obj) {
        if (!(obj instanceof StockDailyInformation))
             return false;
@@ -109,7 +139,9 @@ public class StockDailyInformation {
         StockDailyInformation stockInfo = (StockDailyInformation) obj;
         if (date.equals(stockInfo.getDate()) && open == stockInfo.getOpen() &&
         	close == stockInfo.getClose() && high == stockInfo.getHigh() &&
-        	low == stockInfo.getLow() && volume == stockInfo.getVolume()) {
+        	low == stockInfo.getLow() && volume == stockInfo.getVolume() &&
+        	adjCloseDivNotReinvested == stockInfo.getAdjCloseDivNotReinvested() &&
+        	adjCloseStockSplits == stockInfo.getAdjCloseStockSplits()) {
         	return true;
         } else {
         	return false;
@@ -125,6 +157,8 @@ public class StockDailyInformation {
     	builder.append(high);
     	builder.append(low);
     	builder.append(volume);
+    	builder.append(adjCloseDivNotReinvested);
+    	builder.append(adjCloseStockSplits);
     	return builder.toHashCode();   
     }
 }
