@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import my.app.domains.Stock;
 import my.app.services.PortfolioDailyInformationService;
 import my.app.services.StockDailyInformationService;
 import my.app.services.StockService;
@@ -54,7 +55,7 @@ public class AdminController {
 		String rootDir = "/home/daniel/fyp/data/";
 		UpdateStockInformation usi = 
 				new UpdateStockInformation(rootDir, stockDailyInformationService, stockService);
-		usi.updateStockDailyInformation(true, true);
+		usi.updateStockDailyInformation(false, false);
 		return "redirect:/admin";
 	}
 	
@@ -64,6 +65,15 @@ public class AdminController {
 		UpdateCorporateActions uca = 
 				new UpdateCorporateActions(rootDir, dividendService, stockSplitService, stockService);
 		uca.updateCorporateActions(false);
+		return "redirect:/admin";
+	}
+	
+	@RequestMapping(value = "/admin/updateClosingPrices", method = RequestMethod.POST)
+	public String updateClosingPrices() {
+		String rootDir = "/home/daniel/fyp/data/";
+		UpdateStockInformation usi = 
+				new UpdateStockInformation(rootDir, stockDailyInformationService, stockService);
+		usi.updateClosingPrices();
 		return "redirect:/admin";
 	}
 }
