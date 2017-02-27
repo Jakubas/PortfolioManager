@@ -3,7 +3,9 @@ package my.app.updatedatabase;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import my.app.domains.User;
 import my.app.domains.portfolio.PortfolioDailyInformation;
@@ -24,45 +26,39 @@ public class UpdatePortfolioDailyInformation {
 	}
 	
 	public void updatePortfolioDailyInformation() {
-		PortfolioService portfolioService = new PortfolioServiceImpl();
-		
 		List<User> users = userService.getUsers();
 		int k = 0;
 		for (User user : users) {
-			List<PortfolioDailyInformation> pdis = new ArrayList<PortfolioDailyInformation>();
-			List<StockInPortfolio> portfolio = user.getPortfolio();
-			LocalDate earliestDate = portfolioService.getEarliestDateIn(portfolio);
-			long daysBetween = ChronoUnit.DAYS.between(earliestDate, LocalDate.now());
-//			PortfolioDailyInformation pdi = pdiService.getPortfolioDailyInformationByDate(earliestDate, user);
-//			System.out.println("final: " + (pdi != null));
-			for (int i = 0; i < daysBetween; i++) {
-				if (i % 50 == 0) {
-					System.out.println("allah");
-					pdiService.savePortfolioDailyInformations(pdis);
-					System.out.println("akbar");
-					pdis.clear();
-				}
-				LocalDate date = earliestDate.plusDays(i);
-				System.out.println("stuck here");
-				PortfolioDailyInformation pdi = pdiService.getPortfolioDailyInformationByDate(date, user);
-				System.out.println("unstuck");
-				if (pdi == null) {
-					pdi = new PortfolioDailyInformation(user, date, i);
-					System.out.println("Day " + i + ": "+ pdi.getValue());
-					pdis.add(pdi);
-				} else {
-					PortfolioDailyInformation prevPdi = pdi;
-					pdi.update(i);
-//					System.out.println(!pdi.equals(prevPdi));
-					if (!pdi.equals(prevPdi)) {
-						pdiService.updatePortfolioDailyInformation(pdi);
-					}
-					System.out.println("Update Day " + i + ": "+ pdi.getValue());
-				}
-//				System.out.println("Day: " + i + " / " + daysBetween);
-			}
+			updatePortfolioDailyInformationFor(user);
 			System.out.println("User: " + k++ + " / " + users.size());
-			pdiService.savePortfolioDailyInformations(pdis);
 		}
+	}
+	
+	public void updatePortfolioDailyInformationFor(User user) {
+		PortfolioService portfolioService = new PortfolioServiceImpl();
+		List<PortfolioDailyInformation> pdisToSave = new ArrayList<PortfolioDailyInformation>();
+		List<PortfolioDailyInformation> pdisToUpdate = new ArrayList<PortfolioDailyInformation>();
+		List<StockInPortfolio> portfolio = user.getPortfolio();
+		List<PortfolioDailyInformation> pdisInDatabase = user.getPortfolioDailyInformations();
+		LocalDate earliestDate = portfolioService.getEarliestDateIn(portfolio);
+		long daysBetween = ChronoUnit.DAYS.between(earliestDate, LocalDate.now());
+		for (int i = 0; i < daysBetween; i++) {
+			LocalDate date = earliestDate.plusDays(i);
+			PortfolioDailyInformation pdi = 
+					pdisInDatabase.stream().filter(o -> o.getDate().equals(date)).findFirst().orElse(null);
+			if (pdi == null) {
+				pdi = new PortfolioDailyInformation(user, date, i);
+				pdisToSave.add(pdi);
+			} else {
+				double prevDay = pdi.getDay();
+				double prevValue = pdi.getValue();
+				pdi.update(i);
+				if (prevDay != pdi.getDay() || prevValue !=  pdi.getValue()) {
+					pdisToUpdate.add(pdi);
+				}
+			}	
+		}
+		pdiService.savePortfolioDailyInformations(pdisToSave);
+		pdiService.updatePortfolioDailyInformations(pdisToUpdate);
 	}
 }
