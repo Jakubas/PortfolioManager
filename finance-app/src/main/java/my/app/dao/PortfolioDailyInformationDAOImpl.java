@@ -40,7 +40,7 @@ public class PortfolioDailyInformationDAOImpl implements PortfolioDailyInformati
 		Session session = sessionFactory.getCurrentSession();
 		Transaction tx = session.beginTransaction();
 		for (PortfolioDailyInformation pdi : pdis) {
-			session.saveOrUpdate(pdi);
+			session.save(pdi);
 		}
 		session.flush();
 		session.clear();
@@ -80,6 +80,18 @@ public class PortfolioDailyInformationDAOImpl implements PortfolioDailyInformati
 	public void updatePortfolioDailyInformation(PortfolioDailyInformation pdi) {
 		Session session = sessionFactory.getCurrentSession();
 		session.update(pdi);
+	}
+	
+	@Override
+	public void updatePortfolioDailyInformations(List<PortfolioDailyInformation> pdis) {
+		Session session = sessionFactory.getCurrentSession();
+		Transaction tx = session.beginTransaction();
+		for (PortfolioDailyInformation pdi : pdis) {
+			session.update(pdi);
+		}
+		session.flush();
+		session.clear();
+		tx.commit();
 	}
 
 	@Override

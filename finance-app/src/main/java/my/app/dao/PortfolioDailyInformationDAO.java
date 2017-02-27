@@ -14,5 +14,6 @@ public interface PortfolioDailyInformationDAO {
 	PortfolioDailyInformation getPortfolioDailyInformationByDate(LocalDate date, User user);
 	List<PortfolioDailyInformation> getPortfolioDailyInformations();
 	void updatePortfolioDailyInformation(PortfolioDailyInformation pdi);
+	void updatePortfolioDailyInformations(List<PortfolioDailyInformation> pdis);
 	void deletePortfolioDailyInformation(PortfolioDailyInformation pdi);
 }
