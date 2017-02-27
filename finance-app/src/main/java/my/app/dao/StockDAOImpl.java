@@ -48,8 +48,12 @@ public class StockDAOImpl implements StockDAO {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria cr = session.createCriteria(Stock.class, ticker);
 		cr.add(Restrictions.eq("ticker", ticker));
-		Stock stock = (Stock) cr.list().get(0);
-		return stock;
+		if (!cr.list().isEmpty()) {
+			Stock stock = (Stock) cr.list().get(0);
+			return stock;
+		} else {
+			return null;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
