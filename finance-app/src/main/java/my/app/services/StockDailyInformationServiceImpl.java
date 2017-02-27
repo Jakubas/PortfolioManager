@@ -39,6 +39,10 @@ public class StockDailyInformationServiceImpl implements StockDailyInformationSe
 	public void updateStockInformation(StockDailyInformation stockInformation) {
 		dao.updateStockInformation(stockInformation);
 	}
+	
+	public void updateStockInformations(List<StockDailyInformation> stockInformations) {
+		dao.updateStockInformations(stockInformations);
+	}
 
 	public void deleteStockInformation(StockDailyInformation stockInformation) {
 		dao.deleteStockInformation(stockInformation);

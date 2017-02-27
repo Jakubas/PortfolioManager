@@ -12,5 +12,6 @@ public interface StockDailyInformationService {
 	List<StockDailyInformation> getStockInformations();
 	List<StockDailyInformation> getStockInformationsByStockId(int stockId);
 	void updateStockInformation(StockDailyInformation stockInformation);
+	void updateStockInformations(List<StockDailyInformation> sdis2);
 	void deleteStockInformation(StockDailyInformation stockInformation);
 }

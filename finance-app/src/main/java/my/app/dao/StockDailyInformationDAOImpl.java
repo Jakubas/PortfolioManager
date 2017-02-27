@@ -56,6 +56,17 @@ public class StockDailyInformationDAOImpl implements StockDailyInformationDAO {
 		Session session = sessionFactory.getCurrentSession();
 		session.update(stockInformation);
 	}
+	
+	public void updateStockInformations(List<StockDailyInformation> stockInformations) {
+		Session session = sessionFactory.getCurrentSession();
+		Transaction tx = session.beginTransaction();
+		for (StockDailyInformation stockInformation : stockInformations) {
+			session.update(stockInformation);
+		}
+		session.flush();
+		session.clear();
+		tx.commit();
+	}
 
 	public void deleteStockInformation(StockDailyInformation stockInformation) {
 		Session session = sessionFactory.getCurrentSession();
