@@ -32,7 +32,7 @@ public class PortfolioDailyInformation {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate date;
 	
-	private double cashAmount;
+	private double cashAmount = 0;
 	
 	private double value;
 	
@@ -47,9 +47,7 @@ public class PortfolioDailyInformation {
 	public void update(int day) {
 		this.day = day;
 		if (date.equals(LocalDate.now())) {
-			this.cashAmount = user.getCashAmount();
-		} else {
-			this.cashAmount = 0;
+			cashAmount = user.getCashAmount();
 		}
 		PortfolioService portfolioService = new PortfolioServiceImpl();
 		value = portfolioService.getValueOnDate(user.getPortfolio(), date) + cashAmount;
