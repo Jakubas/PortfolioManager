@@ -48,7 +48,6 @@ public class StockParser {
 
 	private Stock parseStock(String line) throws Exception {
 		int i = 0;
-//		String[] stockStr = line.split(",");
 		String[] stockStrs = CSVParser.splitLine(line);
 		String ticker = parseTicker(stockStrs[i++]);
 		String name = stockStrs[i++];
@@ -58,7 +57,7 @@ public class StockParser {
 	}
 	
 	private String parseTicker(String ticker) throws Exception {
-		String tickerPattern = "([A-Z]+)";  
+		String tickerPattern = "([A-Z]|-)+";  
 		boolean match = Pattern.matches(tickerPattern, ticker);
 		if (match) {
 			return ticker;

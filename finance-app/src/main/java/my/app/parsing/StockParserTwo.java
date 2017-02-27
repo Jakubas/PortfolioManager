@@ -20,11 +20,11 @@ public class StockParserTwo {
 		List<Stock> stocks2 = new ArrayList<Stock>();
 		int i = 0;
 		for (Stock stock : stocks) {
-			System.out.println(i++);
 			String ticker = stock.getTicker();
 			String filePath = rootDir + ticker + "_current.csv";
 			if (downloadCSVs) {
 				downloadCSV(stock.getTicker(), filePath);
+				System.out.println(i++ + " / " + stocks.size() + " stock current data downloaded and parsed");
 			}
 			BufferedReader reader = null;
 			try {
@@ -61,7 +61,6 @@ public class StockParserTwo {
 		stock.setLastTradePrice(CSVParser.parseDouble(stockStrs[i++]));
 		String peRatio = stockStrs[i++];
 		if (!peRatio.equals("N/A")) {
-			System.out.println(peRatio);
 			stock.setPERatio(CSVParser.parseDouble(peRatio));
 		} else {
 			stock.setPERatio(null);
