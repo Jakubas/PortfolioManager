@@ -1,29 +1,16 @@
 package my.app.updatedatabase;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
-
 import my.app.domains.Stock;
-import my.app.parsing.StockParser;
 
 public class StockInformationDownloader {
 	
-	public static void downloadStockInformation(String rootDir) {
-		//"/home/daniel/fyp/data/stock_base_info.csv"
-		String filePath = rootDir + "stock_base_info.csv";
-		downloadBaseStockInformation(filePath);
-		
-		StockParser stockParser = new StockParser();
-		List<Stock> stocks = stockParser.parseCSVToStocks(filePath);
+	public static void downloadStockDailyInformation(List<Stock> stocks) {
 		int i = 1;
 		for(Stock stock : stocks) {
 			downloadHistoricalStockInformation(stock.getTicker());
-			System.out.println(i++ + "/" + stocks.size() + " CSVs downloaded");
+			System.out.println(i++ + "/" + stocks.size() + " historical data CSVs downloaded");
 		}
 	}
 	
