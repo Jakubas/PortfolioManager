@@ -32,6 +32,9 @@ public class StockSplit {
 	private double splitRatioToDate;
 	
 	@NotNull
+	private double splitRatioToDateReversed;
+	
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "stock_id")
 	private Stock stock;
@@ -74,6 +77,14 @@ public class StockSplit {
 
 	public void setSplitRatioToDate(double splitRatioToDate) {
 		this.splitRatioToDate = splitRatioToDate;
+	}
+	
+	public double getSplitRatioToDateReversed() {
+		return splitRatioToDateReversed;
+	}
+
+	public void setSplitRatioToDateReversed(double splitRatioToDateReversed) {
+		this.splitRatioToDateReversed = splitRatioToDateReversed;
 	}
 
 	public Stock getStock() {
