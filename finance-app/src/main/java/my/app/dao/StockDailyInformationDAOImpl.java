@@ -85,4 +85,20 @@ public class StockDailyInformationDAOImpl implements StockDailyInformationDAO {
 				.addEntity(StockDailyInformation.class).list();
 		return stockInformations;
 	}
+
+	@Override
+	public void deleteStockInformations(List<StockDailyInformation> stockInformations) {
+		Session session = sessionFactory.getCurrentSession();
+		Transaction tx = session.beginTransaction();
+		for (StockDailyInformation stockInformation : stockInformations) {
+			int id = stockInformation.getId();
+			stockInformation = session.get(StockDailyInformation.class, id);
+			if (stockInformation != null) {
+				session.delete(stockInformation);
+			}
+		}
+		session.flush();
+		session.clear();
+		tx.commit();
+	}
 }

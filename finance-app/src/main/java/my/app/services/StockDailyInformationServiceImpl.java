@@ -52,4 +52,9 @@ public class StockDailyInformationServiceImpl implements StockDailyInformationSe
 		List<StockDailyInformation> stockInformations = dao.getStockInformationsByStockId(stockId);
 		return stockInformations;
 	}
+
+	@Override
+	public void deleteStockInformations(List<StockDailyInformation> stockInformations) {
+		dao.deleteStockInformations(stockInformations);
+	}
 }

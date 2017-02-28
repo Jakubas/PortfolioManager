@@ -14,6 +14,5 @@ public interface StockDailyInformationDAO {
 	void updateStockInformation(StockDailyInformation stockInformation);
 	void updateStockInformations(List<StockDailyInformation> stockInformations);
 	void deleteStockInformation(StockDailyInformation stockInformation);
-	
-	
+	void deleteStockInformations(List<StockDailyInformation> stockInformations);
 }
