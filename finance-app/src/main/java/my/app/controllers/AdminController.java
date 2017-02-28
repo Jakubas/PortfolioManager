@@ -5,9 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import my.app.domains.Stock;
 import my.app.services.PortfolioDailyInformationService;
 import my.app.services.StockDailyInformationService;
+import my.app.services.StockMetricsService;
 import my.app.services.StockService;
 import my.app.services.UserService;
 import my.app.services.corporateactions.DividendService;
@@ -15,27 +15,30 @@ import my.app.services.corporateactions.StockSplitService;
 import my.app.updatedatabase.UpdateCorporateActions;
 import my.app.updatedatabase.UpdatePortfolioDailyInformation;
 import my.app.updatedatabase.UpdateStockInformation;
+import my.app.updatedatabase.UpdateStockMetrics;
 
 @Controller
 public class AdminController {
 
-	PortfolioDailyInformationService pdiService;
-	UserService userService;
-	DividendService dividendService;
-	StockSplitService stockSplitService;
-	StockService stockService;
-	StockDailyInformationService stockDailyInformationService;
+	private final PortfolioDailyInformationService pdiService;
+	private final UserService userService;
+	private final DividendService dividendService;
+	private final StockSplitService stockSplitService;
+	private final StockService stockService;
+	private final StockDailyInformationService stockDailyInformationService;
+	private final StockMetricsService stockMetricsService;
 	
 	@Autowired
 	public AdminController(PortfolioDailyInformationService pdiService, UserService userService,
 			DividendService dividendService, StockSplitService stockSplitService, StockService stockService,
-			StockDailyInformationService stockDailyInformationService) {
+			StockDailyInformationService stockDailyInformationService, StockMetricsService stockMetricsService) {
 		this.pdiService = pdiService;
 		this.userService = userService;
 		this.dividendService = dividendService;
 		this.stockSplitService = stockSplitService;
 		this.stockService = stockService;
 		this.stockDailyInformationService = stockDailyInformationService;
+		this.stockMetricsService = stockMetricsService;
 	}
 	
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
@@ -55,7 +58,8 @@ public class AdminController {
 		String rootDir = "/home/daniel/fyp/data/";
 		UpdateStockInformation usi = 
 				new UpdateStockInformation(rootDir, stockDailyInformationService, stockService);
-		usi.updateStockDailyInformation(false, true);
+		usi.updateStockDailyInformation(false, false);
+//		usi.removeDuplicateDateEntries();
 		return "redirect:/admin";
 	}
 	
@@ -74,6 +78,14 @@ public class AdminController {
 		UpdateStockInformation usi = 
 				new UpdateStockInformation(rootDir, stockDailyInformationService, stockService);
 		usi.updateClosingPrices();
+		return "redirect:/admin";
+	}
+	
+	@RequestMapping(value = "/admin/updateStockMetrics", method = RequestMethod.POST)
+	public String updateStockMetrics() {
+		UpdateStockMetrics usm = 
+				new UpdateStockMetrics(stockMetricsService, stockService);
+		usm.updateStockMetrics();
 		return "redirect:/admin";
 	}
 }
