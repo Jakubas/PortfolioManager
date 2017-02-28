@@ -2,6 +2,7 @@ package my.app.domains;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,7 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class StockDailyInformation {
-
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
@@ -148,6 +149,18 @@ public class StockDailyInformation {
         }
     }
     
+	public void setValuesFrom(StockDailyInformation sdi) {
+		this.date = sdi.getDate();
+		this.open = sdi.getOpen();
+		this.close = sdi.getClose();
+		this.high = sdi.getHigh();
+		this.low = sdi.getLow();
+		this.volume = sdi.getVolume();
+		this.adjustedClose = sdi.getAdjustedClose();
+		this.adjCloseDivNotReinvested = sdi.getAdjCloseDivNotReinvested();
+		this.adjCloseStockSplits = sdi.getAdjCloseStockSplits();
+	}
+	
     @Override
     public int hashCode() {
     	HashCodeBuilder builder = new HashCodeBuilder();
