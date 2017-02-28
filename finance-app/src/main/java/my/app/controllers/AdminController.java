@@ -55,7 +55,7 @@ public class AdminController {
 		String rootDir = "/home/daniel/fyp/data/";
 		UpdateStockInformation usi = 
 				new UpdateStockInformation(rootDir, stockDailyInformationService, stockService);
-		usi.updateStockDailyInformation(false, false);
+		usi.updateStockDailyInformation(false, true);
 		return "redirect:/admin";
 	}
 	

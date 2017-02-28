@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
 
 import my.app.domains.Stock;
 import my.app.domains.StockDailyInformation;
@@ -74,19 +72,19 @@ public class UpdateStockInformation {
 		//parse the CSV file containing the historical stock data into objects
 		String stockInformationFilePath = rootDir + stock.getTicker() + ".csv";
 		HistoricalDataParser hdp = new HistoricalDataParser();
+		Set<StockDailyInformation> sdisInDatabase = 
+				new HashSet<StockDailyInformation>(stock.getStockDailyInformations());
 		List<StockDailyInformation> sdis = 
 				hdp.parseCSVToStockInformation(stock, stockInformationFilePath);
 		sdis = addClosingPrices(sdis);
 		//retrieve daily information that is currently in the database and store it in a hashset since we use it for lookups
-		Set<StockDailyInformation> sdisInDatabase = new HashSet<StockDailyInformation>(stock.getStockDailyInformations());
 		
 		ArrayList<StockDailyInformation> sdisToSave = new ArrayList<StockDailyInformation>();
 		ArrayList<StockDailyInformation> sdisToUpdate = new ArrayList<StockDailyInformation>();
 		int i = 0;
 		for(StockDailyInformation sdi : sdis) {
 			if (sdisInDatabase == null || 
-				!sdisInDatabase.contains(sdi)) {
-				
+					!sdisInDatabase.contains(sdi)) {
 				StockDailyInformation sdiInDatabase;
 				if ((sdiInDatabase = sdisInDatabase.stream().filter(o -> o.getDate() == sdi.getDate()).findFirst().orElse(null)) != null) {
 					sdiInDatabase.setAdjCloseDivNotReinvested(sdi.getAdjCloseDivNotReinvested());
@@ -100,7 +98,7 @@ public class UpdateStockInformation {
 					System.out.println(i  + " S/S " + sdis.size());
 				}
 			}
-			System.out.println(i++  + " / " + sdis.size());
+			i++;
 		}
 		stockDailyInformationService.saveStockInformations(sdisToSave);
 		stockDailyInformationService.updateStockInformations(sdisToUpdate);
