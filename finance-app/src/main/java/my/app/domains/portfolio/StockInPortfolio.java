@@ -104,7 +104,7 @@ public class StockInPortfolio {
 		double returnOnInvestment = (sellPrice - buyPrice)/buyPrice;
 		Double annualisedReturn;
 		if (sellDate == null) {
-			annualisedReturn = StockDataCalculations.calculateAnnualisedReturn(buyDate, LocalDate.now(), buyPrice, sellPrice);
+			annualisedReturn = StockDataCalculations.calculateAnnualisedReturn(stock, buyDate, LocalDate.now());
 		} else {
 			annualisedReturn = StockDataCalculations.calculateAnnualisedReturn(stock, buyDate, sellDate);
 		}

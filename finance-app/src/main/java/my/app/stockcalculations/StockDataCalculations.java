@@ -39,35 +39,33 @@ public class StockDataCalculations {
 		return annualisedReturn;
 	}
 	
-	private static Double calculateAnnualisedReturn(Double cumulativeReturn, int numberOfDays) {
-		if (cumulativeReturn == null || numberOfDays == 0)
+	private static Double calculateAnnualisedReturn(Double totalReturn, int numberOfDays) {
+		if (totalReturn == null || numberOfDays == 0)
 			return null;
-		double a = 1 + cumulativeReturn;
+		double a = 1 + totalReturn;
 		double b = 365 / (double) numberOfDays;
+		if (numberOfDays == 365/4) b = 4;
+		
+//		System.out.println("a: " + a);
+//		System.out.println("b: " + b);
 		double annualisedReturn = Math.pow(a, b) - 1;
+//		System.out.println("Pow: " + Math.pow(a, b));
+//		System.out.println(annualisedReturn);
 		return annualisedReturn;
 	}
 	
 	private static Double calculateAnnualisedReturn(Stock stock, int numberOfDays) {
-		Double cumulativeReturn = calculateReturn(stock, numberOfDays);
-		return calculateAnnualisedReturn(cumulativeReturn, numberOfDays);
+		Double totalReturn = calculateReturn(stock, numberOfDays);
+		System.out.println(totalReturn);
+		return calculateAnnualisedReturn(totalReturn, numberOfDays);
 	}
 	
 	public static Double calculateAnnualisedReturn(Stock stock, LocalDate buyDate, LocalDate sellDate) {
-		Double cumulativeReturn = calculateReturnInDateRange(stock, sellDate, buyDate);
-		if (cumulativeReturn == null)
+		Double totalReturn = calculateReturnInDateRange(stock, sellDate, buyDate);
+		if (totalReturn == null)
 			return null;
 		int numberOfDays = (int) daysBetweenDates(buyDate, sellDate);
-		return calculateAnnualisedReturn(cumulativeReturn, numberOfDays);
-	}
-	
-	public static Double calculateAnnualisedReturn(LocalDate buyDate, LocalDate sellDate,
-												   double buyPrice, double sellPrice) {
-		Double cumulativeReturn = calculateReturn(buyPrice, sellPrice);
-		if (cumulativeReturn == null)
-			return null;
-		int numberOfDays = (int) daysBetweenDates(buyDate, sellDate);
-		return calculateAnnualisedReturn(cumulativeReturn, numberOfDays);
+		return calculateAnnualisedReturn(totalReturn, numberOfDays);
 	}
 	
 	public static long daysBetweenDates(LocalDate startDate, LocalDate endDate) {
@@ -76,14 +74,12 @@ public class StockDataCalculations {
 	}
 	
 	private static Double calculateReturn(Stock stock, int numberOfDays) {
-		//date is initialised with the current time
 		LocalDate today = LocalDate.now();
 		LocalDate endDate = subtractDaysFromDate(today, numberOfDays);
 		return calculateReturnInDateRange(stock, today, endDate);
 	}
 	
 	public static Double calculateReturnInDateRange(Stock stock, int numberOfDaysStart, int numberOfDaysEnd) {
-		//date is initialised with the current time
 		LocalDate today = LocalDate.now();
 		LocalDate startDate = subtractDaysFromDate(today, numberOfDaysStart);
 		LocalDate endDate = subtractDaysFromDate(today, numberOfDaysEnd);
@@ -97,20 +93,29 @@ public class StockDataCalculations {
 		if (sellStockInfo == null || buyStockInfo == null) {
 			return null;
 		}
-		double buyPrice = buyStockInfo.getAdjustedClose();
-		double sellPrice = sellStockInfo.getAdjustedClose();
-		return calculateReturn(buyPrice, sellPrice);
+		return calculateReturn(buyStockInfo, sellStockInfo);
 	}
 	
-	private static Double calculateReturn(double buyPrice, double sellPrice) {
-		double percentageChange = (sellPrice/buyPrice) - 1;
+	private static Double calculateReturn(StockDailyInformation buyStockInfo, StockDailyInformation sellStockInfo) {
+		double buyPrice = buyStockInfo.getAdjCloseStockSplits();
+		double sellPrice = sellStockInfo.getAdjCloseStockSplits();
+		double dividendTotal = (buyStockInfo.getAdjCloseStockSplits() - buyStockInfo.getAdjCloseDivNotReinvested()) - 
+				(sellStockInfo.getAdjCloseStockSplits() - sellStockInfo.getAdjCloseDivNotReinvested());
+		return calculateReturn(buyPrice, sellPrice, dividendTotal);
+	}
+	
+	private static Double calculateReturn(double buyPrice, double sellPrice, double dividendTotal) {
+		// (x - y) / y = x / y - 1
+//		System.out.println("Sell: " + sellPrice);
+//		System.out.println("Buy : " + buyPrice);
+		double percentageChange = (sellPrice + dividendTotal - buyPrice) / buyPrice;
 		return percentageChange;
 	}
 	
 	public static Double findStockPriceOnDate(Stock stock, LocalDate date) {
 		List<StockDailyInformation> stockInfos = stock.getStockDailyInformations();
 		StockDailyInformation stockInfo = findStockInformationForGivenDate(stockInfos, date);
-		Double result = stockInfo != null ? stockInfo.getAdjustedClose() : null;
+		Double result = stockInfo != null ? stockInfo.getAdjCloseDivNotReinvested() : null;
 		return result;
 	}
 	
