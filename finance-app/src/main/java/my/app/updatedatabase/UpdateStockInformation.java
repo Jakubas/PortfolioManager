@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -62,9 +63,9 @@ public class UpdateStockInformation {
 			StockInformationDownloader.downloadStockDailyInformation(stocks);
 		}
 	
-		for (int i = 0; i < stocks.size(); i++) {
+		for (int i = 415; i < stocks.size(); i++) {
 			updateHistoricalPrices(stocks.get(i));
-			System.out.println((i+1) + "/" + stocks.size() + "historical data CSVs parsed into database");
+			System.out.println((i+1) + "/" + stocks.size() + " historical data CSVs parsed into database");
 		}
 	}
 	
@@ -86,16 +87,14 @@ public class UpdateStockInformation {
 			if (sdisInDatabase == null || 
 					!sdisInDatabase.contains(sdi)) {
 				StockDailyInformation sdiInDatabase;
-				if ((sdiInDatabase = sdisInDatabase.stream().filter(o -> o.getDate() == sdi.getDate()).findFirst().orElse(null)) != null) {
-					sdiInDatabase.setAdjCloseDivNotReinvested(sdi.getAdjCloseDivNotReinvested());
-					sdiInDatabase.setAdjCloseStockSplits(sdi.getAdjCloseStockSplits());
-//					sdi.setId(sdiInDatabase.getId());
-					//if the data is in the database we update it
+				if ((sdiInDatabase = sdisInDatabase.stream().filter(o -> 
+				o.getDate().equals(sdi.getDate())).findFirst().orElse(null)) != null) {
+					sdiInDatabase.setValuesFrom(sdi);
 					sdisToUpdate.add(sdiInDatabase);
-					System.out.println(i  + " U/U " + sdis.size());
+					System.out.println(i  + " U/U " + sdis.size() + ", date: " + sdi.getDate());
 				} else {
 					sdisToSave.add(sdi);
-					System.out.println(i  + " S/S " + sdis.size());
+					System.out.println(i  + " S/S " + sdis.size() + ", date: " + sdi.getDate());
 				}
 			}
 			i++;
@@ -162,36 +161,36 @@ public class UpdateStockInformation {
 	}
 
 	//get the dividend total that is applicable to the stock daily information date
-		private double getDividendTotalFor(StockDailyInformation sdi) {
-			LocalDate date = sdi.getDate();
-			List<Dividend> dividends = sdi.getStock().getDividends();
-			return getDividendTotalFor(date, dividends);
-		}
+	private double getDividendTotalFor(StockDailyInformation sdi) {
+		LocalDate date = sdi.getDate();
+		List<Dividend> dividends = sdi.getStock().getDividends();
+		return getDividendTotalFor(date, dividends);
+	}
+	
+	//get the dividend total that is nearest to the date
+	private double getDividendTotalFor(LocalDate date, List<Dividend> dividends) {
+		dividends.sort(Comparator.comparing(Dividend::getDate));
 		
-		//get the dividend total that is nearest to the date
-		private double getDividendTotalFor(LocalDate date, List<Dividend> dividends) {
-			dividends.sort(Comparator.comparing(Dividend::getDate));
-			
-			if (dividends.isEmpty()) {
-				return 0;
-			}
-			if (date.isAfter(dividends.get(dividends.size()-1).getDate())) {
-				return dividends.get(dividends.size()-1).getTotalToDate();
-			}
-			//TODO use search algorithm optimised for sorted arrays to make this faster
-			for (int i = 0; i < dividends.size(); i++) {
-				Dividend dividend = dividends.get(i);
-				//since stockSplits is sorted by date we return the first split ratio where split date is before the sdi date
-				if (date.isBefore(dividend.getDate())) {
-					if (i > 0) {
-						return dividends.get(i-1).getTotalToDate();
-					} else {
-						return 0;
-					}
-				}
-			}
+		if (dividends.isEmpty()) {
 			return 0;
 		}
+		LocalDate latestDividendDate = dividends.get(dividends.size()-1).getDate();
+		if (date.isAfter(latestDividendDate) || date.isEqual(latestDividendDate)) {
+			return dividends.get(dividends.size()-1).getTotalToDate();
+		}
+		//TODO use search algorithm optimised for sorted arrays to make this faster
+		for (int i = 0; i < dividends.size(); i++) {
+			Dividend dividend = dividends.get(i);
+			if (date.isBefore(dividend.getDate())) {
+				if (i > 0) {
+					return dividends.get(i-1).getTotalToDate();
+				} else {
+					return 0;
+				}
+			}
+		}
+		return 0;
+	}
 		
 	//takes a list of stocks and returns a list of stock tickers corresponding to the stocks
 	private ArrayList<String> stocksToTickers(List<Stock> stocks) {
@@ -200,5 +199,37 @@ public class UpdateStockInformation {
 			tickers.add(stock.getTicker());
 		}
 		return tickers;
+	}
+	
+	/*
+	 * due to a bug I had entries with the same {date, stock} combo in stock_daily_information, so I made this method 
+	 * to remove the entries so that only one entry corresponds to one date and stock. Afterwards, I added a unique 
+	 * constraint to the database to ensure that this doesn't occur again.
+	*/
+	public void removeDuplicateDateEntries() {
+		List<Stock> stocks = stockService.getStocks();
+		for (int i = 0; i < stocks.size(); i++) {
+			Stock stock = stocks.get(i);
+			List<StockDailyInformation> sdis = stock.getStockDailyInformations();
+			sdis.sort(Comparator.comparing(StockDailyInformation::getDate));
+			List<StockDailyInformation> sdisToRemove = new ArrayList<StockDailyInformation>();
+			Iterator<StockDailyInformation> it = sdis.iterator();
+			System.out.println((i+1) + " / " + stocks.size());
+			
+			int k = 0;
+			while (it.hasNext()) {
+				StockDailyInformation sdi = it.next();
+				StockDailyInformation sdi2 = (sdis.subList(k+1, sdis.size()).stream()
+						.filter(o ->  o.getDate().equals(sdi.getDate()) && 
+								o.getId() != sdi.getId())
+						.findFirst().orElse(null));
+				if (sdi2 != null) {
+					System.out.println(k+1 + " / " + sdis.size() + " deleted");
+					sdisToRemove.add(sdi);
+				}
+				k++;
+			}
+			stockDailyInformationService.deleteStockInformations(sdisToRemove);
+		}
 	}
 }
