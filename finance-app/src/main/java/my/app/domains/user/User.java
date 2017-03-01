@@ -25,7 +25,10 @@ import my.app.domains.portfolio.PortfolioDailyInformation;
 import my.app.domains.portfolio.StockInPortfolio;
 import my.app.domains.portfolio.goal.Goal;
 import my.app.domains.stock.Stock;
+import my.app.formatter.PercentageFormat;
 import my.app.risk.Risk;
+import my.app.services.portfolio.PortfolioService;
+import my.app.services.portfolio.PortfolioServiceImpl;
 
 @Entity
 public class User {
@@ -65,7 +68,7 @@ public class User {
 	private List<StockInPortfolio> portfolio;
 
 	@OneToMany(mappedBy = "user")
-	private List<PortfolioDailyInformation> pids;
+	private List<PortfolioDailyInformation> pdis;
 	
 	public User() {
 		
@@ -238,21 +241,16 @@ public class User {
 		return Risk.calculatePortfolioRisk(getActivePortfolio());
 	}
 
-	//based on current portfolio performance
+	@PercentageFormat
 	public double annualisedPortfolioPerformance() {
-		double annualisedPerformance = 0;
-		for (StockInPortfolio stockInPortfolio : getActivePortfolio()) {
-			Double annualisedReturn = stockInPortfolio.getAnnualisedReturn();
-			if (annualisedReturn == null) {
-				annualisedReturn = 0.0;
-			}
-			Double annualisedReturnWeighted = annualisedReturn * (calculateHoldingWeight(stockInPortfolio)/100); 
-			annualisedPerformance += annualisedReturnWeighted;
-		}
+		PortfolioService portfolioService = new PortfolioServiceImpl();
+		double annualisedPerformance = portfolioService.getAnnualisedReturn(getActivePortfolio());
+		System.out.println(annualisedPerformance);
+		System.out.println("here");
 		return annualisedPerformance;
 	}
 	
 	public List<PortfolioDailyInformation> getPortfolioDailyInformations() {
-		return pids;
+		return pdis;
 	}
 }

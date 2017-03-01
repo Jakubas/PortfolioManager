@@ -85,11 +85,15 @@
 						Portfolio Value:
 						<br />
 						Cash Balance:
+						<br />
+						Annualised Perf:
 					</div>
 					<div class="col-sm-6">
 						<span th:text="'$' + ${{user.portfolioValue()}}" />
 						<br />
 						<span th:text="${user.cashAmount} ? '$' + ${{user.cashAmount}} : '0'" />
+						<br />
+						<span th:text="${{user.annualisedPortfolioPerformance()}}" />
 					</div>
 				</div>
 			</div>
