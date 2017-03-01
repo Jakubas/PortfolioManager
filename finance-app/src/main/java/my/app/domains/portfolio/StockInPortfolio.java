@@ -104,9 +104,10 @@ public class StockInPortfolio {
 		double returnOnInvestment = (sellPrice - buyPrice)/buyPrice;
 		Double annualisedReturn;
 		if (sellDate == null) {
-			annualisedReturn = StockDataCalculations.calculateAnnualisedReturn(stock, buyDate, LocalDate.now());
+			annualisedReturn = StockDataCalculations.calculateAnnualisedReturn(stock, buyDate, LocalDate.now(), buyPrice, sellPrice);
+			System.out.println(annualisedReturn);
 		} else {
-			annualisedReturn = StockDataCalculations.calculateAnnualisedReturn(stock, buyDate, sellDate);
+			annualisedReturn = StockDataCalculations.calculateAnnualisedReturn(stock, buyDate, sellDate, buyPrice, sellPrice);
 		}
 		this.returnOnInvestment = returnOnInvestment;
 		this.annualisedReturn = annualisedReturn;
@@ -210,7 +211,7 @@ public class StockInPortfolio {
 		return value;
 	}
 	
-	@NumberFormat(style = Style.NUMBER, pattern = "#,###.00")
+	@NumberFormat(style = Style.NUMBER, pattern = "#,##0.00")
 	public double getGain() {
 		return returnOnInvestment * buyPrice * amount;
 	}

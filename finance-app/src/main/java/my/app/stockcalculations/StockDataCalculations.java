@@ -1,7 +1,7 @@
 package my.app.stockcalculations;
 
 import java.time.LocalDate;
-import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import my.app.domains.Stock;
@@ -39,15 +39,24 @@ public class StockDataCalculations {
 		return annualisedReturn;
 	}
 	
-	private static Double calculateAnnualisedReturn(Double totalReturn, int numberOfDays) {
-		if (totalReturn == null || numberOfDays == 0)
+	public static Double calculateAnnualisedReturn(Stock stock, LocalDate buyDate, LocalDate sellDate) {
+		Double totalReturn = calculateReturnInDateRange(stock, sellDate, buyDate);
+		return calculateAnnualisedReturn(totalReturn, buyDate, sellDate);
+	}
+	
+	public static Double calculateAnnualisedReturn(Stock stock, LocalDate buyDate, LocalDate sellDate, 
+			Double buyPrice, Double sellPrice) {
+		Double totalReturn = calculateReturnInDateRange(stock, sellDate, buyDate, buyPrice, sellPrice);
+		System.out.println("TotalReturn" + totalReturn);
+		return calculateAnnualisedReturn(totalReturn, buyDate, sellDate);
+	}
+	
+	private static Double calculateAnnualisedReturn(Double totalReturn, LocalDate buyDate, LocalDate sellDate) {
+		if (totalReturn == null)
 			return null;
-		double a = 1 + totalReturn;
-		double b = 365 / (double) numberOfDays;
-		if (numberOfDays == 365/4) b = 4;
-		
-		double annualisedReturn = Math.pow(a, b) - 1;
-		return annualisedReturn;
+		int numberOfDays = (int) daysBetweenDates(buyDate, sellDate);
+		System.out.println(numberOfDays);
+		return calculateAnnualisedReturn(totalReturn, numberOfDays);
 	}
 	
 	private static Double calculateAnnualisedReturn(Stock stock, int numberOfDays) {
@@ -55,17 +64,23 @@ public class StockDataCalculations {
 		return calculateAnnualisedReturn(totalReturn, numberOfDays);
 	}
 	
-	public static Double calculateAnnualisedReturn(Stock stock, LocalDate buyDate, LocalDate sellDate) {
-		Double totalReturn = calculateReturnInDateRange(stock, sellDate, buyDate);
-		if (totalReturn == null)
+	private static Double calculateAnnualisedReturn(Double totalReturn, int numberOfDays) {
+		if (totalReturn == null || numberOfDays == 0)
 			return null;
-		int numberOfDays = (int) daysBetweenDates(buyDate, sellDate);
-		return calculateAnnualisedReturn(totalReturn, numberOfDays);
+		double a = 1 + totalReturn;
+		System.out.println(numberOfDays);
+		double b = 365 / (double) numberOfDays;
+		System.out.println("A: " + a);
+		System.out.println("B: " + b);
+		if (numberOfDays == 365/4) b = 4;
+		
+		double annualisedReturn = Math.pow(a, b) - 1;
+		return annualisedReturn;
 	}
 	
 	public static long daysBetweenDates(LocalDate startDate, LocalDate endDate) {
-		Period period = Period.between(startDate, endDate);
-	    return period.getDays();
+		long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+	    return daysBetween;
 	}
 	
 	private static Double calculateReturn(Stock stock, int numberOfDays) {
@@ -88,12 +103,22 @@ public class StockDataCalculations {
 		if (sellStockInfo == null || buyStockInfo == null) {
 			return null;
 		}
-		return calculateReturn(buyStockInfo, sellStockInfo);
-	}
-	
-	private static Double calculateReturn(StockDailyInformation buyStockInfo, StockDailyInformation sellStockInfo) {
 		double buyPrice = buyStockInfo.getAdjCloseStockSplits();
 		double sellPrice = sellStockInfo.getAdjCloseStockSplits();
+		return calculateReturn(buyStockInfo, sellStockInfo, buyPrice, sellPrice);
+	}
+	
+	private static Double calculateReturnInDateRange(Stock stock, LocalDate sellDate, LocalDate buyDate, double buyPrice, double sellPrice) {
+		List<StockDailyInformation> stockInfos = stock.getStockDailyInformations();
+		StockDailyInformation sellStockInfo = findStockInformationForGivenDate(stockInfos, sellDate);
+		StockDailyInformation buyStockInfo = findStockInformationForGivenDate(stockInfos, buyDate);
+		if (sellStockInfo == null || buyStockInfo == null) {
+			return null;
+		}
+		return calculateReturn(buyStockInfo, sellStockInfo, buyPrice, sellPrice);
+	}
+	
+	private static Double calculateReturn(StockDailyInformation buyStockInfo, StockDailyInformation sellStockInfo, double buyPrice, double sellPrice) {
 		double dividendTotal = (buyStockInfo.getAdjCloseStockSplits() - buyStockInfo.getAdjCloseDivNotReinvested()) - 
 				(sellStockInfo.getAdjCloseStockSplits() - sellStockInfo.getAdjCloseDivNotReinvested());
 		return calculateReturn(buyPrice, sellPrice, dividendTotal);
@@ -101,8 +126,6 @@ public class StockDataCalculations {
 	
 	private static Double calculateReturn(double buyPrice, double sellPrice, double dividendTotal) {
 		// (x - y) / y = x / y - 1
-//		System.out.println("Sell: " + sellPrice);
-//		System.out.println("Buy : " + buyPrice);
 		double percentageChange = (sellPrice + dividendTotal - buyPrice) / buyPrice;
 		return percentageChange;
 	}
