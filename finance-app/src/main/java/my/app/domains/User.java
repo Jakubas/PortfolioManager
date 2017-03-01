@@ -16,6 +16,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.format.annotation.NumberFormat.Style;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -51,6 +53,7 @@ public class User {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dob;
 	
+	@NumberFormat(style = Style.NUMBER, pattern = "#,##0.00")
 	private Double cashAmount;
 	
 	@OneToMany(mappedBy = "user")
@@ -157,6 +160,7 @@ public class User {
 	}
 	
 	//the value of all investments in the user's portfolio
+	@NumberFormat(style = Style.NUMBER, pattern = "#,###.00")
 	public double portfolioValue() {
 		double value = 0;
 		for (StockInPortfolio stockInPortfolio : getActivePortfolio()) {

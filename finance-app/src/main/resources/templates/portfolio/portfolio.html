@@ -87,9 +87,9 @@
 						Cash Balance:
 					</div>
 					<div class="col-sm-6">
-						<span th:text="'$' + ${#numbers.formatDecimal(user.portfolioValue(),1,2,'POINT')}" />
+						<span th:text="'$' + ${{user.portfolioValue()}}" />
 						<br />
-						<span th:text="${user.cashAmount} ? '$' + ${#numbers.formatDecimal(user.cashAmount,1,2,'POINT')} : '0'" />
+						<span th:text="${user.cashAmount} ? '$' + ${{user.cashAmount}} : '0'" />
 					</div>
 				</div>
 			</div>
@@ -126,7 +126,7 @@
 					Value:
 				</div>
 				<div class="col-md-2">
-					<span th:text="'$' + ${{portfolioService.getAnnualisedReturn(holdings)}}" />
+					<span th:text="${{portfolioService.getAnnualisedReturn(holdings)}}" />
 					<br />
 					<span th:text="'$' + ${{portfolioService.getValue(holdings)}}" />
 				</div>
