@@ -22,34 +22,32 @@ public class UpdateStockMetrics {
 	public void updateStockMetrics() {
 		List<Stock> stocks = stockService.getStocks();
 		int i = 1;
+		//runs out of heap space/becomes very slow around ~400 objects
 		for (Stock stock : stocks) {
-			Double quarterlyAnnualisedReturn = StockDataCalculations.calculateQuarterlyAnnualisedReturn(stock);
-			Double oneYearAnnualisedReturn = StockDataCalculations.calculate1YrAnnualisedReturn(stock);
-			Double fiveYearAnnualisedReturn = StockDataCalculations.calculate5YrAnnualisedReturn(stock);
-			Double tenYearAnnualisedReturn = StockDataCalculations.calculate10YrAnnualisedReturn(stock);
-			Double variance = Risk.calculateVariance(stock);
-//			System.out.println(stock.getId());
-//			System.out.println(quarterlyAnnualisedReturn);
-//			System.out.println(oneYearAnnualisedReturn);
-//			System.out.println(fiveYearAnnualisedReturn);
-//			System.out.println(tenYearAnnualisedReturn);
-//			System.out.println(variance);
-			StockMetrics stockMetrics = 
-					new StockMetrics(stock, quarterlyAnnualisedReturn, oneYearAnnualisedReturn, 
-							fiveYearAnnualisedReturn, tenYearAnnualisedReturn, variance);
-			
-			StockMetrics prevStockMetrics = 
-					stockMetricsService.getStockMetricsById(stock.getId());
-			if (prevStockMetrics != null &&
-					!stockMetrics.getThreeMonthAnnualisedReturn().equals(prevStockMetrics.getThreeMonthAnnualisedReturn())) {
-				stockMetricsService.deleteStockMetrics(prevStockMetrics);
-				System.out.println("updating");
-				stockMetricsService.saveStockMetrics(stockMetrics);
-			} else if(prevStockMetrics == null) {
-				stockMetricsService.saveStockMetrics(stockMetrics);
-				System.out.println("saved");
-			}
+			updateStockMetricsFor(stock);
 			System.out.println(i++ + " / " + stocks.size() + " stock metrics updated");
+		}
+	}
+	
+	public void updateStockMetricsFor(Stock stock) {
+		Double quarterlyAnnualisedReturn = StockDataCalculations.calculateQuarterlyAnnualisedReturn(stock);
+		Double oneYearAnnualisedReturn = StockDataCalculations.calculate1YrAnnualisedReturn(stock);
+		Double fiveYearAnnualisedReturn = StockDataCalculations.calculate5YrAnnualisedReturn(stock);
+		Double tenYearAnnualisedReturn = StockDataCalculations.calculate10YrAnnualisedReturn(stock);
+		Double variance = Risk.calculateVariance(stock);
+		StockMetrics stockMetrics = 
+				new StockMetrics(stock, quarterlyAnnualisedReturn, oneYearAnnualisedReturn, 
+						fiveYearAnnualisedReturn, tenYearAnnualisedReturn, variance);
+		
+		StockMetrics prevStockMetrics = 
+				stockMetricsService.getStockMetricsById(stock.getId());
+		if (prevStockMetrics != null && !stockMetrics.equals(prevStockMetrics)) {
+			prevStockMetrics.setValuesFrom(stockMetrics);
+			stockMetricsService.updateStockMetrics(prevStockMetrics);
+			System.out.println("updated");
+		} else if(prevStockMetrics == null) {
+			stockMetricsService.saveStockMetrics(stockMetrics);
+			System.out.println("saved");
 		}
 	}
 }

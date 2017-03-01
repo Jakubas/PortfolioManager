@@ -63,7 +63,7 @@ public class UpdateStockInformation {
 			StockInformationDownloader.downloadStockDailyInformation(stocks);
 		}
 	
-		for (int i = 415; i < stocks.size(); i++) {
+		for (int i = 0; i < stocks.size(); i++) {
 			updateHistoricalPrices(stocks.get(i));
 			System.out.println((i+1) + "/" + stocks.size() + " historical data CSVs parsed into database");
 		}

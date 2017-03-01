@@ -46,17 +46,12 @@ public class StockDataCalculations {
 		double b = 365 / (double) numberOfDays;
 		if (numberOfDays == 365/4) b = 4;
 		
-//		System.out.println("a: " + a);
-//		System.out.println("b: " + b);
 		double annualisedReturn = Math.pow(a, b) - 1;
-//		System.out.println("Pow: " + Math.pow(a, b));
-//		System.out.println(annualisedReturn);
 		return annualisedReturn;
 	}
 	
 	private static Double calculateAnnualisedReturn(Stock stock, int numberOfDays) {
 		Double totalReturn = calculateReturn(stock, numberOfDays);
-		System.out.println(totalReturn);
 		return calculateAnnualisedReturn(totalReturn, numberOfDays);
 	}
 	
