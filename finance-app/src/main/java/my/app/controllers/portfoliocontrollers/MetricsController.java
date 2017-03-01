@@ -1,10 +1,6 @@
 package my.app.controllers.portfoliocontrollers;
 
 import java.security.Principal;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import my.app.controllers.Utility;
 import my.app.domains.User;
 import my.app.domains.portfolio.PortfolioDailyInformation;
-import my.app.domains.portfolio.StockInPortfolio;
 import my.app.services.PortfolioService;
 import my.app.services.StockInPortfolioService;
 import my.app.services.StockService;
@@ -65,15 +59,5 @@ public class MetricsController {
 			values[i] = value;
 		}
 		return values;
-//		List<StockInPortfolio> portfolio = user.getPortfolio(); 
-//		LocalDate earliestDate = portfolioService.getEarliestDateIn(portfolio);
-//		int daysBetween = Period.between(earliestDate, LocalDate.now()).getDays();
-//		double[] values = new double[daysBetween/28];
-//		for (int i = 0; i < values.length; i++) {
-//			System.out.println(i + " / " + values.length);
-//			double value = portfolioService.getValueOnDate(portfolio, earliestDate.plusDays(i*28));
-//			values[i] = value;
-//		}
-//		return values;
 	}
 }

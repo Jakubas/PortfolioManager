@@ -21,11 +21,11 @@ public class UpdateStockMetrics {
 	
 	public void updateStockMetrics() {
 		List<Stock> stocks = stockService.getStocks();
-		int i = 1;
 		//runs out of heap space/becomes very slow around ~400 objects
-		for (Stock stock : stocks) {
+		for (int i = 0; i < stocks.size(); i++) {
+			Stock stock = stocks.get(i);
 			updateStockMetricsFor(stock);
-			System.out.println(i++ + " / " + stocks.size() + " stock metrics updated");
+			System.out.println((i+1) + " / " + stocks.size() + " stock metrics updated");
 		}
 	}
 	

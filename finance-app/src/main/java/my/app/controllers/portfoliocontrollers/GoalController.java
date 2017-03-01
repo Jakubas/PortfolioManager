@@ -11,13 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.sun.media.sound.InvalidDataException;
-
 import my.app.domains.User;
 import my.app.domains.portfolio.goal.Goal;
+import my.app.domains.portfolio.goal.Goal.Type;
 import my.app.domains.portfolio.goal.GoalFactory;
 import my.app.domains.portfolio.goal.GoalTemplates;
-import my.app.domains.portfolio.goal.Goal.Type;
 import my.app.risk.RiskValues;
 import my.app.services.GoalService;
 import my.app.services.StockService;
@@ -86,7 +84,7 @@ public class GoalController {
 		Goal goal;
 		try {
 			goal = goalFactory.getGoal(user, goalTemplate, percentage, sector1, sector2, monthlyDepositAmount, amount, length, risk, monthsOrYears);
-		} catch (InvalidDataException e) {
+		} catch (Exception e) {
 			model.addAttribute("error", true);
 			return "portfolio/goals";
 		}

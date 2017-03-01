@@ -7,8 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.sun.media.sound.InvalidDataException;
-
 import my.app.domains.User;
 import my.app.domains.portfolio.goal.Goal.Type;
 import my.app.services.StockService;
@@ -25,10 +23,10 @@ public class GoalFactory {
 	
 	public Goal getGoal(User user, String goalTemplate, Double percentage, 
 			String sector1, String sector2, Integer monthlyDepositAmount, 
-			Integer amount, Double length, String risk, String monthsOrYears) throws InvalidDataException {
+			Integer amount, Double length, String risk, String monthsOrYears) throws Exception {
 		
 		if(!areSectorsValid(sector1, sector2)) {
-			throw new InvalidDataException(sector1 + " or " + sector2 + " is not a sector");
+			throw new Exception(sector1 + " or " + sector2 + " is not a sector");
 		}
         Type type = getType(goalTemplate);
 	    String goalStr = generateGoalText(goalTemplate, type, percentage, sector1, sector2, 
