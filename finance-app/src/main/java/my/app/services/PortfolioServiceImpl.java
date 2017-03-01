@@ -9,6 +9,7 @@ import org.springframework.format.annotation.NumberFormat.Style;
 import org.springframework.stereotype.Service;
 
 import my.app.domains.portfolio.StockInPortfolio;
+import my.app.formatter.PercentageFormat;
 import my.app.stockcalculations.StockDataCalculations;
 
 @Service
@@ -92,12 +93,25 @@ public class PortfolioServiceImpl implements PortfolioService {
 	}
 	
 	@Override
+	@PercentageFormat
 	public double getAnnualisedReturn(List<StockInPortfolio> portfolio) {
-		// TODO Auto-generated method stub
-		return 0;
+		int totalShares = getStockAmount(portfolio);
+		double annualReturn = 0;
+		for (StockInPortfolio holding : portfolio) {
+			double holdingAnnualReturn = holding.getAnnualisedReturn();
+			double holdingShares = holding.getAmount();
+			double shareWeight = holdingShares/totalShares;
+//			System.out.println(shareWeight);
+//			System.out.println(holdingAnnualReturn);
+			annualReturn += holdingAnnualReturn * shareWeight;
+//			System.out.println(annualReturn);
+		}
+//		System.out.println();
+		return annualReturn;
 	}
 
 	@Override
+	@NumberFormat(style = Style.NUMBER, pattern = "#,##0.00")
 	public double getValue(List<StockInPortfolio> portfolio) {
 		double value = 0;
 		for (StockInPortfolio holding : portfolio) {
