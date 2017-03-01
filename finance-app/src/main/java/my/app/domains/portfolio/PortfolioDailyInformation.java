@@ -31,7 +31,7 @@ public class PortfolioDailyInformation {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate date;
 	
-	private double cashAmount = 0;
+	private double cashAmount;
 	
 	private double value;
 	

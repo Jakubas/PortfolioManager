@@ -47,7 +47,6 @@ public class StockDataCalculations {
 	public static Double calculateAnnualisedReturn(Stock stock, LocalDate buyDate, LocalDate sellDate, 
 			Double buyPrice, Double sellPrice) {
 		Double totalReturn = calculateReturnInDateRange(stock, sellDate, buyDate, buyPrice, sellPrice);
-		System.out.println("TotalReturn" + totalReturn);
 		return calculateAnnualisedReturn(totalReturn, buyDate, sellDate);
 	}
 	
@@ -55,7 +54,6 @@ public class StockDataCalculations {
 		if (totalReturn == null)
 			return null;
 		int numberOfDays = (int) daysBetweenDates(buyDate, sellDate);
-		System.out.println(numberOfDays);
 		return calculateAnnualisedReturn(totalReturn, numberOfDays);
 	}
 	
@@ -68,10 +66,7 @@ public class StockDataCalculations {
 		if (totalReturn == null || numberOfDays == 0)
 			return null;
 		double a = 1 + totalReturn;
-		System.out.println(numberOfDays);
 		double b = 365 / (double) numberOfDays;
-		System.out.println("A: " + a);
-		System.out.println("B: " + b);
 		if (numberOfDays == 365/4) b = 4;
 		
 		double annualisedReturn = Math.pow(a, b) - 1;
@@ -133,7 +128,7 @@ public class StockDataCalculations {
 	public static Double findStockPriceOnDate(Stock stock, LocalDate date) {
 		List<StockDailyInformation> stockInfos = stock.getStockDailyInformations();
 		StockDailyInformation stockInfo = findStockInformationForGivenDate(stockInfos, date);
-		Double result = stockInfo != null ? stockInfo.getAdjCloseDivNotReinvested() : null;
+		Double result = stockInfo != null ? stockInfo.getAdjCloseStockSplits() : null;
 		return result;
 	}
 	
@@ -163,8 +158,8 @@ public class StockDataCalculations {
 				return stockInfo;
 			}
 		}
-		if (dayCounter == 60) {
-			//we went back 60 days and didn't find any price data, so the stock wasn't listed
+		if (dayCounter == 14) {
+			//we went back 14 days and didn't find any price data, so the stock wasn't listed
 			//anywhere near the date that we are searching for.
 			return null;
 		}

@@ -40,7 +40,7 @@ public class UpdatePortfolioDailyInformation {
 		List<PortfolioDailyInformation> pdisInDatabase = user.getPortfolioDailyInformations();
 		LocalDate earliestDate = portfolioService.getEarliestDateIn(portfolio);
 		long daysBetween = ChronoUnit.DAYS.between(earliestDate, LocalDate.now());
-		for (int i = 0; i < daysBetween; i++) {
+		for (int i = 0; i <= daysBetween; i++) {
 			LocalDate date = earliestDate.plusDays(i);
 			PortfolioDailyInformation pdi = 
 					pdisInDatabase.stream().filter(o -> o.getDate().equals(date)).findFirst().orElse(null);
