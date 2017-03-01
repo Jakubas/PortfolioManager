@@ -95,18 +95,14 @@ public class PortfolioServiceImpl implements PortfolioService {
 	@Override
 	@PercentageFormat
 	public double getAnnualisedReturn(List<StockInPortfolio> portfolio) {
-		int totalShares = getStockAmount(portfolio);
+		double totalValue = getValue(portfolio);
 		double annualReturn = 0;
 		for (StockInPortfolio holding : portfolio) {
 			double holdingAnnualReturn = holding.getAnnualisedReturn();
-			double holdingShares = holding.getAmount();
-			double shareWeight = holdingShares/totalShares;
-//			System.out.println(shareWeight);
-//			System.out.println(holdingAnnualReturn);
+			double holdingValue = holding.getValue();
+			double shareWeight = holdingValue/totalValue;
 			annualReturn += holdingAnnualReturn * shareWeight;
-//			System.out.println(annualReturn);
 		}
-//		System.out.println();
 		return annualReturn;
 	}
 
