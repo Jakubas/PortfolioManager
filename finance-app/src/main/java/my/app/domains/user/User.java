@@ -123,8 +123,12 @@ public class User {
 		this.dob = dob2;
 	}
 
-	public Double getCashAmount() {
-		return cashAmount;
+	public double getCashAmount() {
+		if (cashAmount != null) {
+			return cashAmount;
+		} else {
+			return 0.0;
+		}
 	}
 
 	public void setCashAmount(Double cashAmount) {
