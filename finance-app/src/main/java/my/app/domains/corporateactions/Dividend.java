@@ -10,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
-import my.app.domains.Stock;
+import my.app.domains.stock.Stock;
 
 @Entity
 public class Dividend {

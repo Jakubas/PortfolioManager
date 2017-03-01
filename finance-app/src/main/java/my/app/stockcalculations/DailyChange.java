@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import my.app.domains.StockDailyInformation;
+import my.app.domains.stock.StockDailyInformation;
 
 public class DailyChange {
 

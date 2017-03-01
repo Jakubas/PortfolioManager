@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import my.app.domains.User;
 import my.app.domains.portfolio.goal.Goal;
 import my.app.domains.portfolio.goal.Goal.Type;
+import my.app.domains.user.User;
 import my.app.domains.portfolio.goal.GoalFactory;
 import my.app.domains.portfolio.goal.GoalTemplates;
 import my.app.risk.RiskValues;
-import my.app.services.GoalService;
-import my.app.services.StockService;
-import my.app.services.UserService;
+import my.app.services.portfolio.GoalService;
+import my.app.services.stock.StockService;
+import my.app.services.user.UserService;
 
 @Controller
 public class GoalController {

@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import my.app.domains.Stock;
-import my.app.domains.StockDailyInformation;
+import my.app.domains.stock.Stock;
+import my.app.domains.stock.StockDailyInformation;
 
 public class HistoricalDataParser {
 	

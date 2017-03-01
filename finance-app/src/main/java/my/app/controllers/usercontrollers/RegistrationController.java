@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import my.app.controllers.Utility;
-import my.app.domains.User;
-import my.app.services.UserService;
+import my.app.domains.user.User;
+import my.app.services.user.UserService;
+import my.app.utilities.DateUtility;
 
 @Controller
 public class RegistrationController {
@@ -42,7 +42,7 @@ public class RegistrationController {
 					user.setLastName(lastName);
 				}
 				if (!dob.isEmpty()) {
-					user.setDob(Utility.stringToDate(dob));
+					user.setDob(DateUtility.stringToDate(dob));
 				}
 				userService.saveUser(user);
 				return "login";

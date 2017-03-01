@@ -2,7 +2,8 @@ package my.app.updatedatabase;
 
 import java.util.List;
 
-import my.app.domains.Stock;
+import my.app.domains.stock.Stock;
+import my.app.utilities.DownloadUtility;
 
 public class StockInformationDownloader {
 	

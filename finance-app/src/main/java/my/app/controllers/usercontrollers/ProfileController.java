@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import my.app.controllers.Utility;
-import my.app.domains.User;
-import my.app.services.UserService;
+import my.app.domains.user.User;
+import my.app.services.user.UserService;
+import my.app.utilities.DateUtility;
 
 @Controller
 public class ProfileController {
@@ -49,7 +49,7 @@ public class ProfileController {
 		if (!dobStr.isEmpty()) {
 			LocalDate dob;
 			try {
-				dob = Utility.stringToDate(dobStr);
+				dob = DateUtility.stringToDate(dobStr);
 			} catch (ParseException e) {
 				ra.addFlashAttribute("dateError", true);
 				return "redirect:/profile";

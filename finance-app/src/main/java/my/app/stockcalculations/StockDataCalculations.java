@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import my.app.domains.Stock;
-import my.app.domains.StockDailyInformation;
+import my.app.domains.stock.Stock;
+import my.app.domains.stock.StockDailyInformation;
 
 //this class is used for various calculations regarding a stock, such as risk, annualised returns, etc.
 //annualisedReturns are estimates and may be off by a couple days

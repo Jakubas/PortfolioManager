@@ -15,8 +15,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.format.annotation.NumberFormat.Style;
 
-import my.app.domains.Stock;
-import my.app.domains.User;
+import my.app.domains.stock.Stock;
+import my.app.domains.user.User;
 import my.app.formatter.PercentageFormat;
 import my.app.stockcalculations.StockDataCalculations;
 

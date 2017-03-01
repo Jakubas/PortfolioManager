@@ -4,13 +4,14 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 
-import my.app.domains.Stock;
 import my.app.domains.corporateactions.Dividend;
 import my.app.domains.corporateactions.StockSplit;
+import my.app.domains.stock.Stock;
 import my.app.parsing.CorporateActionParser;
-import my.app.services.StockService;
 import my.app.services.corporateactions.DividendService;
 import my.app.services.corporateactions.StockSplitService;
+import my.app.services.stock.StockService;
+import my.app.utilities.DownloadUtility;
 
 public class UpdateCorporateActions {
 	

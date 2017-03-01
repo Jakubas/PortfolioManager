@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import my.app.domains.StockMetrics;
-import my.app.services.StockMetricsService;
+import my.app.domains.stock.StockMetrics;
+import my.app.services.stock.StockMetricsService;
 
 @RestController
 public class StockMetricsRestController {

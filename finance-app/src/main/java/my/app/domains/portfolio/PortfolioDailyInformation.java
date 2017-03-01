@@ -12,9 +12,9 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import my.app.domains.User;
-import my.app.services.PortfolioService;
-import my.app.services.PortfolioServiceImpl;
+import my.app.domains.user.User;
+import my.app.services.portfolio.PortfolioService;
+import my.app.services.portfolio.PortfolioServiceImpl;
 
 @Entity
 public class PortfolioDailyInformation {

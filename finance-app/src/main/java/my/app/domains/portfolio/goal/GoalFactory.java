@@ -7,9 +7,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import my.app.domains.User;
 import my.app.domains.portfolio.goal.Goal.Type;
-import my.app.services.StockService;
+import my.app.domains.user.User;
+import my.app.services.stock.StockService;
 
 @Component
 public class GoalFactory {

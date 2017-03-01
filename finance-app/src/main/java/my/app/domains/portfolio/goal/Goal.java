@@ -13,7 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
-import my.app.domains.User;
+import my.app.domains.user.User;
 import my.app.risk.RiskValues;
 
 @Entity

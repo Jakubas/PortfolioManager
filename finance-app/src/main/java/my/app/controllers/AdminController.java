@@ -5,13 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import my.app.services.PortfolioDailyInformationService;
-import my.app.services.StockDailyInformationService;
-import my.app.services.StockMetricsService;
-import my.app.services.StockService;
-import my.app.services.UserService;
 import my.app.services.corporateactions.DividendService;
 import my.app.services.corporateactions.StockSplitService;
+import my.app.services.portfolio.PortfolioDailyInformationService;
+import my.app.services.stock.StockDailyInformationService;
+import my.app.services.stock.StockMetricsService;
+import my.app.services.stock.StockService;
+import my.app.services.user.UserService;
 import my.app.updatedatabase.UpdateCorporateActions;
 import my.app.updatedatabase.UpdatePortfolioDailyInformation;
 import my.app.updatedatabase.UpdateStockInformation;

@@ -8,13 +8,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import my.app.domains.Stock;
-import my.app.domains.StockDailyInformation;
 import my.app.domains.corporateactions.Dividend;
 import my.app.domains.corporateactions.StockSplit;
+import my.app.domains.stock.Stock;
+import my.app.domains.stock.StockDailyInformation;
 import my.app.parsing.HistoricalDataParser;
-import my.app.services.StockDailyInformationService;
-import my.app.services.StockService;
+import my.app.services.stock.StockDailyInformationService;
+import my.app.services.stock.StockService;
 
 
 public class UpdateStockInformation {

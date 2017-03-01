@@ -8,9 +8,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import my.app.domains.Stock;
 import my.app.domains.corporateactions.Dividend;
 import my.app.domains.corporateactions.StockSplit;
+import my.app.domains.stock.Stock;
 
 public class CorporateActionParser {
 

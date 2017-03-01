@@ -9,12 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import my.app.domains.User;
 import my.app.domains.portfolio.PortfolioDailyInformation;
-import my.app.services.PortfolioService;
-import my.app.services.StockInPortfolioService;
-import my.app.services.StockService;
-import my.app.services.UserService;
+import my.app.domains.user.User;
+import my.app.services.portfolio.PortfolioService;
+import my.app.services.portfolio.StockInPortfolioService;
+import my.app.services.stock.StockService;
+import my.app.services.user.UserService;
 
 //Portfolio metrics
 @Controller

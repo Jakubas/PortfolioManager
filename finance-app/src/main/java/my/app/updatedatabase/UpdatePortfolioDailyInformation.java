@@ -5,13 +5,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-import my.app.domains.User;
 import my.app.domains.portfolio.PortfolioDailyInformation;
 import my.app.domains.portfolio.StockInPortfolio;
-import my.app.services.PortfolioDailyInformationService;
-import my.app.services.PortfolioService;
-import my.app.services.PortfolioServiceImpl;
-import my.app.services.UserService;
+import my.app.domains.user.User;
+import my.app.services.portfolio.PortfolioDailyInformationService;
+import my.app.services.portfolio.PortfolioService;
+import my.app.services.portfolio.PortfolioServiceImpl;
+import my.app.services.user.UserService;
 
 public class UpdatePortfolioDailyInformation {
 	

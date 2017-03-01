@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import my.app.domains.Stock;
-import my.app.services.StockService;
+import my.app.domains.stock.Stock;
+import my.app.services.stock.StockService;
 
 @Controller
 public class StockController {

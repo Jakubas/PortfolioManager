@@ -2,11 +2,11 @@ package my.app.updatedatabase;
 
 import java.util.List;
 
-import my.app.domains.Stock;
-import my.app.domains.StockMetrics;
+import my.app.domains.stock.Stock;
+import my.app.domains.stock.StockMetrics;
 import my.app.risk.Risk;
-import my.app.services.StockMetricsService;
-import my.app.services.StockService;
+import my.app.services.stock.StockMetricsService;
+import my.app.services.stock.StockService;
 import my.app.stockcalculations.StockDataCalculations;
 
 public class UpdateStockMetrics {

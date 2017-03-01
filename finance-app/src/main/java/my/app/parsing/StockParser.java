@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-import my.app.domains.Stock;
+import my.app.domains.stock.Stock;
 
 public class StockParser {
 	
