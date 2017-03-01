@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -166,4 +167,58 @@ public class StockMetrics {
 	public void setOneYearROIEst(Double oneYearROIEst) {
 		this.oneYearROIEst = oneYearROIEst;
 	}
+	
+	public void setValuesFrom(StockMetrics metrics) {
+		this.threeMonthAnnualisedReturn = metrics.getThreeMonthAnnualisedReturn();
+		this.oneYearAnnualisedReturn = metrics.getOneYearAnnualisedReturn();
+		this.threeYearAnnualisedReturn = metrics.getThreeYearAnnualisedReturn();
+		this.fiveYearAnnualisedReturn = metrics.getFiveYearAnnualisedReturn();
+		this.tenYearAnnualisedReturn = metrics.getTenYearAnnualisedReturn();
+		this.threeMonthVariance = metrics.getThreeMonthVariance();
+		this.oneYearVariance = metrics.getOneYearVariance();
+		this.threeYearVariance = metrics.getThreeYearVariance();
+		this.fiveYearVariance = metrics.getFiveYearVariance();
+		this.tenYearVariance = metrics.getTenYearVariance();
+		this.oneYearROIEst = metrics.getOneYearROIEst();
+		this.oneYearTargetPriceEst = metrics.getOneYearTargetPriceEst();
+	}
+	
+	public boolean isEqual(Double a, Double b) {
+		if (a == null) {
+			return b == null;
+		} else {
+			return a.equals(b);
+		}
+	}
+	
+	@Override
+    public boolean equals(Object obj) {
+       if (!(obj instanceof StockMetrics))
+            return false;
+        if (obj == this)
+            return true;
+
+        StockMetrics metrics = (StockMetrics) obj;
+        if (isEqual(oneYearAnnualisedReturn, metrics.getOneYearAnnualisedReturn()) &&
+    		isEqual(tenYearAnnualisedReturn, metrics.getTenYearAnnualisedReturn()) &&
+    		isEqual(oneYearVariance, metrics.getOneYearVariance()) &&
+    		isEqual(tenYearVariance, metrics.getTenYearVariance()) &&
+    		isEqual(oneYearTargetPriceEst, metrics.getOneYearTargetPriceEst())
+        	) {
+        	return true;
+        } else {
+        	return false;
+        }
+    }
+    
+	@Override
+	public int hashCode() {
+    	HashCodeBuilder builder = new HashCodeBuilder();
+    	builder.append(oneYearAnnualisedReturn);
+    	builder.append(tenYearAnnualisedReturn);
+    	builder.append(oneYearVariance);
+    	builder.append(tenYearVariance);
+    	builder.append(oneYearTargetPriceEst);
+    	return builder.toHashCode();   
+    }
 }
