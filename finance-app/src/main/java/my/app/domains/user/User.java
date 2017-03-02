@@ -138,6 +138,14 @@ public class User {
 		this.cashAmount = cashAmount;
 	}
 	
+	public void plusCash(double cashAmount) {
+		this.cashAmount += cashAmount;
+	}
+	
+	public void minusCash(double cashAmount) {
+		this.cashAmount -= cashAmount;
+	}
+	
 	public List<Goal> getGoals() {
 		return goals;
 	}
