@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import my.app.domains.portfolio.goal.Goal;
 import my.app.domains.portfolio.goal.Goal.Type;
@@ -68,7 +69,7 @@ public class GoalController {
 	}
 
 	@RequestMapping(value = "portfolio/goals", method = RequestMethod.POST) 
-	public String addGoal(Model model, Principal principal,
+	public String addGoal(RedirectAttributes ra, Principal principal,
 			@RequestParam(value="goalTemplate") String goalTemplate,
 			@RequestParam(value="percentage", required=false) Double percentage,
 			@RequestParam(value="sector1", required=false) String sector1,
@@ -81,26 +82,14 @@ public class GoalController {
 		
 		String username = principal.getName();
 		User user = userService.getUserByUsername(username);
-		System.out.println("-----------------------------");
-		System.out.println(user.getUsername());
-		System.out.println(goalTemplate);
-		System.out.println(percentage);
-		System.out.println(sector1);
-		System.out.println(sector2);
-		System.out.println(monthlyDepositAmount);
-		System.out.println(amount);
-		System.out.println(length);
-		System.out.println(risk);
-		System.out.println(monthsOrYears);
-		System.out.println("-----------------------------");
 		Goal goal;
 		try {
 			goal = goalFactory.getGoal(user, goalTemplate, percentage, sector1, sector2, monthlyDepositAmount, amount, length, risk, monthsOrYears);
 		} catch (Exception e) {
-			model.addAttribute("error", true);
-			return "portfolio/goals";
+			ra.addFlashAttribute("error", true);
+			return "redirect:/portfolio/goals";
 		}
 		goalService.saveGoal(goal);
-		return "redirect:portfolio/goals";
+		return "redirect:/portfolio/goals";
 	}
 }
