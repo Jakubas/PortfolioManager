@@ -28,15 +28,48 @@ public class GoalFactory {
 		if(!areSectorsValid(sector1, sector2)) {
 			throw new Exception(sector1 + " or " + sector2 + " is not a sector");
 		}
-        Type type = getType(goalTemplate);
+        
+		Type type = getType(goalTemplate);
 	    String goalStr = generateGoalText(goalTemplate, type, percentage, sector1, sector2, 
 			   monthlyDepositAmount, amount, length, risk, monthsOrYears);
-	   
 	    Goal goal = new Goal(user, type, goalStr);
 	    setGoalTargets(goal, percentage, sector1, sector2, 
 			   monthlyDepositAmount, amount, length, risk, monthsOrYears);
+		
+	    if (type == Type.SECTOR && !overThreshold(user.getGoals(), percentage)) {
+			throw new Exception("This goal would push the total portfolio percentage over 100%");
+		}
+	    if (!isAvailable(user.getGoals(), type, sector1)) {
+			throw new Exception("A sector goal already exists for this industry");
+		}
         return goal;
    }
+
+	//checking goals for conflicts such as I want 70% of my stock in X and 45% of my stock in Y 
+	//would conflict because it is over 100%
+	private boolean overThreshold(List<Goal> goals, Double percentage) {
+		double totalPercentage = percentage;
+		for (Goal goal : goals) {
+			if (goal.getType().equals(Type.SECTOR)) {
+				totalPercentage += goal.getPercentage();
+			}
+		}
+		return totalPercentage <= 100;
+	}
+	
+	private boolean isAvailable(List<Goal> goals, Type type, String sector1) {
+		if (!type.equals(Type.SECTOR)) {
+			return true;
+		}
+		for (Goal goal : goals) {
+			if (goal.getType().equals(type)) {
+				if (goal.getSector1().equals(sector1)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
 	//checks if the sectors provided as arguments are in the list of valid sectors
 	private boolean areSectorsValid(String sector1, String sector2) {

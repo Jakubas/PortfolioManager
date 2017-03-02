@@ -110,6 +110,7 @@
 	</nav>
 
     <div class="container">
+        <p th:if="${error}" class="error">error</p>
         <h3>
             Portfolio Balancing Goals
         </h3>
@@ -157,7 +158,6 @@
         <h3>
             Add Goal
         </h3>
-        <p th:if="${error}" class="error">error</p>
         <form action="/portfolio/goals" method="post">
             <div class="form-group">
                 <label>Type of Goal:</label>
