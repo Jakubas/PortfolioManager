@@ -105,7 +105,6 @@ public class StockInPortfolio {
 		Double annualisedReturn;
 		if (sellDate == null) {
 			annualisedReturn = StockDataCalculations.calculateAnnualisedReturn(stock, buyDate, LocalDate.now(), buyPrice, sellPrice);
-			System.out.println(annualisedReturn);
 		} else {
 			annualisedReturn = StockDataCalculations.calculateAnnualisedReturn(stock, buyDate, sellDate, buyPrice, sellPrice);
 		}
@@ -204,6 +203,11 @@ public class StockInPortfolio {
 	}
 	
 	public void setAmount(int amount) {
+		int prevAmount = this.amount;
+		int amountChanged = amount - prevAmount;
+		double cash = amountChanged * buyPrice;
+		//we update the user's cash amount to reflect the new amount;
+		user.minusCash(cash);
 		this.amount = amount;
 	}
 	

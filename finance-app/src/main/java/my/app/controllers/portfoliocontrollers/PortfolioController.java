@@ -147,6 +147,8 @@ public class PortfolioController {
 			return "redirect:/portfolio/{stockInPortfolioId}";
 		}
 		stockInPortfolioService.updateStockInPortfolio(sip);
+		//updates the user's cash
+		userService.updateUser(sip.getUser());
 		return "redirect:/portfolio";
 	}
 	
