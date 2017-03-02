@@ -245,8 +245,6 @@ public class User {
 	public double annualisedPortfolioPerformance() {
 		PortfolioService portfolioService = new PortfolioServiceImpl();
 		double annualisedPerformance = portfolioService.getAnnualisedReturn(getActivePortfolio());
-		System.out.println(annualisedPerformance);
-		System.out.println("here");
 		return annualisedPerformance;
 	}
 	

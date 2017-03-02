@@ -1,6 +1,8 @@
 package my.app.controllers.portfoliocontrollers;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -13,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import my.app.domains.portfolio.goal.Goal;
 import my.app.domains.portfolio.goal.Goal.Type;
-import my.app.domains.user.User;
 import my.app.domains.portfolio.goal.GoalFactory;
 import my.app.domains.portfolio.goal.GoalTemplates;
+import my.app.domains.user.User;
 import my.app.risk.RiskValues;
 import my.app.services.portfolio.GoalService;
 import my.app.services.stock.StockService;
@@ -43,11 +45,16 @@ public class GoalController {
 		String username = principal.getName();
 		User user = userService.getUserByUsername(username);
 		List<Goal> goals = user.getGoals();
+		List<Goal> otherGoals = new ArrayList<Goal>(goals);
+		Collections.copy(otherGoals, goals);
+		List<Goal> balanceGoals = filterBy(goals, Type.SECTOR);
+		otherGoals.removeAll(balanceGoals);
 		List<String> goalTemplates = GoalTemplates.GOAL_TEMPLATES;
 		Map<String, Type> goalToTypeMapping = GoalTemplates.GOAL_TO_TYPE_MAPPING;
 		List<String> sectors = stockService.getSectors();
 		List<String> risks = RiskValues.RISKS;
-		model.addAttribute("goals", goals);
+		model.addAttribute("balanceGoals", balanceGoals);
+		model.addAttribute("otherGoals", otherGoals);
 		model.addAttribute("goalTemplates", goalTemplates);
 		model.addAttribute("typeMap", goalToTypeMapping);
 		model.addAttribute("sectors", sectors);
@@ -55,6 +62,11 @@ public class GoalController {
 		return "portfolio/goals";
 	}
 	 
+	private List<Goal> filterBy(List<Goal> goals, Type type) {
+		goals.removeIf(o -> !o.getType().equals(type));
+		return goals;
+	}
+
 	@RequestMapping(value = "portfolio/goals", method = RequestMethod.POST) 
 	public String addGoal(Model model, Principal principal,
 			@RequestParam(value="goalTemplate") String goalTemplate,
