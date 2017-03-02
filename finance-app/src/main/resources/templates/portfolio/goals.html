@@ -115,7 +115,14 @@
             Portfolio Balancing Goals
         </h3>
         <div class="container" th:each="goal : ${balanceGoals}" >
-            <h4 th:text ="${goal.goalStr}" />
+            <h4>
+				<span th:text ="${goal.goalStr}" />
+				<form class="form-noborder" th:action="@{/portfolio/goals/{id}/(id=${goal.id})}"
+				method="post" style="padding-top:0px; padding-bottom:0px; display:inline;">
+					<input type="hidden" name="_method" value="delete" />
+					<button type="submit" class="btn btn-link glyphicon glyphicon-remove" />
+				</form>
+			</h4>
             <div class="progress" th:if="${goal.getProgress()[0]}">
               <div class="progress-bar" role="progressbar" th:aria-valuenow="${goal.getProgress()[2]}"
               aria-valuemin="0" aria-valuemax="100" th:style="'width:' + ${goal.getProgress()[2]} +'%'">
@@ -127,7 +134,6 @@
 					<span th:text="${tip}" />
 					<br />
 				</div>
-
             </p>
         </div>
     </div>
@@ -149,7 +155,6 @@
 					<span th:text="${tip}" />
 					<br />
 				</div>
-
 			</p>
 		</div>
 	</div>

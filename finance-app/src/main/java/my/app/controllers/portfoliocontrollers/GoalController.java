@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -90,6 +91,13 @@ public class GoalController {
 			return "redirect:/portfolio/goals";
 		}
 		goalService.saveGoal(goal);
+		return "redirect:/portfolio/goals";
+	}
+
+	@RequestMapping(value = "portfolio/goals/{goalId}", method = RequestMethod.DELETE) 
+	public String deleteGoal(@PathVariable("goalId") int id) { 
+		Goal goal = goalService.getGoalById(id);
+		goalService.deleteGoal(goal);
 		return "redirect:/portfolio/goals";
 	}
 }
