@@ -60,9 +60,6 @@ public class User {
 	private LocalDate dob;
 	
 	@NumberFormat(style = Style.NUMBER, pattern = "#,##0.00")
-	private Double cashAmount;
-	
-	@NumberFormat(style = Style.NUMBER, pattern = "#,##0.00")
 	private BigDecimal cash;
 	
 	@OneToMany(mappedBy = "user")
@@ -193,17 +190,14 @@ public class User {
 				value += stockInPortfolio.getValue();
 			}
 		}
-		value = (cashAmount != null) ? value + cashAmount : value;
+		value += this.getCash();
 		return value;
 	}
 	
 	//the value of all investments in a given sector from a user's portfolio
 	public double sectorValue(String sector) {
-		if (sector == "Cash") {
-			if (cashAmount == null) {
-				return 0;
-			} 
-			return cashAmount;
+		if (sector.equals("Cash")) {
+			return this.getCash();
 		}
 		double value = 0;
 		for (StockInPortfolio stockInPortfolio : getActivePortfolio()) {
