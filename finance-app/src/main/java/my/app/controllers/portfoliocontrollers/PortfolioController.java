@@ -129,7 +129,7 @@ public class PortfolioController {
 			}
 			if (sellDate == null) {
 				sip.setSellDate(null);
-			} else if (sip.getSellDate() != null && sip.getBuyDate().equals(buyDate)) {
+			} else if (sip.getSellDate() != null && sip.getSellDate().equals(sellDate)) {
 				if (sellPrice != null && sip.getSellPrice() != null && 
 				    Math.abs(sellPrice - sip.getSellPrice()) >= 0.01) {
 					sip.setSellPrice(sellPrice);
