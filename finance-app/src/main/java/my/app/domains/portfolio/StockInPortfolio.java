@@ -76,6 +76,7 @@ public class StockInPortfolio {
 		this.buyDate = buyDate;
 		this.buyPrice = StockDataCalculations.findStockPriceOnDate(stock, buyDate);
 		calculateMetrics();
+		user.minusCash(buyPrice * amount);
 	}
 
 	public StockInPortfolio(Stock stock, User user, int amount, LocalDate buyDate, LocalDate sellDate) {
@@ -87,6 +88,7 @@ public class StockInPortfolio {
 		this.sellDate = sellDate;
 		this.sellPrice = StockDataCalculations.findStockPriceOnDate(stock, sellDate);
 		calculateMetrics();
+		user.minusCash(buyPrice * amount);
 	}
 	
 	public void calculateMetrics() {
@@ -132,7 +134,7 @@ public class StockInPortfolio {
 			throw new DateTimeException("Date is too early");
 		}
 		this.buyDate = buyDate;
-		this.buyPrice = buyPrice;
+		this.setBuyPrice(buyPrice);
 		calculateMetrics();
 	}
 
@@ -152,7 +154,7 @@ public class StockInPortfolio {
 				throw new DateTimeException("Date is too early");
 			}
 			this.sellDate = sellDate;
-			this.sellPrice = sellPrice;
+			this.setSellPrice(sellPrice);
 			calculateMetrics();
 		} else {
 			this.sellDate = null;

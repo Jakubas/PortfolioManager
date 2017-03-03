@@ -82,6 +82,7 @@ public class PortfolioController {
 		}
 		StockInPortfolio sip = new StockInPortfolio(stock, user, amount, buyDate);
 		stockInPortfolioService.saveStockInPortfolio(sip);
+		userService.updateUser(sip.getUser());
 		return "redirect:/stocks";
 	}
 	
