@@ -72,7 +72,7 @@
 				<br />
 				<span th:text="${user.dob} ? ${{user.dob}} : 'N/A'" />
 				<br />
-				<span th:text="${user.cashAmount} ? '$' + ${user.cashAmount} : '0'" />
+				<span th:text="${user.cashAmount} ? '$' + ${{user.cashAmount}} : '0'" />
 				<br />
 			</div>
 		</div>

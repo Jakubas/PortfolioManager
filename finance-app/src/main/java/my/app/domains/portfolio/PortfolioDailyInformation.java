@@ -46,7 +46,7 @@ public class PortfolioDailyInformation {
 	public void update(int day) {
 		this.day = day;
 		if (date.equals(LocalDate.now())) {
-			cashAmount = user.getCashAmount();
+			cashAmount = user.getCash();
 		}
 		PortfolioService portfolioService = new PortfolioServiceImpl();
 		value = portfolioService.getValueOnDate(user.getPortfolio(), date) + cashAmount;

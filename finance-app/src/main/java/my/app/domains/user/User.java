@@ -1,5 +1,7 @@
 package my.app.domains.user;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDate;
@@ -59,6 +61,9 @@ public class User {
 	
 	@NumberFormat(style = Style.NUMBER, pattern = "#,##0.00")
 	private Double cashAmount;
+	
+	@NumberFormat(style = Style.NUMBER, pattern = "#,##0.00")
+	private BigDecimal cash;
 	
 	@OneToMany(mappedBy = "user")
 	private List<Goal> goals;
@@ -125,25 +130,29 @@ public class User {
 	public void setDob(LocalDate dob2) {
 		this.dob = dob2;
 	}
-
+	
 	public double getCashAmount() {
-		if (cashAmount != null) {
-			return cashAmount;
+		return getCash();
+	}
+	
+	public double getCash() {
+		if (cash != null) {
+			return cash.doubleValue();
 		} else {
 			return 0.0;
 		}
 	}
 
-	public void setCashAmount(Double cashAmount) {
-		this.cashAmount = cashAmount;
+	public void setCash(Double cash) {
+		this.cash = BigDecimal.valueOf(cash).setScale(2, RoundingMode.HALF_EVEN);
 	}
 	
-	public void plusCash(double cashAmount) {
-		this.cashAmount += cashAmount;
+	public void plusCash(double cash) {
+		this.cash = this.cash.add(BigDecimal.valueOf(cash));
 	}
 	
-	public void minusCash(double cashAmount) {
-		this.cashAmount -= cashAmount;
+	public void minusCash(double cash) {
+		this.cash = this.cash.subtract(BigDecimal.valueOf(cash));
 	}
 	
 	public List<Goal> getGoals() {

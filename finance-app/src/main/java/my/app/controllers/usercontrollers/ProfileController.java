@@ -57,7 +57,7 @@ public class ProfileController {
 			user.setDob(dob);
 		}
 		if (cashAmount != null) {
-			user.setCashAmount(cashAmount);
+			user.setCash(cashAmount);
 		}
 		userService.updateUser(user);
 		return "redirect:/profile";
