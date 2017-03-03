@@ -164,6 +164,15 @@ public class StockInPortfolio {
 	}
 
 	public void setBuyPrice(Double buyPrice) {
+		double prevPrice;
+		if (this.buyPrice == null) {
+			prevPrice = 0;
+		} else {
+			prevPrice = this.buyPrice;
+		}
+		double priceChange = buyPrice - prevPrice;
+		double cash = priceChange * amount;
+		user.minusCash(cash);
 		this.buyPrice = buyPrice;
 		calculateMetrics();
 	}
@@ -173,6 +182,15 @@ public class StockInPortfolio {
 	}
 
 	public void setSellPrice(Double sellPrice) {
+		double prevPrice;
+		if (this.sellPrice == null) {
+			prevPrice = 0;
+		} else {
+			prevPrice = this.sellPrice;
+		}
+		double priceChange = sellPrice - prevPrice;
+		double cash = priceChange * amount;
+		user.plusCash(cash);
 		this.sellPrice = sellPrice;
 		calculateMetrics();
 	}
@@ -204,9 +222,9 @@ public class StockInPortfolio {
 	
 	public void setAmount(int amount) {
 		int prevAmount = this.amount;
-		int amountChanged = amount - prevAmount;
-		double cash = amountChanged * buyPrice;
-		//we update the user's cash amount to reflect the new amount;
+		double amountChange = amount - prevAmount;
+		double cash = amountChange * buyPrice;
+		//we update the user's cash to reflect the new amount;
 		user.minusCash(cash);
 		this.amount = amount;
 	}
