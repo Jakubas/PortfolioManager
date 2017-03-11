@@ -13,21 +13,22 @@ import my.app.domains.user.User;
 public class GoalCalculations {
 	
 	
-	public static List<String> getBalancingTips(User user) {
+	public static List<String> getBalancingTips(User user, List<String> sectors) {
 		List<String> balancingTips = new ArrayList<String>();
 		double totalCashNeeded = getCashNeededForBalancing(user);
 		double cash = user.getCash();
 		double cashNeeded = totalCashNeeded - cash;
-		List<Stock> stockToSell = stockToSell(user, cashNeeded);
+		List<Stock> stockToSell = stockToSell(user, cashNeeded, sectors);
 		
 		//You need $x to rebalance your portfolio.
-		balancingTips.add("You need $" + totalCashNeeded + " to rebalance your portfolio.");
+		balancingTips.add("You need $" + String.format("%.2f", totalCashNeeded) + " to rebalance your portfolio.");
 		//You have $x in cash, you need $y more.
-		balancingTips.add("You have $" + cash + " in cash, you need $" + cashNeeded + " more.");
+		balancingTips.add("You have $" + String.format("%.2f", cash) + " in cash, you need $" + String.format("%.2f", cashNeeded) + " more.");
 		//I suggest you sell: 
 		String stockToSellString = "";
+		System.out.println(stockToSell.size());
 		for (Stock stock : stockToSell) {
-			stockToSellString += "<br /> - " + stock.getTicker();
+			stockToSellString += "<br /> - " + stock.getTicker() + " (" + stock.getName() + ")";
 		}
 		balancingTips.add("Based on poor performance, I suggest you sell: " + stockToSellString);
 		// - list of stocks you suggest to sell
@@ -59,14 +60,9 @@ public class GoalCalculations {
 		return sectors;
 	}
 	
-	public static List<String> getSectorsNotBeingBalanced(User user) {
-		List<Goal> goals = user.getGoals();
-		List<String> sectors = new ArrayList<String>();
-		for(Goal goal : goals) {
-			if (!goal.getType().equals(Type.SECTOR)) {
-				sectors.add(goal.getSector1());
-			}
-		}
+	public static List<String> getSectorsNotBeingBalanced(User user, List<String> sectors) {
+		List<String> balancingSectors = getSectorsBeingBalanced(user);
+		sectors.removeAll(balancingSectors);
 		return sectors;
 	}
 	
@@ -78,28 +74,29 @@ public class GoalCalculations {
 		return weight;
 	}
 	
-	public static double targetPercentage(User user) {
-		List<String> activeSectors = getSectorsBeingBalanced(user);
-		List<String> inactiveSectors = getSectorsNotBeingBalanced(user);
-		//(100 -  total weight of active goal sectors) / number of inactive sectors
-		return (100 - calculateSectorsWeight(user, activeSectors)) / inactiveSectors.size();
-	}
+//	public static double targetPercentage(User user) {
+//		List<String> activeSectors = getSectorsBeingBalanced(user);
+//		List<String> inactiveSectors = getSectorsNotBeingBalanced(user);
+//		//(100 -  total weight of active goal sectors) / number of inactive sectors
+//		return (100 - calculateSectorsWeight(user, activeSectors)) / inactiveSectors.size();
+//	}
+//	
+//	public static List<String> sectorsToSellFor(User user) {
+//		List<String> inactiveSectors = getSectorsNotBeingBalanced(user);
+//		double inactiveTargetPercentage = targetPercentage(user);
+//		List<String> sectorsToSell = new ArrayList<String>();
+//		for (String sector : inactiveSectors) {
+//			double sectorWeight = user.calculateSectorWeight(sector);
+//			if (sectorWeight > inactiveTargetPercentage) {
+//				sectorsToSell.add(sector);
+//			}
+//		}
+//		return sectorsToSell;
+//	}
 	
-	public static List<String> sectorsToSellFor(User user) {
-		List<String> inactiveSectors = getSectorsNotBeingBalanced(user);
-		double inactiveTargetPercentage = targetPercentage(user);
-		List<String> sectorsToSell = new ArrayList<String>();
-		for (String sector : inactiveSectors) {
-			double sectorWeight = user.calculateSectorWeight(sector);
-			if (sectorWeight > inactiveTargetPercentage) {
-				sectorsToSell.add(sector);
-			}
-		}
-		return sectorsToSell;
-	}
-	
-	public static List<Stock> stockToSell(User user, double cashNeeded) {
-		List<String> sectorsToSell = getSectorsNotBeingBalanced(user);
+	public static List<Stock> stockToSell(User user, double cashNeeded, List<String> sectors) {
+		List<String> sectorsToSell = getSectorsNotBeingBalanced(user, sectors);
+		System.out.println(sectorsToSell.size());
 		List<Stock> stockToSell = new ArrayList<Stock>();
 		List<StockInPortfolio> portfolio = user.getActivePortfolio();
 		portfolio.removeIf(o -> !sectorsToSell.contains(o.getStock().getSector()));
@@ -108,7 +105,9 @@ public class GoalCalculations {
 			if (cashNeeded <= 0) {
 				break;
 			} 
-			stockToSell.add(holding.getStock());
+			if (!stockToSell.contains(holding.getStock())) {
+				stockToSell.add(holding.getStock());
+			}
 			cashNeeded -= holding.getValue();
 		}
 		return stockToSell;
