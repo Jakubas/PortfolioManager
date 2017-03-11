@@ -13,8 +13,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import my.app.domains.portfolio.StockInPortfolio;
+import my.app.domains.stock.Stock;
 import my.app.domains.user.User;
 import my.app.risk.RiskValues;
+import my.app.services.portfolio.PortfolioService;
+import my.app.services.portfolio.PortfolioServiceImpl;
 
 @Entity
 public class Goal {
@@ -336,6 +340,10 @@ public class Goal {
 			diff = Math.abs(percentage - currentPercentage);
 			diffValue = String.format("%.2f", (diff/100) * user.portfolioValue());
 //			percentageDiff = String.format("%.2f", (1.0 - (percentage/currentPercentage))*100);
+			PortfolioService portfolioService = new PortfolioServiceImpl();
+			List<StockInPortfolio> portfolio = user.getActivePortfolio();
+			portfolio.removeIf(o -> !o.getStock().getSector().equals(sector1));
+			Stock stock = portfolioService.getWorstPerformer(portfolio).getStock();
 			if (currentPercentage < percentage) {
 				tips.add("You need to increase your portfolio weight in " + sector1 + " by " + diff + "%");
 				
@@ -343,6 +351,7 @@ public class Goal {
 			} else {
 				tips.add("You need to decrease your portfolio weight in " + sector1 + " by " + diff + "%");
 				tips.add("This can be accomplished by selling $" + diffValue + " of your holdings in the " + sector1 + " sector");
+				tips.add("I suggest selling " + stock.getTicker() + " since it is your worst performing assest in this sector");
 			}
 			break;
 		}
