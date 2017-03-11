@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import my.app.domains.portfolio.StockInPortfolio;
+import my.app.domains.stock.Stock;
 
 public interface PortfolioService {
 	
@@ -17,5 +18,6 @@ public interface PortfolioService {
 	double getValue(List<StockInPortfolio> portfolio);
 	double getValueOnDate(List<StockInPortfolio> portfolio, LocalDate date);
 	LocalDate getEarliestDateIn(List<StockInPortfolio> portfolio);
+	StockInPortfolio getWorstPerformer(List<StockInPortfolio> portfolio);
 	
 }

@@ -9,6 +9,7 @@ import org.springframework.format.annotation.NumberFormat.Style;
 import org.springframework.stereotype.Service;
 
 import my.app.domains.portfolio.StockInPortfolio;
+import my.app.domains.stock.Stock;
 import my.app.formatter.PercentageFormat;
 import my.app.stockcalculations.StockDataCalculations;
 
@@ -149,5 +150,20 @@ public class PortfolioServiceImpl implements PortfolioService {
 			}
 		}
 		return earliestDate;
+	}
+
+	@Override
+	public StockInPortfolio getWorstPerformer(List<StockInPortfolio> portfolio) {
+		if (portfolio.isEmpty()) {
+			return null;
+		}
+		StockInPortfolio worstPerformingHolding = portfolio.get(0); 
+		for (StockInPortfolio holding : portfolio) {
+			System.out.println(holding.getStock().getSector() + ": " + holding.getStock().getName() + ":" + holding.getAnnualisedReturn());
+			if (holding.getAnnualisedReturn() < worstPerformingHolding.getAnnualisedReturn()) {
+				worstPerformingHolding = holding;
+			}
+		}
+		return worstPerformingHolding;
 	}
 }
