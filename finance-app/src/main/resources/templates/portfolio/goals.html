@@ -114,6 +114,10 @@
         <h3>
             Portfolio Balancing Goals
         </h3>
+		<div class="container" th:each="tip : ${balancingTips}">
+			<span th:utext="${tip}" />
+			<br />
+		</div>
         <div class="container" th:each="goal : ${balanceGoals}" >
             <h4>
 				<span th:text ="${goal.goalStr}" />

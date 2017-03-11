@@ -20,6 +20,7 @@ import my.app.domains.portfolio.goal.Goal.Type;
 import my.app.domains.portfolio.goal.GoalFactory;
 import my.app.domains.portfolio.goal.GoalTemplates;
 import my.app.domains.user.User;
+import my.app.goallogic.GoalCalculations;
 import my.app.risk.RiskValues;
 import my.app.services.portfolio.GoalService;
 import my.app.services.stock.StockService;
@@ -55,12 +56,14 @@ public class GoalController {
 		Map<String, Type> goalToTypeMapping = GoalTemplates.GOAL_TO_TYPE_MAPPING;
 		List<String> sectors = stockService.getSectors();
 		List<String> risks = RiskValues.RISKS;
+		
 		model.addAttribute("balanceGoals", balanceGoals);
 		model.addAttribute("otherGoals", otherGoals);
 		model.addAttribute("goalTemplates", goalTemplates);
 		model.addAttribute("typeMap", goalToTypeMapping);
 		model.addAttribute("sectors", sectors);
 		model.addAttribute("risks", risks);
+		model.addAttribute("balancingTips", GoalCalculations.getBalancingTips(user, sectors));
 		return "portfolio/goals";
 	}
 	 
