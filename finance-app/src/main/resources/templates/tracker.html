@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Investment App</title>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+</head>
+<body>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+		    <div class="navbar-header">
+		    	<a class="navbar-brand" href="#">Portfolio Manager</a>
+		    </div>
+            <div class="nav navbar-left">
+                <ul class="nav navbar-nav">
+	            <li><a href="/">Home</a></li>
+	            <li><a href="/stocks">Stocks</a></li>
+				<li><a href="/portfolio">Portfolio</a></li>
+				<li><a href="/portfolio/goals">Goals</a></li>
+				<li><a href="/portfolio/metrics">Metrics</a></li>
+                <li class="active"><a href="/tracker">Tracker</a></li>
+				<li sec:authorize="isAuthenticated()"><a href="/profile">Profile</a></li>
+				<li sec:authorize="isAnonymous()"><a href="/register">Register</a></li>
+            	<li sec:authorize="isAnonymous()"><a href="/login">Login</a></li>
+                </ul>
+            </div>
+            <div sec:authorize="isAuthenticated()" class="navbar-collapse navbar-right collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+                        <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                            <input hidden="true" type="submit" value="Sign Out"/>
+                        </form>
+                    </li>
+                    <li>
+                        <a>
+                            Welcome, <span sec:authentication="name"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+	  	</div>
+    </nav>
+    <div class="container">
+        <div class="stock" th:each="tracker : ${trackingList}">
+            <h3>
+                <a th:href="@{/stocks/{id}/(id=${tracker.stock.id})}" th:text="${stock.name}" />
+            </h3>
+            <h4>
+                <button th:id="stockTrigger + ${tracker.stock.id}" type="button" class="btn btn-link glyphicon glyphicon-plus-sign"
+                th:onclick="'javascript:showStockAmountField(\'' + ${tracker.stock.id} + '\');'" style="display:block" />
+                <form th:id="addStockForm + ${tracker.stock.id}" class="form-noborder" action="/portfolio" method="post" style="display:none">
+                    <input type="hidden" name="stockId" th:value="${tracker.stock.id}" />
+                    <div class="form-group">
+                        <label>Amount of stock</label>
+                        <input type="number" class="form-control" step="1" name="amount" required="true" />
+                    </div>
+                    <div class="form-group">
+                        <label>Date bought (optional field)</label>
+                        <input type="date" class="form-control" name="buyDate" />
+                    </div>
+                    <!--button type="submit" class="btn btn-link glyphicon glyphicon-plus-sign"></button-->
+                    <button type="submit" class="btn btn-primary" style="display:block;">Add to portfolio</button>
+
+                </form>
+                <span th:text="${tracker.stock.ticker}" />
+            </h4>
+            <h4 class="sector" th:text ="${tracker.stock.sector}" />
+            <div class ="row">
+                <div class ="col-sm-2">
+                    Price
+                </div>
+                <div class ="col-sm-2">
+                    <span th:text="${tracker.stock.lastTradePrice}" />
+                </div>
+                <div class ="col-sm-2">
+                    Market Cap
+                </div>
+                <div class ="marketcap col-sm-2">
+                    <span th:text="${tracker.stock.marketCap}" />
+                </div>
+            </div>
+            <div class ="row">
+                <div class ="col-sm-2">
+                    P/E Ratio
+                </div>
+                <div class ="col-sm-2">
+                    <span th:text="${tracker.stock.getPERatio()} ? ${tracker.stock.getPERatio()} : 'N/A'" />
+                </div>
+                <div class ="col-sm-2">
+                    10 Yr Annualised Return
+                </div>
+                <div class ="return col-sm-2">
+                    <span th:text="${tracker.stock.stockMetrics.tenYearAnnualisedReturn}" />
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
