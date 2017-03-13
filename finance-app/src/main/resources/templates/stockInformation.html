@@ -3,6 +3,35 @@
 <head>
 	<title>Investment App</title>
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		google.load('visualization', '1.0', {
+			'packages' : [ 'corechart' ]
+		});
+		google.setOnLoadCallback(drawPriceChart);
+
+		function drawPriceChart() {
+			var data = new google.visualization.DataTable();
+			data.addColumn('date', 'Date');
+			data.addColumn('number', 'Price');
+			var prices = [[${prices}]];
+			var dates  = [[${dates}]];
+			for (var i = 0; i < prices.length; i++) {
+				var price = prices[i];
+				var date = dates[i];
+				data.addRow([new Date(date), price]);
+			}
+			var options = {
+				title: 'Stock price over time',
+				width: 900,
+				height: 675
+			};
+			var chart = new google.visualization.LineChart(document.getElementById('price_chart_div'));
+			chart.draw(data, options);
+		}
+		/*]]>*/
+	</script>
 </head>
 <body>
 	<nav class="navbar navbar-default">
@@ -85,19 +114,7 @@
 	</div>
 
 	<div class="container">
-		<div class="row">
-			<div class="col-sm-1"> </div>
-			<div class="col-sm-10">
-			<h1>
-				GRAPH GRAPH GRAPH GRAPH GRAPH GRAPH
-				GRAPH GRAPH GRAPH GRAPH GRAPH GRAPH
-				GRAPH GRAPH GRAPH GRAPH GRAPH GRAPH
-				GRAPH GRAPH GRAPH GRAPH GRAPH GRAPH
-				GRAPH GRAPH GRAPH GRAPH GRAPH GRAPH
-				GRAPH GRAPH GRAPH GRAPH GRAPH GRAPH
-			</h1>
-			</div>
-		</div>
+		<div id="price_chart_div"></div>
 	</div>
 
 	<div class="container">
