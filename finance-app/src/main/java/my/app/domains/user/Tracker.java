@@ -28,7 +28,8 @@ public class Tracker {
 	private User user;
 	
 	public Tracker(Stock stock, User user) {
-		
+		this.stock = stock;
+		this.user = user;
 	}
 	
 	public Tracker() {}
