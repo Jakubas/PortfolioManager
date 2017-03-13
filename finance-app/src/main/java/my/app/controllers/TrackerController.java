@@ -1,6 +1,7 @@
 package my.app.controllers;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,6 +45,10 @@ public class TrackerController {
 		String username = principal.getName();
 		User user = userService.getUserByUsername(username);
 		Stock stock = stockService.getStockById(stockId);
+		List<Tracker> trackingList = user.getTrackingList();
+		if (trackingList.stream().anyMatch(o -> o.getStock().getId() == stock.getId())) {
+			return "redirect:/tracker";
+		}
 		Tracker tracker = new Tracker(stock, user);
 		trackerService.saveTracker(tracker);
 		return "redirect:/tracker";
