@@ -43,7 +43,7 @@
     <div class="container">
         <div class="stock" th:each="tracker : ${trackingList}">
             <h3>
-                <a th:href="@{/stocks/{id}/(id=${tracker.stock.id})}" th:text="${stock.name}" />
+                <a th:href="@{/stocks/{id}/(id=${tracker.stock.id})}" th:text="${tracker.stock.name}" />
             </h3>
             <h4>
                 <button th:id="stockTrigger + ${tracker.stock.id}" type="button" class="btn btn-link glyphicon glyphicon-plus-sign"
