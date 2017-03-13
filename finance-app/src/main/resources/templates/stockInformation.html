@@ -49,13 +49,14 @@
 					<span th:text="${stock.ticker}" />
 			 	</h3>
 				<h3>
-					802.56
+					<span th:text="'$' + ${stock.lastTradePrice}" />
 					<br />
-					<p style="font-size:14px">
-					20-12-2016
+					<!--<p style="font-size:14px">
+					<20-12-2016
 					<br />
 					1:56PM
 					</p>
+					-->
 				</h3>
 		 	</div>
 			<div class="col-sm-2">
@@ -67,25 +68,17 @@
 					1y variance
 					<br />
 					1y annualised ret
-					<br />
-					1y ROI est
-					<br />
-					1y target est
 				</p>
 			</div>
 			<div class="col-sm-2">
 				<p style="font-size:16px; margin-top:2em;">
-					000.00B
+					<span th:text="${stock.marketCap}" />
 					<br />
-					00.00
-					<br />
-					00.00%
-					<br />
-					<span th:text="${{stockMetrics.tenYearAnnualisedReturn}}" />
+					<span th:text="${stock.getPERatio()} ? ${stock.getPERatio()} : 'N/A'" />
 					<br />
 					00.00%
 					<br />
-					00.00
+					<span th:text="${stockMetrics.tenYearAnnualisedReturn} ? ${{stockMetrics.tenYearAnnualisedReturn}} : 'N/A'" />
 				</p>
 			</div>
 		</div>
@@ -144,15 +137,15 @@
 				10y annualised ret
 			</div>
 			<div class="col-sm-2">
-				<span th:text="${{stockMetrics.threeMonthAnnualisedReturn}}" />
+				<span th:text="${stockMetrics.threeMonthAnnualisedReturn} ? ${{stockMetrics.threeMonthAnnualisedReturn}} : 'N/A'" />
 				<br />
-				<span th:text="${{stockMetrics.oneYearAnnualisedReturn}}" />
+				<span th:text="${stockMetrics.oneYearAnnualisedReturn} ? ${{stockMetrics.oneYearAnnualisedReturn}} : 'N/A'" />
 				<br />
 				00.00%
 				<br />
-				<span th:text="${{stockMetrics.fiveYearAnnualisedReturn}}" />
+				<span th:text="${stockMetrics.fiveYearAnnualisedReturn} ? ${{stockMetrics.fiveYearAnnualisedReturn}} : 'N/A'" />
 				<br />
-				<span th:text="${{stockMetrics.tenYearAnnualisedReturn}}" />
+				<span th:text="${stockMetrics.tenYearAnnualisedReturn} ? ${{stockMetrics.tenYearAnnualisedReturn}} : 'N/A'" />
 			</div>
 		</div>
 	</div>
