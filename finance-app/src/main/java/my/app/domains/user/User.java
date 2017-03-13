@@ -65,12 +65,14 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private List<Goal> goals;
 	
-	
 	@OneToMany(mappedBy = "user")
 	private List<StockInPortfolio> portfolio;
 
 	@OneToMany(mappedBy = "user")
 	private List<PortfolioDailyInformation> pdis;
+	
+	@OneToMany(mappedBy = "user")
+	private List<Tracker> trackingList;
 	
 	public User() {
 		
@@ -261,5 +263,9 @@ public class User {
 	
 	public List<PortfolioDailyInformation> getPortfolioDailyInformations() {
 		return pdis;
+	}
+
+	public List<Tracker> getTrackingList() {
+		return trackingList;
 	}
 }
