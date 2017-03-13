@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +16,7 @@ import javax.validation.constraints.NotNull;
 
 import my.app.domains.portfolio.StockInPortfolio;
 import my.app.domains.stock.Stock;
+import my.app.domains.user.Tracker;
 import my.app.domains.user.User;
 import my.app.risk.RiskValues;
 import my.app.services.portfolio.PortfolioService;
@@ -341,21 +343,60 @@ public class Goal {
 			diffValue = String.format("%.2f", (diff/100) * user.portfolioValue());
 //			percentageDiff = String.format("%.2f", (1.0 - (percentage/currentPercentage))*100);
 			PortfolioService portfolioService = new PortfolioServiceImpl();
-			List<StockInPortfolio> portfolio = user.getActivePortfolio();
-			portfolio.removeIf(o -> !o.getStock().getSector().equals(sector1));
-			Stock stock = portfolioService.getWorstPerformer(portfolio).getStock();
 			if (currentPercentage < percentage) {
+				List<StockInPortfolio> portfolio = user.getActivePortfolio();
+				portfolio.removeIf(o -> !o.getStock().getSector().equals(sector1));
+				StockInPortfolio holding = portfolioService.getBestPerformer(portfolio);
 				tips.add("You need to increase your portfolio weight in " + sector1 + " by " + diff + "%");
-				
 				tips.add("This can be accomplished by buying $" + diffValue + " of holdings in the " + sector1 + " sector");
+				if (holding != null) {
+					tips.add("I suggest buying " + holding.getStock().getTicker() + " since it is your best performing assest in this sector");
+				}
+				String tickersStr = getTickersForSector(user, sector1);
+				if (tickersStr != null) {
+					if (tickersStr.contains(",")) {		
+						tips.add("You can also buy these tickers from your tracking list: " + tickersStr);
+					} else {
+						tips.add("You can also buy this ticker from your tracking list: " + tickersStr);
+					}
+				}
 			} else {
+				List<StockInPortfolio> portfolio = user.getActivePortfolio();
+				portfolio.removeIf(o -> !o.getStock().getSector().equals(sector1));
+				StockInPortfolio holding = portfolioService.getWorstPerformer(portfolio);
 				tips.add("You need to decrease your portfolio weight in " + sector1 + " by " + diff + "%");
 				tips.add("This can be accomplished by selling $" + diffValue + " of your holdings in the " + sector1 + " sector");
-				tips.add("I suggest selling " + stock.getTicker() + " since it is your worst performing assest in this sector");
+				if (holding != null) {
+					tips.add("I suggest selling " + holding.getStock().getTicker() + " since it is your worst performing assest in this sector");
+				}
 			}
 			break;
 		}
 		return tips;
+	}
+
+	private String getTickersForSector(User user, String sector1) {
+		List<Tracker> trackingList = user.getTrackingList();
+		List<Tracker> filteredTrackingList = new ArrayList<Tracker>();
+		for (Tracker tracker : trackingList) {
+			if (tracker.getStock().getSector().equals(sector1)) {
+				filteredTrackingList.add(tracker);
+			}
+		}
+		if (filteredTrackingList == null || filteredTrackingList.isEmpty()) {
+			return null;
+		}
+		String tickers = ""; 
+		for (int i = 0; i < filteredTrackingList.size(); i++) {
+			Tracker tracker = filteredTrackingList.get(i);
+			String ticker = tracker.getStock().getTicker();
+			if (i + 1 < filteredTrackingList.size()) {
+				tickers += ticker + ", ";
+			} else {
+				tickers += ticker;
+			}
+		}
+		return tickers;
 	}
 
 	//calculates the years required to reach the goal based on compounding monthly returns
