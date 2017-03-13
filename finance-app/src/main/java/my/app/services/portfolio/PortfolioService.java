@@ -19,5 +19,6 @@ public interface PortfolioService {
 	double getValueOnDate(List<StockInPortfolio> portfolio, LocalDate date);
 	LocalDate getEarliestDateIn(List<StockInPortfolio> portfolio);
 	StockInPortfolio getWorstPerformer(List<StockInPortfolio> portfolio);
+	StockInPortfolio getBestPerformer(List<StockInPortfolio> portfolio);
 	
 }
