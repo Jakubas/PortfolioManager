@@ -3,6 +3,18 @@
 <head>
 	<title>Investment App</title>
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script type="text/javascript" th:inline="javascript">
+        function showStockAmountField(stockId) {
+            var button = document.getElementById("stockTrigger" + stockId);
+            button.style.display = "none";
+            var form = document.getElementById("addStockForm" + stockId);
+            form.style.display = "block";
+            var form2 = document.getElementById("trackStockForm" + stockId);
+            form2.style.display = "block";
+            var form3 = document.getElementById("deleteForm" + stockId);
+            form3.style.display = "block";
+        }
+    </script>
 </head>
 <body>
 	<nav class="navbar navbar-default">
@@ -47,7 +59,7 @@
             </h3>
             <h4>
                 <button th:id="stockTrigger + ${tracker.stock.id}" type="button" class="btn btn-link glyphicon glyphicon-plus-sign"
-                th:onclick="'javascript:showStockAmountField(\'' + ${tracker.stock.id} + '\');'" style="display:block" />
+                th:onclick="'javascript:showStockAmountField(\'' + ${tracker.stock.id} + '\');'" />
                 <form th:id="addStockForm + ${tracker.stock.id}" class="form-noborder" action="/portfolio" method="post" style="display:none">
                     <input type="hidden" name="stockId" th:value="${tracker.stock.id}" />
                     <div class="form-group">
@@ -63,6 +75,11 @@
 
                 </form>
                 <span th:text="${tracker.stock.ticker}" />
+                <form th:id="deleteForm + ${tracker.stock.id}" class="form-noborder" action="/tracker" method="post">
+                    <input type="hidden" name="_method" value="delete" />
+                    <input type="hidden" name="id" th:value="${tracker.id}" />
+                    <button type="submit" class="btn btn-primary" style="padding-top:0px; padding-bottom:0px; display:inline;">Remove from tracker</button>
+                </form>
             </h4>
             <h4 class="sector" th:text ="${tracker.stock.sector}" />
             <div class ="row">

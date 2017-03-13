@@ -137,7 +137,7 @@
 			</h3>
 			<h4>
 				<button th:id="stockTrigger + ${stock.id}" type="button" class="btn btn-link glyphicon glyphicon-plus-sign"
-				th:onclick="'javascript:showStockAmountField(\'' + ${stock.id} + '\');'" style="display:block" />
+				th:onclick="'javascript:showStockAmountField(\'' + ${stock.id} + '\');'" style="padding-top:0px; padding-bottom:0px" />
 				<form th:id="trackStockForm + ${stock.id}" class="form-noborder" action="/tracker" method="post" style="display:none">
 					<input type="hidden" name="stockId" th:value="${stock.id}" />
 					<button type="submit" class="btn btn-primary" style="display:block;">Add to tracker</button>
