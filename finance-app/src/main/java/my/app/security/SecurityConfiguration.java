@@ -48,6 +48,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
         .antMatchers("/stocks/**").hasRole("USER")
         .antMatchers("/portfolio/**").hasRole("USER")
+        .antMatchers("/tracker/**").hasRole("USER")
         .antMatchers("/admin").hasRole("ADMIN")
         .antMatchers("/api/**").hasRole("ADMIN");
         
