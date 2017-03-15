@@ -45,22 +45,29 @@ public class StockMetrics {
 	private Double fiveYearVariance;
 	@PercentageFormat
 	private Double tenYearVariance;
-	@PercentageFormat
-	private Double oneYearTargetPriceEst;
-	@PercentageFormat
-	private Double oneYearROIEst;
+	//@PercentageFormat
+	//private Double oneYearTargetPriceEst;
+	//@PercentageFormat
+	//private Double oneYearROIEst;
 	
 	public StockMetrics() {
 		
 	}
 	
-	public StockMetrics(Stock stock, Double quarterlyAnnualisedReturn, Double oneYearAnnualisedReturn,
-			Double fiveYearAnnualisedReturn, Double tenYearAnnualisedReturn, Double tenYearVariance) {
+	public StockMetrics(Stock stock, Double threeMonthAnnualisedReturn, Double oneYearAnnualisedReturn, 
+			Double threeYearAnnualisedReturn, Double fiveYearAnnualisedReturn, Double tenYearAnnualisedReturn,
+			Double threeMonthVariance, Double oneYearVariance, Double threeYearVariance, 
+			Double fiveYearVariance, Double tenYearVariance) {
 		this.stock = stock;
-		this.threeMonthAnnualisedReturn = quarterlyAnnualisedReturn;
+		this.threeMonthAnnualisedReturn = threeMonthAnnualisedReturn;
 		this.oneYearAnnualisedReturn = oneYearAnnualisedReturn;
-		this.setFiveYearAnnualisedReturn(fiveYearAnnualisedReturn);
-		this.setTenYearAnnualisedReturn(tenYearAnnualisedReturn);
+		this.threeYearAnnualisedReturn = threeYearAnnualisedReturn;
+		this.fiveYearAnnualisedReturn = fiveYearAnnualisedReturn;
+		this.tenYearAnnualisedReturn = tenYearAnnualisedReturn;
+		this.threeMonthVariance = threeMonthVariance;
+		this.oneYearVariance = oneYearVariance;
+		this.threeYearVariance = threeYearVariance;
+		this.fiveYearVariance = fiveYearVariance;
 		this.tenYearVariance = tenYearVariance;
 	}
 	
@@ -152,21 +159,21 @@ public class StockMetrics {
 		this.tenYearVariance = tenYearVariance;
 	}
 
-	public Double getOneYearTargetPriceEst() {
-		return oneYearTargetPriceEst;
-	}
-
-	public void setOneYearTargetPriceEst(Double oneYearTargetPriceEst) {
-		this.oneYearTargetPriceEst = oneYearTargetPriceEst;
-	}
-
-	public Double getOneYearROIEst() {
-		return oneYearROIEst;
-	}
-
-	public void setOneYearROIEst(Double oneYearROIEst) {
-		this.oneYearROIEst = oneYearROIEst;
-	}
+//	public Double getOneYearTargetPriceEst() {
+//		return oneYearTargetPriceEst;
+//	}
+//
+//	public void setOneYearTargetPriceEst(Double oneYearTargetPriceEst) {
+//		this.oneYearTargetPriceEst = oneYearTargetPriceEst;
+//	}
+//
+//	public Double getOneYearROIEst() {
+//		return oneYearROIEst;
+//	}
+//
+//	public void setOneYearROIEst(Double oneYearROIEst) {
+//		this.oneYearROIEst = oneYearROIEst;
+//	}
 	
 	public void setValuesFrom(StockMetrics metrics) {
 		this.threeMonthAnnualisedReturn = metrics.getThreeMonthAnnualisedReturn();
@@ -179,8 +186,8 @@ public class StockMetrics {
 		this.threeYearVariance = metrics.getThreeYearVariance();
 		this.fiveYearVariance = metrics.getFiveYearVariance();
 		this.tenYearVariance = metrics.getTenYearVariance();
-		this.oneYearROIEst = metrics.getOneYearROIEst();
-		this.oneYearTargetPriceEst = metrics.getOneYearTargetPriceEst();
+//		this.oneYearROIEst = metrics.getOneYearROIEst();
+//		this.oneYearTargetPriceEst = metrics.getOneYearTargetPriceEst();
 	}
 	
 	public boolean isEqual(Double a, Double b) {
@@ -202,8 +209,8 @@ public class StockMetrics {
         if (isEqual(oneYearAnnualisedReturn, metrics.getOneYearAnnualisedReturn()) &&
     		isEqual(tenYearAnnualisedReturn, metrics.getTenYearAnnualisedReturn()) &&
     		isEqual(oneYearVariance, metrics.getOneYearVariance()) &&
-    		isEqual(tenYearVariance, metrics.getTenYearVariance()) &&
-    		isEqual(oneYearTargetPriceEst, metrics.getOneYearTargetPriceEst())
+    		isEqual(tenYearVariance, metrics.getTenYearVariance())
+//    		isEqual(oneYearTargetPriceEst, metrics.getOneYearTargetPriceEst())
         	) {
         	return true;
         } else {
@@ -218,7 +225,7 @@ public class StockMetrics {
     	builder.append(tenYearAnnualisedReturn);
     	builder.append(oneYearVariance);
     	builder.append(tenYearVariance);
-    	builder.append(oneYearTargetPriceEst);
+//    	builder.append(oneYearTargetPriceEst);
     	return builder.toHashCode();   
     }
 }
