@@ -118,18 +118,27 @@
 	</div>
 
 	<div class="container">
+		<div class="row" style="margin-bottom:0px">
+			<div class="col-sm-1"> </div>
+			<div class="col-sm-4">
+				Month over Month Variance
+			</div>
+			<div class="col-sm-4">
+				Annualised Return
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-sm-1"> </div>
 			<div class="col-sm-2">
-				3m variance
+				3m
 				<br />
-				1y variance
+				1y
 				<br />
-				3y variance
+				3y
 				<br />
-				5y variance
+				5y
 				<br />
-				10y variance
+				10y
 			</div>
 			<div class="col-sm-2">
 				<span th:text="${stockMetrics.threeMonthVariance} ? ${{stockMetrics.threeMonthVariance}} : 'N/A'" />
@@ -143,15 +152,15 @@
 				<span th:text="${stockMetrics.tenYearVariance} ? ${{stockMetrics.tenYearVariance}} : 'N/A'" />
 			</div>
 			<div class="col-sm-2">
-				3m annualised ret
+				3m
 				<br />
-				1y annualised ret
+				1y
 				<br />
-				3y annualised ret
+				3y
 				<br />
-				5y annualised ret
+				5y
 				<br />
-				10y annualised re
+				10y
 			</div>
 			<div class="col-sm-2">
 				<span th:text="${stockMetrics.threeMonthAnnualisedReturn} ? ${{stockMetrics.threeMonthAnnualisedReturn}} : 'N/A'" />
