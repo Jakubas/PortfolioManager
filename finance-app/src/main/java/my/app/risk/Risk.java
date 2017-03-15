@@ -65,9 +65,6 @@ public class Risk {
 			}
 			monthlyReturns[i] = monthlyReturn;
 		}
-		for (int i = 0; i < monthlyReturns.length; i++) {
-			System.out.println(i + ": "+ monthlyReturns[i]);
-		}
 		return calculateVariance(monthlyReturnsLength, monthlyReturns);
 	}
 	

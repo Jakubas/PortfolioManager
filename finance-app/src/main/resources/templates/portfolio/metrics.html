@@ -16,11 +16,11 @@
 			data.addColumn('string', 'Topping');
 			data.addColumn('number', 'Slices');
 			var sectors = [[${sectors}]];
-			var weights = [[${weights}]];
+			var sectorValues = [[${sectorValues}]];
 			for (var i = 0; i < sectors.length; i++) {
 				var sector = sectors[i];
-				var weight = weights[i];
-				data.addRow([sector, weight]);
+				var value = sectorValues[i];
+				data.addRow([sector, value]);
 			}
 			var options = {
 				'title' : 'Portfolio Weighting by Sector',

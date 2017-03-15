@@ -40,12 +40,12 @@ public class MetricsController {
 		String username = principal.getName();
 		User user = userService.getUserByUsername(username);
 		List<String> sectors = stockService.getSectors();
-		double[] weights =  new double[sectors.size()];
+		double[] sectorValues =  new double[sectors.size()];
 		for (int i = 0; i < sectors.size(); i++) {
-			weights[i] = user.calculateSectorWeight(sectors.get(i));
+			sectorValues[i] = user.sectorValue(sectors.get(i));
 		}
 		model.addAttribute("sectors", sectors);
-		model.addAttribute("weights", weights);
+		model.addAttribute("sectorValues", sectorValues);
 		model.addAttribute("dayValues", getDayValues(user));
 		model.addAttribute("dates", getDates(user));
 		return "portfolio/metrics";
