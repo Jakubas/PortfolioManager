@@ -3,6 +3,7 @@ package my.app.goallogic;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import my.app.domains.portfolio.StockInPortfolio;
 import my.app.domains.portfolio.goal.Goal;
@@ -34,9 +35,24 @@ public class GoalCalculations {
 		}
 		balancingTips.add("Based on your portfolio balance goals and past performance, I suggest you sell: " + toSell);
 		// - list of stocks you suggest to sell
+		if (GoalsBalancingWeight(user) == 100) {
+			List<String> sectorsToSell = getSectorsNotBeingBalanced(user, sectors);
+			String sectorsToSellStr = sectorsToSell.stream().collect(Collectors.joining("<br /> - ", "<br /> - " , ""));
+			balancingTips.add("You need to sell all your holdings in: " + sectorsToSellStr);
+		}
 		return balancingTips;
 	}
 	
+	private static double GoalsBalancingWeight(User user) {
+		List<Goal> goals = user.getGoals();
+		goals.removeIf(o -> !o.getType().equals(Type.SECTOR));
+		double weight = 0;
+		for (Goal goal : goals) {
+			weight += goal.getPercentage();
+		}
+		return weight;
+	}
+
 	public static double getCashNeededForBalancing(User user) {
 		List<Goal> goals = user.getGoals();
 		goals.removeIf(o -> !o.getType().equals(Type.SECTOR));
@@ -62,6 +78,12 @@ public class GoalCalculations {
 		return sectors;
 	}
 	
+	public static List<String> getSectorsNotBeingBalanced(User user, List<String> sectors) {
+		List<String> balancingSectors = getSectorsBeingBalanced(user);
+		sectors.removeAll(balancingSectors);
+		return sectors;
+	}
+	
 	//returns a list of sectors that are in active sector goals
 	public static List<String> getOverInvestedSectors(User user) {
 		List<Goal> goals = user.getGoals();
@@ -75,12 +97,6 @@ public class GoalCalculations {
 				}
 			}
 		}
-		return sectors;
-	}
-	
-	public static List<String> getSectorsNotBeingBalanced(User user, List<String> sectors) {
-		List<String> balancingSectors = getSectorsBeingBalanced(user);
-		sectors.removeAll(balancingSectors);
 		return sectors;
 	}
 	
