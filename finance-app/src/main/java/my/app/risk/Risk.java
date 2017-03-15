@@ -65,6 +65,9 @@ public class Risk {
 			}
 			monthlyReturns[i] = monthlyReturn;
 		}
+		for (int i = 0; i < monthlyReturns.length; i++) {
+			System.out.println(i + ": "+ monthlyReturns[i]);
+		}
 		return calculateVariance(monthlyReturnsLength, monthlyReturns);
 	}
 	
@@ -107,18 +110,18 @@ public class Risk {
 	}
 	
 	public static double calculate1YearVariance(Stock stock) {
-		return Risk.calculateVariance(stock, 1);
+		return Risk.calculateMonthlyVariance(stock, 12);
 	}
 	
 	public static double calculate3YearVariance(Stock stock) {
-		return Risk.calculateVariance(stock, 3);
+		return Risk.calculateMonthlyVariance(stock, 36);
 	}
 	
 	public static double calculate5YearVariance(Stock stock) {
-		return Risk.calculateVariance(stock, 5);
+		return Risk.calculateMonthlyVariance(stock, 60);
 	}
 	
 	public static double calculate10YearVariance(Stock stock) {
-		return Risk.calculateVariance(stock, 10);
+		return Risk.calculateMonthlyVariance(stock, 120);
 	}
 }
