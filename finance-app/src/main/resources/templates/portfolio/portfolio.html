@@ -110,8 +110,11 @@
 				<div class="col-md-4">
 					<a th:href="@{/stocks/{id}/(id=${holdings[0].stock.id})}" th:text="${holdings[0].stock.name}" />
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-2">
 					<span th:text="${holdings[0].stock.ticker}" />
+				</div>
+				<div class="col-md-4">
+					<span th:text="${holdings[0].stock.sector}" />
 				</div>
 			</div>
 			<div class="row" th:if="${holdings[0]}" style="font-size:18px">
