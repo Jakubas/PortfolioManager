@@ -206,9 +206,15 @@ public class StockMetrics {
             return true;
 
         StockMetrics metrics = (StockMetrics) obj;
-        if (isEqual(oneYearAnnualisedReturn, metrics.getOneYearAnnualisedReturn()) &&
+        if (isEqual(threeMonthAnnualisedReturn, metrics.getThreeMonthAnnualisedReturn()) &&
+    		isEqual(oneYearAnnualisedReturn, metrics.getOneYearAnnualisedReturn()) &&
+    		isEqual(threeYearAnnualisedReturn, metrics.getThreeYearAnnualisedReturn()) &&	
+    		isEqual(fiveYearAnnualisedReturn, metrics.getFiveYearAnnualisedReturn()) &&	
     		isEqual(tenYearAnnualisedReturn, metrics.getTenYearAnnualisedReturn()) &&
+    		isEqual(threeMonthVariance, metrics.getThreeMonthVariance()) &&
     		isEqual(oneYearVariance, metrics.getOneYearVariance()) &&
+    		isEqual(threeYearVariance, metrics.getThreeYearVariance()) &&
+    		isEqual(fiveYearVariance, metrics.getFiveYearVariance()) &&
     		isEqual(tenYearVariance, metrics.getTenYearVariance())
 //    		isEqual(oneYearTargetPriceEst, metrics.getOneYearTargetPriceEst())
         	) {
@@ -221,9 +227,15 @@ public class StockMetrics {
 	@Override
 	public int hashCode() {
     	HashCodeBuilder builder = new HashCodeBuilder();
+    	builder.append(threeMonthAnnualisedReturn);
     	builder.append(oneYearAnnualisedReturn);
+    	builder.append(threeYearAnnualisedReturn);
+    	builder.append(fiveYearAnnualisedReturn);
     	builder.append(tenYearAnnualisedReturn);
+    	builder.append(threeMonthVariance);
     	builder.append(oneYearVariance);
+    	builder.append(threeYearVariance);
+    	builder.append(fiveYearVariance);
     	builder.append(tenYearVariance);
 //    	builder.append(oneYearTargetPriceEst);
     	return builder.toHashCode();   
