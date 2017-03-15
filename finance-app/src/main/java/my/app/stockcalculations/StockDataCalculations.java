@@ -11,9 +11,7 @@ import my.app.domains.stock.StockDailyInformation;
 //annualisedReturns are estimates and may be off by a couple days
 public class StockDataCalculations {
 
-	private StockDataCalculations() {
-		
-	}
+	private StockDataCalculations() {}
 	
 	public static Double calculateQuarterlyAnnualisedReturn(Stock stock) {
 		int numberOfDays = 365/4;
@@ -23,6 +21,12 @@ public class StockDataCalculations {
 
 	public static Double calculate1YrAnnualisedReturn(Stock stock) {
 		int numberOfDays = 365;
+		Double annualisedReturn = calculateAnnualisedReturn(stock, numberOfDays);
+		return annualisedReturn;
+	}
+	
+	public static Double calculate3YrAnnualisedReturn(Stock stock) {
+		int numberOfDays = 365*3;
 		Double annualisedReturn = calculateAnnualisedReturn(stock, numberOfDays);
 		return annualisedReturn;
 	}
