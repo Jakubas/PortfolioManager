@@ -30,14 +30,20 @@ public class UpdateStockMetrics {
 	}
 	
 	public void updateStockMetricsFor(Stock stock) {
-		Double quarterlyAnnualisedReturn = StockDataCalculations.calculateQuarterlyAnnualisedReturn(stock);
+		Double threeMonthAnnualisedReturn = StockDataCalculations.calculateQuarterlyAnnualisedReturn(stock);
 		Double oneYearAnnualisedReturn = StockDataCalculations.calculate1YrAnnualisedReturn(stock);
+		Double threeYearAnnualisedReturn = StockDataCalculations.calculate3YrAnnualisedReturn(stock);
 		Double fiveYearAnnualisedReturn = StockDataCalculations.calculate5YrAnnualisedReturn(stock);
 		Double tenYearAnnualisedReturn = StockDataCalculations.calculate10YrAnnualisedReturn(stock);
-		Double variance = Risk.calculateVariance(stock);
+		Double threeMonthVariance = Risk.calculate3MonthVariance(stock);
+		Double oneYearVariance = Risk.calculate1YearVariance(stock);
+		Double threeYearVariance = Risk.calculate3YearVariance(stock);
+		Double fiveYearVariance = Risk.calculate5YearVariance(stock);
+		Double tenYearVariance = Risk.calculate10YearVariance(stock);
 		StockMetrics stockMetrics = 
-				new StockMetrics(stock, quarterlyAnnualisedReturn, oneYearAnnualisedReturn, 
-						fiveYearAnnualisedReturn, tenYearAnnualisedReturn, variance);
+				new StockMetrics(stock, threeMonthAnnualisedReturn, oneYearAnnualisedReturn, threeYearAnnualisedReturn, 
+						fiveYearAnnualisedReturn, tenYearAnnualisedReturn, threeMonthVariance, oneYearVariance, 
+						threeYearVariance, fiveYearVariance, tenYearVariance);
 		
 		StockMetrics prevStockMetrics = 
 				stockMetricsService.getStockMetricsById(stock.getId());
