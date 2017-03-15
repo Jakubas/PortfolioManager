@@ -132,15 +132,15 @@
 				10y variance
 			</div>
 			<div class="col-sm-2">
-				00.00%
+				<span th:text="${stockMetrics.threeMonthVariance} ? ${{stockMetrics.threeMonthVariance}} : 'N/A'" />
 				<br />
-				00.00%
+				<span th:text="${stockMetrics.oneYearVariance} ? ${{stockMetrics.oneYearVariance}} : 'N/A'" />
 				<br />
-				00.00%
+				<span th:text="${stockMetrics.threeYearVariance} ? ${{stockMetrics.threeYearVariance}} : 'N/A'" />
 				<br />
-				00.00%
+				<span th:text="${stockMetrics.fiveYearVariance} ? ${{stockMetrics.fiveYearVariance}} : 'N/A'" />
 				<br />
-				<span th:text="${{stockMetrics.threeMonthVariance}}" />
+				<span th:text="${stockMetrics.tenYearVariance} ? ${{stockMetrics.tenYearVariance}} : 'N/A'" />
 			</div>
 			<div class="col-sm-2">
 				3m annualised ret
@@ -151,14 +151,14 @@
 				<br />
 				5y annualised ret
 				<br />
-				10y annualised ret
+				10y annualised re
 			</div>
 			<div class="col-sm-2">
 				<span th:text="${stockMetrics.threeMonthAnnualisedReturn} ? ${{stockMetrics.threeMonthAnnualisedReturn}} : 'N/A'" />
 				<br />
 				<span th:text="${stockMetrics.oneYearAnnualisedReturn} ? ${{stockMetrics.oneYearAnnualisedReturn}} : 'N/A'" />
 				<br />
-				00.00%
+				<span th:text="${stockMetrics.threeYearAnnualisedReturn} ? ${{stockMetrics.threeYearAnnualisedReturn}} : 'N/A'" />
 				<br />
 				<span th:text="${stockMetrics.fiveYearAnnualisedReturn} ? ${{stockMetrics.fiveYearAnnualisedReturn}} : 'N/A'" />
 				<br />
