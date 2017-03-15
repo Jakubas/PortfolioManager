@@ -36,15 +36,17 @@
 
 		function drawValueChart() {
 	    	var data = new google.visualization.DataTable();
-			data.addColumn('number', 'Date');
+			data.addColumn('date', 'Date');
 			data.addColumn('number', 'Portfolio');
 			//data.addColumn('number', 'SPX (S&P 500)');
 			var dayValues = [[${dayValues}]];
+			var dates  = [[${dates}]];
 			//var spxValues = [[${spxValues}]];
 			for (var i = 0; i < dayValues.length; i++) {
 				var value = dayValues[i];
+				var date = dates[i];
 				//var spxValue = spxValues[i];
-				data.addRow([i, value]);
+				data.addRow([new Date(date), value]);
 			}
 			var options = {
           		title: 'Portfolio Value Over Time',

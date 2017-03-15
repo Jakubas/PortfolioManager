@@ -1,6 +1,7 @@
 package my.app.controllers.portfoliocontrollers;
 
 import java.security.Principal;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,15 +44,16 @@ public class MetricsController {
 		for (int i = 0; i < sectors.size(); i++) {
 			weights[i] = user.calculateSectorWeight(sectors.get(i));
 		}
-		double[] dayValues = getDayValues(user);
 		model.addAttribute("sectors", sectors);
 		model.addAttribute("weights", weights);
-		model.addAttribute("dayValues", dayValues);
+		model.addAttribute("dayValues", getDayValues(user));
+		model.addAttribute("dates", getDates(user));
 		return "portfolio/metrics";
 	}
 	
 	public double[] getDayValues(User user) {
 		List<PortfolioDailyInformation> pids = user.getPortfolioDailyInformations();
+		pids.sort(Comparator.comparing(PortfolioDailyInformation::getDate));
 		double[] values = new double[pids.size()];
 		for (int i = 0; i < pids.size(); i++) {
 			PortfolioDailyInformation pid = pids.get(i);
@@ -59,5 +61,17 @@ public class MetricsController {
 			values[i] = value;
 		}
 		return values;
+	}
+	
+	public String[] getDates(User user) {
+		List<PortfolioDailyInformation> pids = user.getPortfolioDailyInformations();
+		pids.sort(Comparator.comparing(PortfolioDailyInformation::getDate));
+		String[] dates = new String[pids.size()];
+		for (int i = 0; i < pids.size(); i++) {
+			PortfolioDailyInformation pid = pids.get(i);
+			String value = pid.getDate().toString();
+			dates[i] = value;
+		}
+		return dates;
 	}
 }
