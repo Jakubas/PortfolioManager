@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import my.app.domains.portfolio.StockInPortfolio;
 
-public class CashFlow {
+public class HoldingTransaction {
 
 	private double cashAmount;
 	
@@ -13,7 +13,7 @@ public class CashFlow {
 	private LocalDate date;
 	
 	//if it's not isBuy then its a sale
-	public CashFlow(StockInPortfolio holding, boolean isBuy) {
+	public HoldingTransaction(StockInPortfolio holding, boolean isBuy) {
 		this.setEvent(holding, isBuy);
 	}
 
