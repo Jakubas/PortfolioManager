@@ -4,6 +4,8 @@
 	<title>Investment App</title>
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" />
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.7/dt-1.10.13/datatables.min.css"/>
+	<script type="text/javascript" src="https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.13/datatables.min.js"></script>
 	<script type="text/javascript" th:inline="javascript">
 		/*<![CDATA[*/
 		function showStockAmountField(stockId) {
@@ -85,9 +87,8 @@
 			$("#master").html(stockDivsSorted);
 		}
 		function showTable() {
-			alert("ss");
 			var tableDiv = $("#tableDiv");
-			var listDiv = $("#master");
+			var listDiv = $("#listDiv");
 			if (tableDiv.css('display') == 'none') {
 				tableDiv.show();
 				listDiv.hide();
@@ -95,14 +96,17 @@
 		}
 
 		function showList() {
-			alert("list");
 			var tableDiv = $("#tableDiv");
-			var listDiv = $("#master");
+			var listDiv = $("#listDiv");
 			if (listDiv.css('display') == 'none') {
 				tableDiv.hide();
 				listDiv.show();
 			}
 		}
+
+		$(document).ready(function() {
+			$('#stockTable').DataTable();
+		});
 		/*]]>*/
 	</script>
 </head>
@@ -151,67 +155,69 @@
 			</div>
 		</div>
 	</div>
-	<div id="master">
+	<div id="listDiv">
 		<div class="container">
-			<button onclick="sortAlphabetically()" id="alphBnt">Sort Alphabetically</button>
-			<button onclick="sortByMarketCap()" id="capBnt">Sort By Market Cap</button>
-			<button onclick="sortByAnnualisedReturn()" id="returnBtn">Sort By Annualised Return</button>
+			<button class="btn btn-default" onclick="sortAlphabetically()" id="alphBnt">Sort Alphabetically</button>
+			<button class="btn btn-default" onclick="sortByMarketCap()" id="capBnt">Sort By Market Cap</button>
+			<button class="btn btn-default" onclick="sortByAnnualisedReturn()" id="returnBtn">Sort By Annualised Return</button>
 		</div>
-		<div class="stock container" th:each="stock : ${stocks}">
-			<h3>
-				<a th:href="@{/stocks/{id}/(id=${stock.id})}" th:text="${stock.name}" />
-			</h3>
-			<h4>
-				<button th:id="stockTrigger + ${stock.id}" type="button" class="btn btn-link glyphicon glyphicon-plus-sign"
-				th:onclick="'javascript:showStockAmountField(\'' + ${stock.id} + '\');'" style="padding-top:0px; padding-bottom:0px" />
-				<form th:id="trackStockForm + ${stock.id}" class="form-noborder" action="/tracker" method="post" style="display:none">
-					<input type="hidden" name="stockId" th:value="${stock.id}" />
-					<button type="submit" class="btn btn-primary" style="display:block;">Add to tracker</button>
-				</form>
-				<br />
-				<form th:id="addStockForm + ${stock.id}" class="form-noborder" action="/portfolio" method="post" style="display:none">
-					<input type="hidden" name="stockId" th:value="${stock.id}" />
-					<div class="form-group">
-						<label>Amount of stock</label>
-						<input type="number" class="form-control" step="1" name="amount" required="true" />
-					</div>
-					<div class="form-group">
-						<label>Date bought (optional field)</label>
-						<input type="date" class="form-control" name="buyDate" />
-					</div>
-					<!--button type="submit" class="btn btn-link glyphicon glyphicon-plus-sign"></button-->
-					<button type="submit" class="btn btn-primary" style="display:block;">Add to portfolio</button>
+		<div id="master">
+			<div class="stock container" th:each="stock : ${stocks}">
+				<h3>
+					<a th:href="@{/stocks/{id}/(id=${stock.id})}" th:text="${stock.name}" />
+				</h3>
+				<h4>
+					<button th:id="stockTrigger + ${stock.id}" type="button" class="btn btn-link glyphicon glyphicon-plus-sign"
+					th:onclick="'javascript:showStockAmountField(\'' + ${stock.id} + '\');'" style="padding-top:0px; padding-bottom:0px" />
+					<form th:id="trackStockForm + ${stock.id}" class="form-noborder" action="/tracker" method="post" style="display:none">
+						<input type="hidden" name="stockId" th:value="${stock.id}" />
+						<button type="submit" class="btn btn-primary" style="display:block;">Add to tracker</button>
+					</form>
+					<br />
+					<form th:id="addStockForm + ${stock.id}" class="form-noborder" action="/portfolio" method="post" style="display:none">
+						<input type="hidden" name="stockId" th:value="${stock.id}" />
+						<div class="form-group">
+							<label>Amount of stock</label>
+							<input type="number" class="form-control" step="1" name="amount" required="true" />
+						</div>
+						<div class="form-group">
+							<label>Date bought (optional field)</label>
+							<input type="date" class="form-control" name="buyDate" />
+						</div>
+						<!--button type="submit" class="btn btn-link glyphicon glyphicon-plus-sign"></button-->
+						<button type="submit" class="btn btn-primary" style="display:block;">Add to portfolio</button>
 
-				</form>
-				<span th:text="${stock.ticker}" />
-			</h4>
-			<h4 class="sector" th:text ="${stock.sector}" />
-			<div class ="row">
-				<div class ="col-sm-2">
-					Price
+					</form>
+					<span th:text="${stock.ticker}" />
+				</h4>
+				<h4 class="sector" th:text ="${stock.sector}" />
+				<div class ="row">
+					<div class ="col-sm-2">
+						Price
+					</div>
+					<div class ="col-sm-2">
+						<span th:text="'$' + ${{stock.lastTradePrice}}" />
+					</div>
+					<div class ="col-sm-2">
+						Market Cap
+					</div>
+					<div class ="marketcap col-sm-2">
+						<span th:text="${stock.marketCap}" />
+					</div>
 				</div>
-				<div class ="col-sm-2">
-					<span th:text="'$' + ${{stock.lastTradePrice}}" />
-				</div>
-				<div class ="col-sm-2">
-					Market Cap
-				</div>
-				<div class ="marketcap col-sm-2">
-					<span th:text="${stock.marketCap}" />
-				</div>
-			</div>
-			<div class ="row">
-				<div class ="col-sm-2">
-					P/E Ratio
-				</div>
-				<div class ="col-sm-2">
-					<span th:text="${stock.getPERatio()} ? ${stock.getPERatio()} : 'N/A'" />
-				</div>
-				<div class ="col-sm-2">
-					10y Annualised Return
-				</div>
-				<div class ="return col-sm-2">
-					<span th:text="${{stock.stockMetrics.tenYearAnnualisedReturn}}" />
+				<div class ="row">
+					<div class ="col-sm-2">
+						P/E Ratio
+					</div>
+					<div class ="col-sm-2">
+						<span th:text="${stock.getPERatio()} ? ${stock.getPERatio()} : 'N/A'" />
+					</div>
+					<div class ="col-sm-2">
+						10y Annualised Return
+					</div>
+					<div class ="return col-sm-2">
+						<span th:text="${{stock.stockMetrics.tenYearAnnualisedReturn}}" />
+					</div>
 				</div>
 			</div>
 		</div>
