@@ -81,10 +81,14 @@ public class MetricsController {
 	
 	private List<HoldingTransaction> getTransactions(User user) {
 		List<HoldingTransaction> transactions = new ArrayList<HoldingTransaction>();
-		List<StockInPortfolio> portfolio = user.getActivePortfolio();
+		List<StockInPortfolio> portfolio = user.getPortfolio();
 		for (StockInPortfolio holding : portfolio) {
-			transactions.add(new HoldingTransaction(holding, true));
-			transactions.add(new HoldingTransaction(holding, false));
+			if (holding.getAmount() > 0) {
+				transactions.add(new HoldingTransaction(holding, true));
+				if (holding.isStockSold()) {
+					transactions.add(new HoldingTransaction(holding, false));
+				}
+			}
 		}
 		transactions.sort(Comparator.comparing(HoldingTransaction::getDate));
 		return transactions;
