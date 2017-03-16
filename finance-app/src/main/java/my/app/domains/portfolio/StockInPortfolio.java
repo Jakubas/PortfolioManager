@@ -45,10 +45,10 @@ public class StockInPortfolio {
 	private LocalDate sellDate;
 	
 	@NotNull
-	@NumberFormat(style = Style.NUMBER, pattern = "#,###.##")
+	@NumberFormat(style = Style.NUMBER, pattern = "#,###.00######")
 	private Double buyPrice;
 	
-	@NumberFormat(style = Style.NUMBER, pattern = "#,###.##")
+	@NumberFormat(style = Style.NUMBER, pattern = "#,###.00######")
 	private Double sellPrice;
 	
 	@NotNull
