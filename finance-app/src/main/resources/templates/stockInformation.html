@@ -94,9 +94,9 @@
 					<br />
 					P/E ratio
 					<br />
-					1y variance
+					1y variance (MoM)
 					<br />
-					1y annualised ret
+					1y annualised return
 				</p>
 			</div>
 			<div class="col-sm-2">
@@ -105,9 +105,9 @@
 					<br />
 					<span th:text="${stock.getPERatio()} ? ${stock.getPERatio()} : 'N/A'" />
 					<br />
-					00.00%
+					<span th:text="${stockMetrics.oneYearVariance} ? ${{stockMetrics.oneYearVariance}} : 'N/A'" />
 					<br />
-					<span th:text="${stockMetrics.tenYearAnnualisedReturn} ? ${{stockMetrics.tenYearAnnualisedReturn}} : 'N/A'" />
+					<span th:text="${stockMetrics.oneYearAnnualisedReturn} ? ${{stockMetrics.oneYearAnnualisedReturn}} : 'N/A'" />
 				</p>
 			</div>
 		</div>
