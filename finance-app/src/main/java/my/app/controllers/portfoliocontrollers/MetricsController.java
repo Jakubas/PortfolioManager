@@ -1,6 +1,7 @@
 package my.app.controllers.portfoliocontrollers;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -10,7 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import my.app.cashflow.CashFlow;
 import my.app.domains.portfolio.PortfolioDailyInformation;
+import my.app.domains.portfolio.StockInPortfolio;
 import my.app.domains.user.User;
 import my.app.services.portfolio.PortfolioService;
 import my.app.services.portfolio.StockInPortfolioService;
@@ -48,9 +51,10 @@ public class MetricsController {
 		model.addAttribute("sectorValues", sectorValues);
 		model.addAttribute("dayValues", getDayValues(user));
 		model.addAttribute("dates", getDates(user));
+		model.addAttribute("cashFlow", getCashFlow(user));
 		return "portfolio/metrics";
 	}
-	
+
 	public double[] getDayValues(User user) {
 		List<PortfolioDailyInformation> pids = user.getPortfolioDailyInformations();
 		pids.sort(Comparator.comparing(PortfolioDailyInformation::getDate));
@@ -73,5 +77,16 @@ public class MetricsController {
 			dates[i] = value;
 		}
 		return dates;
+	}
+	
+	private List<CashFlow> getCashFlow(User user) {
+		List<CashFlow> cashFlows = new ArrayList<CashFlow>();
+		List<StockInPortfolio> portfolio = user.getActivePortfolio();
+		for (StockInPortfolio holding : portfolio) {
+			cashFlows.add(new CashFlow(holding, true));
+			cashFlows.add(new CashFlow(holding, false));
+		}
+		cashFlows.sort(Comparator.comparing(CashFlow::getDate));
+		return cashFlows;
 	}
 }
