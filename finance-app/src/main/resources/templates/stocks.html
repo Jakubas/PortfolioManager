@@ -146,9 +146,12 @@
 	  	</div>
 	</nav>
 
-	<div>
+	<div class="container">
 		<div class="row">
-			<div class="col-md-10"></div>
+			<div class="col-md-10">
+				<p th:if="${dateError}" class="error">Incorrect date format</p>
+				<p th:if="${amountError}" class="error">You can't buy less than 1 share</p>
+			</div>
 			<div class="col-md-2">
 				<button type="button" onclick="showList()" autofocus="true" class="btn btn-link glyphicon glyphicon-list" />
 				<button type="button" onclick="showTable()" class="btn btn-link glyphicon glyphicon-th" />

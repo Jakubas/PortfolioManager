@@ -66,6 +66,10 @@ public class PortfolioController {
 			@RequestParam("amount") int amount,
 			@RequestParam(value = "buyDate", required = false) String buyDateStr) {
 		
+		if (amount <= 0) {
+			ra.addFlashAttribute("amountError", true);
+			return "redirect:/stocks";
+		}
 		String username = principal.getName();
 		User user = userService.getUserByUsername(username); 
 		Stock stock = stockService.getStockById(stockId);
@@ -102,6 +106,10 @@ public class PortfolioController {
 			@RequestParam(value = "sellDate", required = false) String sellDateStr,
 			@RequestParam("buyPrice") Double buyPrice,
 			@RequestParam(value = "sellPrice", required = false) Double sellPrice) {
+		if (amount <= 0) {
+			ra.addFlashAttribute("amountError", true);
+			return "redirect:/portfolio/{stockInPortfolioId}";
+		}
 		StockInPortfolio sip = stockInPortfolioService.getStockInPortfolioById(id);
 		LocalDate buyDate;
 		LocalDate sellDate = null;
