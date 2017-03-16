@@ -4,6 +4,10 @@
 	<title>Investment App</title>
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.13/datatables.min.css"/>
+	<script type="text/javascript" src="https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.13/datatables.min.js"></script>
+
+
 	<script type="text/javascript" th:inline="javascript">
 		/*<![CDATA[*/
 		google.load('visualization', '1.0', {
@@ -56,6 +60,10 @@
 			var chart = new google.visualization.LineChart(document.getElementById('value_chart_div'));
 			chart.draw(data, options);
 		}
+
+		$(document).ready(function() {
+			$('#transactionTable').DataTable();
+		});
 		/*]]>*/
 	</script>
 </head>
@@ -99,6 +107,31 @@
 	</div>
 	<div class="container">
 		<div id="value_chart_div"></div>
+	</div>
+	<div class="container">
+		<h3>Transaction history</h3>
+		<table id="transactionTable" class="table table-bordered table-hover dt-responsive">
+			<thead>
+				<tr>
+			  		<th>Date</th>
+					<th>Type</th>
+					<th>Stock Ticker</th>
+				  	<th>Transaction Value</th>
+				  	<th>Stock Price</th>
+					<th>Amount</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="transaction : ${transactions}">
+					<td th:text="${transaction.date}" />
+					<td th:text="${transaction.isBuy()} ? 'Buy' : 'Sell'" />
+					<td th:text="${transaction.ticker}" />
+					<td th:text="'$' + ${{transaction.value}}" />
+					<td th:text="'$' + ${{transaction.stockPrice}}" />
+					<td th:text="${transaction.amount}" />
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </body>
 </html>
