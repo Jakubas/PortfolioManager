@@ -84,8 +84,25 @@
 			}
 			$("#master").html(stockDivsSorted);
 		}
-		$(document).ready(function() {
-		});
+		function showTable() {
+			alert("ss");
+			var tableDiv = $("#tableDiv");
+			var listDiv = $("#master");
+			if (tableDiv.css('display') == 'none') {
+				tableDiv.show();
+				listDiv.hide();
+			}
+		}
+
+		function showList() {
+			alert("list");
+			var tableDiv = $("#tableDiv");
+			var listDiv = $("#master");
+			if (listDiv.css('display') == 'none') {
+				tableDiv.hide();
+				listDiv.show();
+			}
+		}
 		/*]]>*/
 	</script>
 </head>
@@ -125,12 +142,21 @@
 	  	</div>
 	</nav>
 
-	<div class="container">
-		<button onclick="sortAlphabetically()" id="alphBnt">Sort Alphabetically</button>
-		<button onclick="sortByMarketCap()" id="capBnt">Sort By Market Cap</button>
-		<button onclick="sortByAnnualisedReturn()" id="returnBtn">Sort By Annualised Return</button>
+	<div>
+		<div class="row">
+			<div class="col-md-10"></div>
+			<div class="col-md-2">
+				<button type="button" onclick="showList()" autofocus="true" class="btn btn-link glyphicon glyphicon-list" />
+				<button type="button" onclick="showTable()" class="btn btn-link glyphicon glyphicon-th" />
+			</div>
+		</div>
 	</div>
 	<div id="master">
+		<div class="container">
+			<button onclick="sortAlphabetically()" id="alphBnt">Sort Alphabetically</button>
+			<button onclick="sortByMarketCap()" id="capBnt">Sort By Market Cap</button>
+			<button onclick="sortByAnnualisedReturn()" id="returnBtn">Sort By Annualised Return</button>
+		</div>
 		<div class="stock container" th:each="stock : ${stocks}">
 			<h3>
 				<a th:href="@{/stocks/{id}/(id=${stock.id})}" th:text="${stock.name}" />
@@ -165,7 +191,7 @@
 					Price
 				</div>
 				<div class ="col-sm-2">
-					<span th:text="${stock.lastTradePrice}" />
+					<span th:text="'$' + ${{stock.lastTradePrice}}" />
 				</div>
 				<div class ="col-sm-2">
 					Market Cap
@@ -182,13 +208,43 @@
 					<span th:text="${stock.getPERatio()} ? ${stock.getPERatio()} : 'N/A'" />
 				</div>
 				<div class ="col-sm-2">
-					10 Yr Annualised Return
+					10y Annualised Return
 				</div>
 				<div class ="return col-sm-2">
-					<span th:text="${stock.stockMetrics.tenYearAnnualisedReturn}" />
+					<span th:text="${{stock.stockMetrics.tenYearAnnualisedReturn}}" />
 				</div>
 			</div>
 		</div>
+	</div>
+
+	<div id="tableDiv" class="container" style="display:none">
+		<h3>Stocks</h3>
+		<table id="stockTable" class="table table-bordered table-hover dt-responsive">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Ticker</th>
+					<th>Sector</th>
+					<th>Price</th>
+					<th>Market Cap</th>
+					<th>P/E Ratio</th>
+					<th>10y Annualised Return</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="stock : ${stocks}">
+					<td>
+						<a th:href="@{/stocks/{id}/(id=${stock.id})}" th:text="${stock.name}" />
+					</td>
+					<td th:text="${stock.ticker}" />
+					<td th:text="${stock.sector}" />
+					<td th:text="'$' + ${{stock.lastTradePrice}}" />
+					<td th:text="${stock.marketCap}" />
+					<td th:text="${stock.getPERatio()} ? ${stock.getPERatio()} : 'N/A'" />
+					<td th:text="${{stock.stockMetrics.tenYearAnnualisedReturn}}" />
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </body>
 </html>
