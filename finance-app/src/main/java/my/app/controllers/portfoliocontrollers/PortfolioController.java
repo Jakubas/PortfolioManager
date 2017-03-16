@@ -129,6 +129,9 @@ public class PortfolioController {
 			}
 			if (sellDate == null) {
 				sip.setSellDate(null);
+			} else if (sellDate.isBefore(buyDate)) {
+				ra.addFlashAttribute("dateError3", true);
+				return "redirect:/portfolio/{stockInPortfolioId}";
 			} else if (sip.getSellDate() != null && sip.getSellDate().equals(sellDate)) {
 				if (sellPrice != null && sip.getSellPrice() != null && 
 				    Math.abs(sellPrice - sip.getSellPrice()) >= 0.01) {

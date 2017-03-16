@@ -46,6 +46,7 @@
         </h3>
         <p th:if="${dateError}" class="error">Incorrect date format</p>
         <p th:if="${dateError2}" class="error">Date is too early, stock wasn't listed yet</p>
+		<p th:if="${dateError3}" class="error">Sell date is before buy date</p>
 		<form th:action="@{/portfolio/{id}/(id=${stockInPortfolio.id})}" method="post">
             <input type="hidden" name="_method" value="put" />
 			<div class="form-group">
