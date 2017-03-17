@@ -59,4 +59,9 @@ public class PortfolioDailyInformationServiceImpl implements PortfolioDailyInfor
 	public void deletePortfolioDailyInformation(PortfolioDailyInformation pdi) {
 		dao.deletePortfolioDailyInformation(pdi);
 	}
+	
+	@Override
+	public void deletePortfolioDailyInformations(List<PortfolioDailyInformation> pdis) {
+		dao.deletePortfolioDailyInformations(pdis);
+	}
 }

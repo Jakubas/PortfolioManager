@@ -100,4 +100,16 @@ public class PortfolioDailyInformationDAOImpl implements PortfolioDailyInformati
 			session.delete(pdi);
 		}
 	}
+
+	@Override
+	public void deletePortfolioDailyInformations(List<PortfolioDailyInformation> pdis) {
+		Session session = sessionFactory.getCurrentSession();
+		Transaction tx = session.beginTransaction();
+		for (PortfolioDailyInformation pdi : pdis) {
+			session.delete(pdi);
+		}
+		session.flush();
+		session.clear();
+		tx.commit();
+	}
 }

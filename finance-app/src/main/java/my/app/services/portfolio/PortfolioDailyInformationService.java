@@ -16,4 +16,5 @@ public interface PortfolioDailyInformationService {
 	void updatePortfolioDailyInformation(PortfolioDailyInformation pdi);
 	void updatePortfolioDailyInformations(List<PortfolioDailyInformation> pdis);
 	void deletePortfolioDailyInformation(PortfolioDailyInformation pdi);
+	void deletePortfolioDailyInformations(List<PortfolioDailyInformation> pdis);
 }
