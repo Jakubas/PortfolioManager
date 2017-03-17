@@ -37,7 +37,7 @@ public class IndexDailyInformation {
 	private double low;
 	
 	@NotNull
-	private int volume;
+	private long volume;
 	
 	//the closing price adjusted by dividends (reinvested back into the stock) and stock splits
 	@NotNull
@@ -53,7 +53,7 @@ public class IndexDailyInformation {
 	}
 	
 	public IndexDailyInformation(LocalDate date, double open, double close, double high,
-			double low, int volume, double adjustedClose, Index index) {
+			double low, long volume, double adjustedClose, Index index) {
 		this.date = date;
 		this.open = open;
 		this.close = close;
@@ -76,6 +76,10 @@ public class IndexDailyInformation {
 		return date;
 	}
 	
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
+	
 	public double getOpen() {
 		return open;
 	}
@@ -92,7 +96,7 @@ public class IndexDailyInformation {
 		return low;
 	}
 	
-	public int getVolume() {
+	public long getVolume() {
 		return volume;
 	}
 	
