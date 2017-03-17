@@ -21,8 +21,8 @@ public class StockInformationDownloader {
 		DownloadUtility.downloadFile(url, filePath);
 	}
 	
-	public static void downloadHistoricalStockInformation(String stockTicker) {
+	public static void downloadHistoricalStockInformation(String ticker) {
 		String urlPrefix = "http://ichart.finance.yahoo.com/table.csv?d=1&e=1&f=2099&g=d&a=1&b=1&c=1800&ignore=.csv&s=";
-		DownloadUtility.downloadFile(urlPrefix + stockTicker, "/home/daniel/fyp/data/" + stockTicker + ".csv");
+		DownloadUtility.downloadFile(urlPrefix + ticker, "/home/daniel/fyp/data/" + ticker + ".csv");
 	}
 }

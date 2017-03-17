@@ -1,12 +1,17 @@
 package my.app.domains.stock;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@Table(name = "Index_Fund") 
 public class Index {
 
 	@Id
@@ -18,6 +23,9 @@ public class Index {
 	
 	@NotNull
 	private String ticker;
+	
+	@OneToMany(mappedBy = "index")
+	private List<IndexDailyInformation> indexDailyInformations;
 	
 	public Index() {}
 	
@@ -36,5 +44,9 @@ public class Index {
 	
 	public String getTicker() {
 		return ticker;
+	}
+
+	public List<IndexDailyInformation> getIndexDailyInformations() {
+		return indexDailyInformations;
 	}
 }
