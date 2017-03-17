@@ -3,6 +3,7 @@ package my.app.updatedatabase;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import my.app.domains.portfolio.PortfolioDailyInformation;
@@ -40,6 +41,7 @@ public class UpdatePortfolioDailyInformation {
 		List<PortfolioDailyInformation> pdisInDatabase = user.getPortfolioDailyInformations();
 		LocalDate earliestDate = portfolioService.getEarliestDateIn(portfolio);
 		long daysBetween = ChronoUnit.DAYS.between(earliestDate, LocalDate.now());
+		deleteOldPortfolioDailyInformation(pdisInDatabase, earliestDate);
 		for (int i = 0; i <= daysBetween; i++) {
 			LocalDate date = earliestDate.plusDays(i);
 			PortfolioDailyInformation pdi = 
@@ -58,5 +60,17 @@ public class UpdatePortfolioDailyInformation {
 		}
 		pdiService.savePortfolioDailyInformations(pdisToSave);
 		pdiService.updatePortfolioDailyInformations(pdisToUpdate);
+	}
+
+	private void deleteOldPortfolioDailyInformation(List<PortfolioDailyInformation> pdisInDatabase,
+			LocalDate earliestDate) {
+		pdisInDatabase.sort(Comparator.comparing(PortfolioDailyInformation::getDate));
+		List<PortfolioDailyInformation> pdisToDelete = new ArrayList<PortfolioDailyInformation>();
+		for (PortfolioDailyInformation pdi : pdisInDatabase) {
+			if (pdi.getDate().isBefore(earliestDate) ) {
+				pdisToDelete.add(pdi);
+			}
+		}
+		pdiService.deletePortfolioDailyInformations(pdisToDelete);
 	}
 }
