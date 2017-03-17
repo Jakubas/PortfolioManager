@@ -111,7 +111,11 @@
 	  	</div>
 	</nav>
 
-    <div class="container">
+	<div class="container">
+        <p th:if="${error}" class="error">error</p>
+	</div>
+
+    <div th:if="${!balanceGoals.isEmpty()}" class="container">
         <p th:if="${error}" class="error">error</p>
         <h3>
             Portfolio Balancing Goals
@@ -144,7 +148,7 @@
         </div>
     </div>
 
-	<div class="container">
+	<div th:if="${!otherGoals.isEmpty()}" class="container">
 		<h3>
 			Other Goals
 		</h3>
