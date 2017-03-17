@@ -103,13 +103,19 @@
             </div>
 	  	</div>
 	</nav>
-    <div class="container">
+
+	<div th:if="${!isData}" class="container">
+		<h3>
+			You need to have some holdings in your portfolio to see the metrics.
+		</h3>
+	</div>
+    <div th:if="${isData}" class="container">
 		<div id="pie_chart_div"></div>
 	</div>
-	<div class="container">
+	<div th:if="${isData}" class="container">
 		<div id="value_chart_div"></div>
 	</div>
-	<div class="container">
+	<div th:if="${isData}" class="container">
 		<h3>Transaction history</h3>
 		<table id="transactionTable" class="table table-bordered table-hover dt-responsive">
 			<thead>

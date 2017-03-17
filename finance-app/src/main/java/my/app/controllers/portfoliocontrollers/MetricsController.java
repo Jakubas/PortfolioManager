@@ -66,6 +66,7 @@ public class MetricsController {
 		model.addAttribute("dates", getDates(user));
 		model.addAttribute("transactions", transactions);
 		model.addAttribute("indexValues", getIndexValues(user, transactions));
+		model.addAttribute("isData", !user.getPortfolio().isEmpty());
 		UpdatePortfolioDailyInformation updi = new UpdatePortfolioDailyInformation(portfolioDailyInformationService, userService);
 		updi.updatePortfolioDailyInformationFor(user);
 		return "portfolio/metrics";
@@ -95,12 +96,12 @@ public class MetricsController {
 		return dates;
 	}
 	
-	private Object getIndexValues(User user, List<HoldingTransaction> transactions) {
+	private double[] getIndexValues(User user, List<HoldingTransaction> transactions) {
 		List<IndexDailyInformation> idis = indexDailyInformationService.getIndexDailyInformations();
 		List<PortfolioDailyInformation> pdis = user.getPortfolioDailyInformations();
 		pdis.sort(Comparator.comparing(PortfolioDailyInformation::getDate));
 		idis.sort(Comparator.comparing(IndexDailyInformation::getDate));
-		if (pdis == null || pdis.isEmpty()) {
+		if (pdis == null || pdis.size() < 2) {
 			return null;
 		}
 		LocalDate earliestDate = pdis.get(0).getDate();
@@ -109,7 +110,6 @@ public class MetricsController {
 		idis.removeIf(o -> o.getDate().isAfter(latestDate));
 		double[] indexValues = new double[pdis.size()];
 		transactions.sort(Comparator.comparing(HoldingTransaction::getDate));
-		
 		//fill the gaps inbetween dates;
 		List<IndexDailyInformation> idisToAdd = new ArrayList<IndexDailyInformation>();
 		for (int i = 0; i < idis.size()-1; i++) {
@@ -140,7 +140,7 @@ public class MetricsController {
 		int j = 0;
 		for (int i = 0; i < indexValues.length; i++) {
 			IndexDailyInformation idi = idis.get(i);
-			if (j < transactions.size()) {
+			if (transactions != null && j < transactions.size()) {
 				HoldingTransaction transaction = transactions.get(j);
 				while (j < transactions.size() && 
 						(transaction.getDate().isBefore(idi.getDate()) || 
