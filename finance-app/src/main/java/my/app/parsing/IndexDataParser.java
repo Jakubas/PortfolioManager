@@ -60,7 +60,7 @@ public class IndexDataParser {
 		double high = CSVParser.parseDouble(lines[i++]);
 		double low = CSVParser.parseDouble(lines[i++]);
 		double close = CSVParser.parseDouble(lines[i++]);
-		int volume = CSVParser.parseInt(lines[i++]);
+		long volume = CSVParser.parseLong(lines[i++]);
 		double adjustedClose = CSVParser.parseDouble(lines[i++]);
 		
 		IndexDailyInformation indexDailyInformation = 

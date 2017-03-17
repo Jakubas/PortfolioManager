@@ -87,4 +87,14 @@ public class CSVParser {
 			throw new Exception();
 		}
 	}
+	
+	public static long parseLong(String longStr) throws Exception {
+		String intPattern = "([0-9]+)";
+		boolean match = Pattern.matches(intPattern, longStr);
+		if (match) {
+			return Long.parseLong(longStr);
+		} else {
+			throw new Exception();
+		}
+	}
 }
