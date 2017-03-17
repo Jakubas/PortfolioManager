@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import my.app.services.corporateactions.DividendService;
 import my.app.services.corporateactions.StockSplitService;
 import my.app.services.portfolio.PortfolioDailyInformationService;
+import my.app.services.stock.IndexDailyInformationService;
+import my.app.services.stock.IndexService;
 import my.app.services.stock.StockDailyInformationService;
 import my.app.services.stock.StockMetricsService;
 import my.app.services.stock.StockService;
@@ -27,11 +29,14 @@ public class AdminController {
 	private final StockService stockService;
 	private final StockDailyInformationService stockDailyInformationService;
 	private final StockMetricsService stockMetricsService;
+	private final IndexService indexService;
+	private final IndexDailyInformationService indexDailyInformationService;
 	
 	@Autowired
 	public AdminController(PortfolioDailyInformationService pdiService, UserService userService,
 			DividendService dividendService, StockSplitService stockSplitService, StockService stockService,
-			StockDailyInformationService stockDailyInformationService, StockMetricsService stockMetricsService) {
+			StockDailyInformationService stockDailyInformationService, StockMetricsService stockMetricsService,
+			IndexService indexService, IndexDailyInformationService indexDailyInformationService) {
 		this.pdiService = pdiService;
 		this.userService = userService;
 		this.dividendService = dividendService;
@@ -39,6 +44,8 @@ public class AdminController {
 		this.stockService = stockService;
 		this.stockDailyInformationService = stockDailyInformationService;
 		this.stockMetricsService = stockMetricsService;
+		this.indexService = indexService;
+		this.indexDailyInformationService = indexDailyInformationService;
 	}
 	
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
@@ -57,7 +64,7 @@ public class AdminController {
 	public String updateStockInformation() {
 		String rootDir = "/home/daniel/fyp/data/";
 		UpdateStockInformation usi = 
-				new UpdateStockInformation(rootDir, stockDailyInformationService, stockService);
+				new UpdateStockInformation(rootDir, stockDailyInformationService, stockService, indexService, indexDailyInformationService);
 		usi.updateStockDailyInformation(true, true);
 //		usi.removeDuplicateDateEntries();
 		return "redirect:/admin";
@@ -76,7 +83,7 @@ public class AdminController {
 	public String updateClosingPrices() {
 		String rootDir = "/home/daniel/fyp/data/";
 		UpdateStockInformation usi = 
-				new UpdateStockInformation(rootDir, stockDailyInformationService, stockService);
+				new UpdateStockInformation(rootDir, stockDailyInformationService, stockService, indexService, indexDailyInformationService);
 		usi.updateClosingPrices();
 		return "redirect:/admin";
 	}

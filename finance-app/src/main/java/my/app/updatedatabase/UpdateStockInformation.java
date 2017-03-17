@@ -10,9 +10,14 @@ import java.util.Set;
 
 import my.app.domains.corporateactions.Dividend;
 import my.app.domains.corporateactions.StockSplit;
+import my.app.domains.stock.Index;
+import my.app.domains.stock.IndexDailyInformation;
 import my.app.domains.stock.Stock;
 import my.app.domains.stock.StockDailyInformation;
 import my.app.parsing.HistoricalDataParser;
+import my.app.parsing.IndexDataParser;
+import my.app.services.stock.IndexDailyInformationService;
+import my.app.services.stock.IndexService;
 import my.app.services.stock.StockDailyInformationService;
 import my.app.services.stock.StockService;
 
@@ -21,11 +26,16 @@ public class UpdateStockInformation {
 	
 	private final StockDailyInformationService stockDailyInformationService;
 	private final StockService stockService;
+	private final IndexDailyInformationService indexDailyInformationService;
+	private final IndexService indexService;
 	private final String rootDir;
 	
-	public UpdateStockInformation(String rootDir, StockDailyInformationService stockInformationService, StockService stockService) {
+	public UpdateStockInformation(String rootDir, StockDailyInformationService stockInformationService, 
+			StockService stockService, IndexService indexService, IndexDailyInformationService indexDailyInformationService) {
 		this.stockDailyInformationService = stockInformationService;
 		this.stockService = stockService;
+		this.indexService = indexService;
+		this.indexDailyInformationService = indexDailyInformationService;
 		this.rootDir = rootDir;
 	}
 	
@@ -67,6 +77,52 @@ public class UpdateStockInformation {
 			updateHistoricalPrices(stocks.get(i));
 			System.out.println((i+1) + "/" + stocks.size() + " historical data CSVs parsed into database");
 		}
+		updateIndexDailyInformation(downloadHistoricalData);
+	}
+	
+	public void updateIndexDailyInformation(boolean downloadHistoricalData) {
+		Index index;
+		if (!indexService.getIndices().isEmpty()) {
+			index = indexService.getIndices().get(0);
+		} else {
+			index = new Index("S&P 500", "^GSPC");
+			indexService.saveIndex(index);
+		}
+		if (downloadHistoricalData) {
+			StockInformationDownloader.downloadHistoricalStockInformation(index.getTicker());
+		}
+		updateIndexHistoricalPrices(index);
+		System.out.println("Updated index daily information");
+	}
+	
+	private void updateIndexHistoricalPrices(Index index) {
+		String indexInformationFilePath = rootDir + index.getTicker() + ".csv";
+		Set<IndexDailyInformation> idisInDatabase = 
+				new HashSet<IndexDailyInformation>(index.getIndexDailyInformations());
+		List<IndexDailyInformation> idis = IndexDataParser.parseCSVToIndexInformation(index, indexInformationFilePath);
+		ArrayList<IndexDailyInformation> idisToSave = new ArrayList<IndexDailyInformation>();
+		ArrayList<IndexDailyInformation> idisToUpdate = new ArrayList<IndexDailyInformation>();
+		int i = 0;
+		for(IndexDailyInformation idi : idis) {
+			if (idisInDatabase == null) {
+				idisToSave.add(idi);
+				System.out.println(i  + " S/S " + idis.size() + ", date: " + idi.getDate());
+			} else if(!idisInDatabase.contains(idi)) {
+				IndexDailyInformation idiInDatabase;
+				if ((idiInDatabase = idisInDatabase.stream().filter(o -> 
+				o.getDate().equals(idi.getDate())).findFirst().orElse(null)) != null) {
+					idiInDatabase.setValuesFrom(idi);
+					idisToUpdate.add(idiInDatabase);
+					System.out.println(i  + " U/U " + idis.size() + ", date: " + idi.getDate());
+				} else {
+					idisToSave.add(idi);
+					System.out.println(i  + " S/S " + idis.size() + ", date: " + idi.getDate());
+				}
+			}
+			i++;
+		}
+		indexDailyInformationService.saveIndexDailyInformations(idisToSave);
+		indexDailyInformationService.updateIndexDailyInformations(idisToUpdate);
 	}
 	
 	private void updateHistoricalPrices(Stock stock) {
