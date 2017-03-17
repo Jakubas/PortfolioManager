@@ -42,15 +42,15 @@
 	    	var data = new google.visualization.DataTable();
 			data.addColumn('date', 'Date');
 			data.addColumn('number', 'Portfolio');
-			//data.addColumn('number', 'SPX (S&P 500)');
+			data.addColumn('number', 'SPX (S&P 500)');
 			var dayValues = [[${dayValues}]];
+			var indexValues =[[${indexValues}]]
 			var dates  = [[${dates}]];
-			//var spxValues = [[${spxValues}]];
 			for (var i = 0; i < dayValues.length; i++) {
 				var value = dayValues[i];
+				var indexValue = indexValues[i]
 				var date = dates[i];
-				//var spxValue = spxValues[i];
-				data.addRow([new Date(date), value]);
+				data.addRow([new Date(date), value, indexValue]);
 			}
 			var options = {
           		title: 'Portfolio Value Over Time',
