@@ -6,6 +6,7 @@ import java.util.List;
 
 import my.app.domains.stock.Stock;
 import my.app.domains.stock.StockDailyInformation;
+import my.app.utilities.DateUtility;
 
 //this class is used for various calculations regarding a stock, such as risk, annualised returns, etc.
 //annualisedReturns are estimates and may be off by a couple days
@@ -57,7 +58,7 @@ public class StockDataCalculations {
 	private static Double calculateAnnualisedReturn(Double totalReturn, LocalDate buyDate, LocalDate sellDate) {
 		if (totalReturn == null)
 			return null;
-		int numberOfDays = (int) daysBetweenDates(buyDate, sellDate);
+		int numberOfDays = (int) DateUtility.daysBetween(buyDate, sellDate);
 		return calculateAnnualisedReturn(totalReturn, numberOfDays);
 	}
 	
@@ -75,11 +76,6 @@ public class StockDataCalculations {
 		
 		double annualisedReturn = Math.pow(a, b) - 1;
 		return annualisedReturn;
-	}
-	
-	public static long daysBetweenDates(LocalDate startDate, LocalDate endDate) {
-		long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
-	    return daysBetween;
 	}
 	
 	private static Double calculateReturn(Stock stock, int numberOfDays) {

@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class DateUtility {
@@ -28,5 +29,10 @@ public class DateUtility {
 	
 	public static Date toDate(LocalDate localDate) {
 		return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+	}
+	
+	public static long daysBetween(LocalDate startDate, LocalDate endDate) {
+		long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+	    return daysBetween;
 	}
 }
