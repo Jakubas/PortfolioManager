@@ -106,7 +106,11 @@ public class PortfolioDailyInformationDAOImpl implements PortfolioDailyInformati
 		Session session = sessionFactory.getCurrentSession();
 		Transaction tx = session.beginTransaction();
 		for (PortfolioDailyInformation pdi : pdis) {
-			session.delete(pdi);
+			int id = pdi.getId();
+			pdi = session.get(PortfolioDailyInformation.class, id);
+			if (pdi != null) {
+				session.delete(pdi);
+			}
 		}
 		session.flush();
 		session.clear();
