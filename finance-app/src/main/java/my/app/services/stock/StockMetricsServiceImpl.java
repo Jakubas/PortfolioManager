@@ -4,15 +4,15 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import my.app.dao.stock.StockMetricsDAOImpl;
+import my.app.dao.stock.StockMetricsDAO;
 import my.app.domains.stock.StockMetrics;
 
 @Service
 public class StockMetricsServiceImpl implements StockMetricsService {
 
-	private final StockMetricsDAOImpl dao;
+	private final StockMetricsDAO dao;
 	
-	public StockMetricsServiceImpl(StockMetricsDAOImpl dao) {
+	public StockMetricsServiceImpl(StockMetricsDAO dao) {
 		this.dao = dao;
 	}
 	

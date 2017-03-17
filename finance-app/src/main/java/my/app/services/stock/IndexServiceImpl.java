@@ -4,15 +4,15 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import my.app.dao.stock.IndexDAOImpl;
+import my.app.dao.stock.IndexDAO;
 import my.app.domains.stock.Index;
 
 @Service
 public class IndexServiceImpl implements IndexService {
 
-	private final IndexDAOImpl dao;
+	private final IndexDAO dao;
 	
-	public IndexServiceImpl(IndexDAOImpl dao) {
+	public IndexServiceImpl(IndexDAO dao) {
 		this.dao = dao;
 	}
 	

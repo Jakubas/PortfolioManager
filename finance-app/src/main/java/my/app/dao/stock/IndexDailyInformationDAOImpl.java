@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -26,6 +27,18 @@ public class IndexDailyInformationDAOImpl implements IndexDailyInformationDAO {
 	public void saveIndexDailyInformation(IndexDailyInformation indexDailyInformation) {
 		Session session = sessionFactory.getCurrentSession();
 		session.persist(indexDailyInformation);
+	}
+	
+	@Override
+	public void saveIndexDailyInformations(List<IndexDailyInformation> idisToSave) {
+		Session session = sessionFactory.getCurrentSession();
+		Transaction tx = session.beginTransaction();
+		for (IndexDailyInformation indexDailyInformation : idisToSave) {
+			session.save(indexDailyInformation);
+		}
+		session.flush();
+		session.clear();
+		tx.commit();
 	}
 
 	@Override
@@ -48,6 +61,18 @@ public class IndexDailyInformationDAOImpl implements IndexDailyInformationDAO {
 		Session session = sessionFactory.getCurrentSession();
 		session.update(indexDailyInformation);
 	}
+	
+	@Override
+	public void updateIndexDailyInformations(List<IndexDailyInformation> idisToUpdate) {
+		Session session = sessionFactory.getCurrentSession();
+		Transaction tx = session.beginTransaction();
+		for (IndexDailyInformation indexDailyInformation : idisToUpdate) {
+			session.update(indexDailyInformation);
+		}
+		session.flush();
+		session.clear();
+		tx.commit();
+	}
 
 	@Override
 	public void deleteIndexDailyInformation(IndexDailyInformation indexDailyInformation) {
@@ -58,5 +83,4 @@ public class IndexDailyInformationDAOImpl implements IndexDailyInformationDAO {
 			session.delete(indexDailyInformation);
 		}
 	}
-
 }
