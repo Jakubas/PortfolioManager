@@ -44,6 +44,7 @@ public class RegistrationController {
 				if (!dob.isEmpty()) {
 					user.setDob(DateUtility.stringToDate(dob));
 				}
+				user.setCash(0.0);
 				userService.saveUser(user);
 				return "login";
 			} else {
