@@ -49,7 +49,7 @@ public class PortfolioDailyInformation {
 			cashAmount = user.getCash();
 		}
 		PortfolioService portfolioService = new PortfolioServiceImpl();
-		value = portfolioService.getValueOnDate(user.getPortfolio(), date) + cashAmount;
+		value = portfolioService.getValueOnDate(user.getPortfolio(), date);
 	}
 	
 	public PortfolioDailyInformation() { }
