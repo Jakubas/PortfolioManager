@@ -2,6 +2,7 @@ package my.app.services.portfolio;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.format.annotation.NumberFormat;
@@ -150,7 +151,14 @@ public class PortfolioServiceImpl implements PortfolioService {
 		}
 		return earliestDate;
 	}
-
+	
+	@Override
+	public LocalDate getLatestDateIn(List<StockInPortfolio> portfolio) {
+		if (portfolio == null || portfolio.isEmpty()) 
+			return LocalDate.now();
+		portfolio.sort(Comparator.comparing(StockInPortfolio::getBuyDate).reversed());
+		return portfolio.get(0).getBuyDate();
+	}
 	@Override
 	public StockInPortfolio getWorstPerformer(List<StockInPortfolio> portfolio) {
 		if (portfolio.isEmpty()) {
