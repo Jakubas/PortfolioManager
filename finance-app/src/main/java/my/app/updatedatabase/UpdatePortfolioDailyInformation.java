@@ -39,6 +39,13 @@ public class UpdatePortfolioDailyInformation {
 		List<PortfolioDailyInformation> pdisToUpdate = new ArrayList<PortfolioDailyInformation>();
 		List<StockInPortfolio> portfolio = user.getPortfolio();
 		List<PortfolioDailyInformation> pdisInDatabase = user.getPortfolioDailyInformations();
+		if (!user.isPortfolioInformationUpToDate() && pdisInDatabase != null && !pdisInDatabase.isEmpty()) {
+			pdisInDatabase.sort(Comparator.comparing(PortfolioDailyInformation::getDate).reversed());
+			LocalDate latestDate = pdisInDatabase.get(0).getDate();
+			if (latestDate.isEqual(LocalDate.now())) {
+				return;
+			}
+		}
 		LocalDate earliestDate = portfolioService.getEarliestDateIn(portfolio);
 		long daysBetween = ChronoUnit.DAYS.between(earliestDate, LocalDate.now());
 		deleteOldPortfolioDailyInformation(pdisInDatabase, earliestDate);
@@ -60,6 +67,8 @@ public class UpdatePortfolioDailyInformation {
 		}
 		pdiService.savePortfolioDailyInformations(pdisToSave);
 		pdiService.updatePortfolioDailyInformations(pdisToUpdate);
+		user.setUpdatePortfolioInformation(false);
+		userService.updateUser(user);
 	}
 
 	private void deleteOldPortfolioDailyInformation(List<PortfolioDailyInformation> pdisInDatabase,
