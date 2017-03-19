@@ -74,6 +74,9 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private List<Tracker> trackingList;
 	
+	//a flag used to check if the portfolioDailyInformation needs to be updated.
+	private boolean updatePortfolioInformation;
+	
 	public User() {
 		
 	}
@@ -267,5 +270,13 @@ public class User {
 
 	public List<Tracker> getTrackingList() {
 		return trackingList;
+	}
+
+	public boolean isPortfolioInformationUpToDate() {
+		return updatePortfolioInformation;
+	}
+
+	public void setUpdatePortfolioInformation(boolean updatePortfolioInformation) {
+		this.updatePortfolioInformation = updatePortfolioInformation;
 	}
 }

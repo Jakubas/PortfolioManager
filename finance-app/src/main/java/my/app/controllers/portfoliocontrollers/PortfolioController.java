@@ -86,7 +86,8 @@ public class PortfolioController {
 		}
 		StockInPortfolio sip = new StockInPortfolio(stock, user, amount, buyDate);
 		stockInPortfolioService.saveStockInPortfolio(sip);
-		userService.updateUser(sip.getUser());
+		user.setUpdatePortfolioInformation(true);
+		userService.updateUser(user);
 		return "redirect:/stocks";
 	}
 	
@@ -159,8 +160,9 @@ public class PortfolioController {
 			return "redirect:/portfolio/{stockInPortfolioId}";
 		}
 		stockInPortfolioService.updateStockInPortfolio(sip);
-		//updates the user's cash
-		userService.updateUser(sip.getUser());
+		User user = sip.getUser();
+		user.setUpdatePortfolioInformation(true);
+		userService.updateUser(user);
 		return "redirect:/portfolio";
 	}
 	
@@ -170,7 +172,9 @@ public class PortfolioController {
 		
 		StockInPortfolio sip = stockInPortfolioService.getStockInPortfolioById(id);
 		stockInPortfolioService.deleteStockInPortfolio(sip);
-		
+		User user = sip.getUser();
+		user.setUpdatePortfolioInformation(true);
+		userService.updateUser(user);
 		return getPortfolio(model, principal);
 	}
 }
