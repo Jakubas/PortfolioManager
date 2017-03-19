@@ -6,13 +6,14 @@
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.13/datatables.min.css"/>
 	<script type="text/javascript" src="https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.13/datatables.min.js"></script>
-
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 	<script type="text/javascript" th:inline="javascript">
 		/*<![CDATA[*/
 		google.load('visualization', '1.0', {
 			'packages' : [ 'corechart' ]
 		});
+		google.charts.load('current', {'packages':['corechart', 'controls']});
 		google.setOnLoadCallback(drawPieChart);
 		google.setOnLoadCallback(drawValueChart);
 		function drawPieChart() {
@@ -56,9 +57,30 @@
           		title: 'Portfolio Value Over Time',
 	        	width: 900,
 	        	height: 675
-      		};
+		    };
 			var chart = new google.visualization.LineChart(document.getElementById('value_chart_div'));
 			chart.draw(data, options);
+			var dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'));
+			var chart2 = new google.visualization.ChartWrapper({
+			  	chartType: 'LineChart',
+			  	containerId: 'value_chart_div',
+			  	options: {
+            		title: 'Portfolio Value Over Time',
+  	        		width: 900,
+  	        		height: 675
+  		      	}
+			});
+
+			var control = new google.visualization.ControlWrapper({
+			  controlType: 'ChartRangeFilter',
+			  containerId: 'range_value_chart_div',
+			  options: {
+				filterColumnIndex: 0
+			  }
+			});
+
+			dashboard.bind([control], [chart2]);
+			//dashboard.draw(data);
 		}
 
 		$(document).ready(function() {
@@ -113,7 +135,10 @@
 		<div id="pie_chart_div"></div>
 	</div>
 	<div th:if="${isData}" class="container">
-		<div id="value_chart_div"></div>
+		<div id="dashboard_div">
+  			<div id="value_chart_div" style="width: 100%; height: 100%"></div>
+  			<div id="range_value_chart_div" style="width: 100%; height: 100%"></div>
+		</div>
 	</div>
 	<div th:if="${isData}" class="container">
 		<h3>Transaction history</h3>
