@@ -148,9 +148,11 @@
 				<div class="col-md-2">
 					Date bought: <span th:text="${{holding.buyDate}}" />
 				</div>
-				<div class="col-md-2">
-					<span th:text="${holding.sellDate} ? 'Date sold:' : ' '" />
-					<span th:text="${{holding.sellDate}}" />
+				<div th:if="${holding.sellDate}" class="col-md-2">
+					Date sold: <span th:text="${{holding.sellDate}}" />
+				</div>
+				<div class="col-md-3">
+					Dividends per share: <span th:text="'$' + ${{holding.getDividendsTotal()}}" />
 				</div>
 				<form class="form-noborder" th:action="@{/portfolio/{id}/(id=${holding.id})}"
 				method="get" style="padding-top:0px; padding-bottom:0px">

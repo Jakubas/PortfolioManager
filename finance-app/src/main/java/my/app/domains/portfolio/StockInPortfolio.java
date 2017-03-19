@@ -2,6 +2,8 @@ package my.app.domains.portfolio;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collector;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +17,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.format.annotation.NumberFormat.Style;
 
+import my.app.domains.corporateactions.Dividend;
 import my.app.domains.stock.Stock;
 import my.app.domains.user.User;
 import my.app.formatter.PercentageFormat;
@@ -244,5 +247,18 @@ public class StockInPortfolio {
 	//this is the absolute price difference between the buy and sell values 
 	public double getDifference() {
 		return Math.abs(returnOnInvestment * buyPrice * amount);
+	}
+	
+	@NumberFormat(style = Style.NUMBER, pattern = "#,##0.00")
+	public double getDividendsTotal() {
+		List<Dividend> dividends = stock.getDividends();
+		double dividendsTotal = 0;
+		for (Dividend dividend : dividends) {
+			if ((dividend.getDate().isAfter(buyDate) || dividend.getDate().isEqual(buyDate)) && 
+					(sellDate == null || dividend.getDate().isBefore(sellDate))) {
+				dividendsTotal +=  dividend.getAmount();
+			}
+		}
+		return dividendsTotal;
 	}
 }
