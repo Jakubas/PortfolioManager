@@ -77,6 +77,9 @@ public class User {
 	//a flag used to check if the portfolioDailyInformation needs to be updated.
 	private boolean updatePortfolioInformation;
 	
+	//a flag that if set switches to table view for the user
+	private boolean tableView;
+	
 	public User() {
 		
 	}
@@ -285,5 +288,13 @@ public class User {
 
 	public void setUpdatePortfolioInformation(boolean updatePortfolioInformation) {
 		this.updatePortfolioInformation = updatePortfolioInformation;
+	}
+
+	public boolean isTableView() {
+		return tableView;
+	}
+
+	public void setTableView(boolean tableView) {
+		this.tableView = tableView;
 	}
 }
