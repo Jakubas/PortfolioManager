@@ -180,7 +180,6 @@ public class PortfolioServiceImpl implements PortfolioService {
 		}
 		StockInPortfolio bestPerformingHolding = portfolio.get(0); 
 		for (StockInPortfolio holding : portfolio) {
-			System.out.println(holding.getStock().getSector() + ": " + holding.getStock().getName() + ":" + holding.getAnnualisedReturn());
 			if (holding.getAnnualisedReturn() > bestPerformingHolding.getAnnualisedReturn()) {
 				bestPerformingHolding = holding;
 			}
