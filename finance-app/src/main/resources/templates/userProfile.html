@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>Investment App</title>
+	<title>Portfolio Manager</title>
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 	<script>
 		function showEditForm() {
@@ -18,7 +18,7 @@
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 		    <div class="navbar-header">
-		    	<a class="navbar-brand" href="#">Investment App</a>
+		    	<a class="navbar-brand" href="#">Portfolio Manager</a>
 		    </div>
             <div class="nav navbar-left">
                 <ul class="nav navbar-nav">
@@ -74,7 +74,7 @@
 				<br />
 				<span th:text="${user.dob} ? ${{user.dob}} : 'N/A'" />
 				<br />
-				<span th:text="${user.cashAmount} ? '$' + ${{user.cashAmount}} : '0'" />
+				<span th:text="${user.cash} ? '$' + ${{user.cash}} : '0'" />
 				<br />
 			</div>
 		</div>
@@ -94,7 +94,7 @@
 				<label>Date of birth</label>
 				<input type="date" class="form-control" name="dob" th:value="${{user.dob}}" />
 				<label>Cash</label>
-				<input type="number" step="0.01" class="form-control" name="cashAmount" th:value="${user.cashAmount}" />
+				<input type="number" step="0.01" class="form-control" name="cashAmount" th:value="${user.cash}" />
 				<button type="submit" class="btn btn-link glyphicon glyphicon-plus-sign"></button>
 			</div>
 		</form>
