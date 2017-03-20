@@ -48,9 +48,18 @@ public class PortfolioController {
 		List<StockInPortfolio> portfolio = user.getActivePortfolio();
 		List<List<StockInPortfolio>> groupedPortfolio = portfolioService.groupPortfolio(portfolio);
 		List<String> sectors = stockService.getSectors();
+		boolean ignoreCash = false;
+		if (user.getCash() < 0) {
+			sectors.remove("Cash");
+			ignoreCash = true;
+		}
 		double[] weights =  new double[sectors.size()];
 		for (int i = 0; i < sectors.size(); i++) {
-			weights[i] = user.calculateSectorWeight(sectors.get(i));
+			if (!ignoreCash) {
+				weights[i] = user.calculateSectorWeight(sectors.get(i));
+			} else {
+				weights[i] = user.calculateSectorWeightWithoutCash(sectors.get(i));
+			}
 		}
 		model.addAttribute("user", user);
 		model.addAttribute("groupedPortfolio", groupedPortfolio);

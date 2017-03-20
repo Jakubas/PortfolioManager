@@ -239,6 +239,13 @@ public class User {
 		return result;
 	}
 	
+	public double calculateSectorWeightWithoutCash(String sector) {
+		double portfolioValue = portfolioValue() - this.getCash();
+		double sectorValue = sectorValue(sector);
+		double result = (portfolioValue != 0.0) ? sectorValue/portfolioValue*100 : 0;
+		return result;
+	}
+	
 	public double calculateStockWeight(Stock stock) {
 		double portfolioValue = portfolioValue();
 		double stockValue = stockValue(stock);

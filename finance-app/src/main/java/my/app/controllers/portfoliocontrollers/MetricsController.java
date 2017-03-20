@@ -55,9 +55,18 @@ public class MetricsController {
 		String username = principal.getName();
 		User user = userService.getUserByUsername(username);
 		List<String> sectors = stockService.getSectors();
+		boolean ignoreCash = false;
+		if (user.getCash() < 0) {
+			sectors.remove("Cash");
+			ignoreCash = true;
+		}
 		double[] sectorValues =  new double[sectors.size()];
 		for (int i = 0; i < sectors.size(); i++) {
-			sectorValues[i] = user.sectorValue(sectors.get(i));
+			if (!ignoreCash) {
+				sectorValues[i] = user.calculateSectorWeight(sectors.get(i));
+			} else {
+				sectorValues[i] = user.calculateSectorWeightWithoutCash(sectors.get(i));
+			}
 		}
 		List<HoldingTransaction> transactions = getTransactions(user);
 		model.addAttribute("sectors", sectors);
