@@ -72,7 +72,8 @@ public class PortfolioController {
 	
 	@RequestMapping(value = "portfolio", method = RequestMethod.POST)
 	public String addToPortfolio(RedirectAttributes ra, Principal principal,
-			@RequestParam("stockId") int stockId,
+			@RequestParam(value = "ticker", required = false) String ticker,
+			@RequestParam(value = "stockId", required = false) Integer stockId,
 			@RequestParam("amount") int amount,
 			@RequestParam(value = "buyDate", required = false) String buyDateStr,
 			@RequestParam(value = "buyPrice", required = false) Double buyPrice) {
@@ -83,7 +84,12 @@ public class PortfolioController {
 		}
 		String username = principal.getName();
 		User user = userService.getUserByUsername(username); 
-		Stock stock = stockService.getStockById(stockId);
+		Stock stock;
+		if (stockId != null) {
+			stock = stockService.getStockById(stockId);
+		} else {
+			stock = stockService.getStockByTicker(ticker);
+		}
 		LocalDate buyDate;
 		if (buyDateStr != "") {
 			try {

@@ -258,6 +258,26 @@
 				</tr>
 			</tbody>
 		</table>
+		<form class="form-noborder" action="/portfolio" method="post">
+			<h3>Add to portfolio</h3>
+			<div class="form-group">
+				<label>Ticker</label>
+				<input type="text" class="form-control" name="ticker" required="true" />
+			</div>
+			<div class="form-group">
+				<label>Amount of stock</label>
+				<input type="number" class="form-control" step="1" name="amount" required="true" />
+			</div>
+			<div class="form-group">
+				<label>Date bought (optional field)</label>
+				<input type="date" class="form-control" name="buyDate" />
+			</div>
+			<div class="form-group">
+				<label>Buy price (optional field)</label>
+				<input type="number" class="form-control" step="any" name="buyPrice" />
+			</div>
+			<button type="submit" class="btn btn-primary" style="display:block;">Add</button>
+		</form>
 	</div>
 </body>
 </html>
