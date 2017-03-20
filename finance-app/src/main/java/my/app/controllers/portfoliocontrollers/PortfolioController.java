@@ -63,6 +63,7 @@ public class PortfolioController {
 		}
 		model.addAttribute("user", user);
 		model.addAttribute("groupedPortfolio", groupedPortfolio);
+		model.addAttribute("groupedHistoricalPortfolio", portfolioService.groupPortfolio(user.getHistoricalPortfolio()));
 		model.addAttribute("portfolioService", portfolioService);
 		model.addAttribute("sectors", sectors);
 		model.addAttribute("weights", weights);
