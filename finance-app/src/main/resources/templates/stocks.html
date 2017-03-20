@@ -152,6 +152,7 @@
 			<div class="col-md-10">
 				<p th:if="${dateError}" class="error">Incorrect date format</p>
 				<p th:if="${amountError}" class="error">You can't buy less than 1 share</p>
+				<p th:if="${priceError}" class="error">The buy price has to be above $0</p>
 			</div>
 			<div class="col-md-2">
 				<button type="button" onclick="showList()" autofocus="true" class="btn btn-link glyphicon glyphicon-list" />
@@ -188,9 +189,11 @@
 							<label>Date bought (optional field)</label>
 							<input type="date" class="form-control" name="buyDate" />
 						</div>
-						<!--button type="submit" class="btn btn-link glyphicon glyphicon-plus-sign"></button-->
+						<div class="form-group">
+							<label>Buy price (optional field)</label>
+							<input type="number" class="form-control" step="any" name="buyPrice" />
+						</div>
 						<button type="submit" class="btn btn-primary" style="display:block;">Add to portfolio</button>
-
 					</form>
 					<span th:text="${stock.ticker}" />
 				</h4>

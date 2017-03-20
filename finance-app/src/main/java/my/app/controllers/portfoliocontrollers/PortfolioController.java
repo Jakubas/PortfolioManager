@@ -64,7 +64,8 @@ public class PortfolioController {
 	public String addToPortfolio(RedirectAttributes ra, Principal principal,
 			@RequestParam("stockId") int stockId,
 			@RequestParam("amount") int amount,
-			@RequestParam(value = "buyDate", required = false) String buyDateStr) {
+			@RequestParam(value = "buyDate", required = false) String buyDateStr,
+			@RequestParam(value = "buyPrice", required = false) Double buyPrice) {
 		
 		if (amount <= 0) {
 			ra.addFlashAttribute("amountError", true);
@@ -85,7 +86,15 @@ public class PortfolioController {
 			buyDate = LocalDate.now();
 		}
 		StockInPortfolio sip = new StockInPortfolio(stock, user, amount, buyDate);
+		if (buyPrice != null) {
+			if (buyPrice <= 0) {
+				ra.addFlashAttribute("priceError", true);
+				return "redirect:/stocks";
+			}
+			sip.setBuyPrice(buyPrice);
+		}
 		stockInPortfolioService.saveStockInPortfolio(sip);
+		
 		user.setUpdatePortfolioInformation(true);
 		userService.updateUser(user);
 		return "redirect:/stocks";
