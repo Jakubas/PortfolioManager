@@ -155,12 +155,18 @@
 				<p th:if="${priceError}" class="error">The buy price has to be above $0</p>
 			</div>
 			<div class="col-md-2">
-				<button type="button" onclick="showList()" autofocus="true" class="btn btn-link glyphicon glyphicon-list" />
-				<button type="button" onclick="showTable()" class="btn btn-link glyphicon glyphicon-th" />
+				<form class="form-noborder" action="/stocks/listView" method="post" style="padding-top:0px; padding-bottom:0px; display:inline;">
+					<button th:if="${tableView}" type="submit" onclick="showList()" class="btn btn-link glyphicon glyphicon-list" />
+					<button th:if="${!tableView}" type="submit" onclick="showList()" class="btn btn-link glyphicon glyphicon-list disabled" />
+				</form>
+				<form class="form-noborder" action="/stocks/tableView" method="post" style="padding-top:0px; padding-bottom:0px; display:inline;">
+					<button th:if="${tableView}" type="submit" onclick="showTable()" class="btn btn-link glyphicon glyphicon-th disabled" />
+					<button th:if="${!tableView}" type="submit" onclick="showTable()" class="btn btn-link glyphicon glyphicon-th" />
+				</form>
 			</div>
 		</div>
 	</div>
-	<div id="listDiv">
+	<div th:if="${!tableView}" id="listDiv">
 		<div class="container">
 			<button class="btn btn-default" onclick="sortAlphabetically()" id="alphBnt">Sort Alphabetically</button>
 			<button class="btn btn-default" onclick="sortByMarketCap()" id="capBnt">Sort By Market Cap</button>
@@ -230,7 +236,7 @@
 		</div>
 	</div>
 
-	<div id="tableDiv" class="container" style="display:none">
+	<div th:if="${tableView}" id="tableDiv" class="container">
 		<h3>Stocks</h3>
 		<table id="stockTable" class="table table-bordered table-hover dt-responsive">
 			<thead>

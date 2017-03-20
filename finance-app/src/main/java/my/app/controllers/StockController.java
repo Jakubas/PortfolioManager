@@ -1,5 +1,6 @@
 package my.app.controllers;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -13,22 +14,28 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import my.app.domains.stock.Stock;
 import my.app.domains.stock.StockDailyInformation;
+import my.app.domains.user.User;
 import my.app.services.stock.StockService;
+import my.app.services.user.UserService;
 
 @Controller
 public class StockController {
 
 	private final StockService stockService;
+	private final UserService userService;
 	
 	@Autowired
-	public StockController(StockService stockService) {
+	public StockController(StockService stockService, UserService userService) {
 		this.stockService = stockService;
+		this.userService = userService;
 	}
 	
 	@RequestMapping(value = "stocks", method=RequestMethod.GET)
-	public String getStocks(Model model) {
+	public String getStocks(Principal principal, Model model) {
 		List<Stock> stocks = stockService.getStocks();
+		User user = userService.getUserByUsername(principal.getName());
 		model.addAttribute("stocks", stocks);
+		model.addAttribute("tableView", user.isTableView());
 		return "stocks";
 	}
 	
@@ -60,5 +67,21 @@ public class StockController {
 			prices.add(sdi.getAdjCloseStockSplits());
 		}
 		return prices;
+	}
+	
+	@RequestMapping(value = "stocks/tableView", method=RequestMethod.POST)
+	public String setTableView(Principal principal) {
+		User user = userService.getUserByUsername(principal.getName());
+		user.setTableView(true);
+		userService.updateUser(user);
+		return "redirect:/stocks";
+	}
+	
+	@RequestMapping(value = "stocks/listView", method=RequestMethod.POST)
+	public String setListView(Principal principal) {
+		User user = userService.getUserByUsername(principal.getName());
+		user.setTableView(false);
+		userService.updateUser(user);
+		return "redirect:/stocks";
 	}
 }
