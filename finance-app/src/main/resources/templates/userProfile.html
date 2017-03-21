@@ -85,17 +85,25 @@
 		<button id="editTrigger" type="button" class="btn btn-link glyphicon glyphicon-edit"
 		onclick="showEditForm()" style="display:block" />
 		<form id="editForm" class="form-noborder" action="/profile" method="post" style="display:none">
+			<input type="hidden" name="userId" th:value="${user.id}" />
 			<div class="form-group">
-				<input type="hidden" name="userId" th:value="${user.id}" />
 				<label>First name</label>
 				<input type="text" class="form-control" name="firstName" required="true" th:value="${user.firstName}" />
+			</div>
+			<div class="form-group">
 				<label>Last name</label>
 				<input type="text" class="form-control" name="lastName" th:value="${user.lastName}"/>
+			</div>
+			<div class="form-group">
 				<label>Date of birth</label>
 				<input type="date" class="form-control" name="dob" th:value="${{user.dob}}" />
+			</div>
+			<div class="form-group">
 				<label>Cash</label>
 				<input type="number" step="0.01" class="form-control" name="cashAmount" th:value="${user.cash}" />
-				<button type="submit" class="btn btn-link glyphicon glyphicon-plus-sign"></button>
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-default">Save</button>
 			</div>
 		</form>
 	</div>

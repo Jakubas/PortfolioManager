@@ -19,7 +19,7 @@ public class GoalCalculations {
 		double totalCashNeeded = getCashNeededForBalancing(user);
 		double cash = user.getCash();
 		double cashNeeded = totalCashNeeded - cash;
-		if (cashNeeded <= 0) {
+		if (cashNeeded < 0.01) {
 			balancingTips.add("You have enough cash to balance your portfolio");
 			return balancingTips;
 		}
