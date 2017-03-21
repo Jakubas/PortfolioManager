@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import my.app.domains.stock.Stock;
 import my.app.domains.user.Tracker;
@@ -40,11 +41,21 @@ public class TrackerController {
 	}
 	
 	@RequestMapping(value = "/tracker", method = RequestMethod.POST)
-	public String addToTracking(Principal principal, Model model,
-			@RequestParam("stockId") int stockId) {
+	public String addToTracking(RedirectAttributes ra, Principal principal, Model model,
+			@RequestParam(value = "stockId", required = false) Integer stockId,
+			@RequestParam(value = "ticker", required = false) String ticker) {
 		String username = principal.getName();
 		User user = userService.getUserByUsername(username);
-		Stock stock = stockService.getStockById(stockId);
+		Stock stock;
+		if (stockId != null) {
+			stock = stockService.getStockById(stockId);
+		} else {
+			stock = stockService.getStockByTicker(ticker);
+			if (stock == null) {
+				ra.addFlashAttribute("tickerError", true);
+				return "redirect:/stocks";
+			}
+		}
 		List<Tracker> trackingList = user.getTrackingList();
 		if (trackingList.stream().anyMatch(o -> o.getStock().getId() == stock.getId())) {
 			return "redirect:/tracker";

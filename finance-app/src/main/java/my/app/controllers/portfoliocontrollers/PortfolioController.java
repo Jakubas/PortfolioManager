@@ -89,6 +89,10 @@ public class PortfolioController {
 			stock = stockService.getStockById(stockId);
 		} else {
 			stock = stockService.getStockByTicker(ticker);
+			if (stock == null) {
+				ra.addFlashAttribute("tickerError", true);
+				return "redirect:/stocks";
+			}
 		}
 		LocalDate buyDate;
 		if (buyDateStr != "") {
