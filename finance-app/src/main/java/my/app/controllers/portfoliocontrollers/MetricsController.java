@@ -54,6 +54,8 @@ public class MetricsController {
 	public String getPortfolioMetrics(Model model, Principal principal) {
 		String username = principal.getName();
 		User user = userService.getUserByUsername(username);
+		UpdatePortfolioDailyInformation updi = new UpdatePortfolioDailyInformation(portfolioDailyInformationService, userService);
+		updi.updatePortfolioDailyInformationFor(user);
 		List<String> sectors = stockService.getSectors();
 		boolean ignoreCash = false;
 		if (user.getCash() < 0) {
@@ -76,8 +78,6 @@ public class MetricsController {
 		model.addAttribute("transactions", transactions);
 		model.addAttribute("indexValues", getIndexValues(user, transactions));
 		model.addAttribute("isData", !user.getPortfolio().isEmpty());
-		UpdatePortfolioDailyInformation updi = new UpdatePortfolioDailyInformation(portfolioDailyInformationService, userService);
-		updi.updatePortfolioDailyInformationFor(user);
 		return "portfolio/metrics";
 	}
 

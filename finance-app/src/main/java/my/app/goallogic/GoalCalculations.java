@@ -19,6 +19,10 @@ public class GoalCalculations {
 		double totalCashNeeded = getCashNeededForBalancing(user);
 		double cash = user.getCash();
 		double cashNeeded = totalCashNeeded - cash;
+		if (cashNeeded <= 0) {
+			balancingTips.add("You have enough cash to balance your portfolio");
+			return balancingTips;
+		}
 		List<Stock> stockToSell = stockToSell(user, cashNeeded, sectors);
 		//You need $x to rebalance your portfolio.
 		balancingTips.add("You need $" + String.format("%.2f", totalCashNeeded) + " to rebalance your portfolio.");
