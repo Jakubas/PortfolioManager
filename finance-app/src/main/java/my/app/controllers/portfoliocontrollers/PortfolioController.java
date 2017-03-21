@@ -167,6 +167,7 @@ public class PortfolioController {
 			}
 			if (sellDate == null) {
 				sip.setSellDate(null);
+				sip.setSellPrice(null);
 			} else if (sellDate.isBefore(buyDate)) {
 				ra.addFlashAttribute("dateError3", true);
 				return "redirect:/portfolio/{stockInPortfolioId}";
@@ -177,11 +178,11 @@ public class PortfolioController {
 				}
 			} else if (sellPrice != null && sip.getSellPrice() != null && 
 					   Math.abs(sellPrice - sip.getSellPrice()) >= 0.01) {
-				sip.setSellDate(buyDate);
-				sip.setSellPrice(buyPrice);
+				sip.setSellDate(sellDate);
+				sip.setSellPrice(sellPrice);
 			} else {
 				//remove this when price is autofilled on client side
-				sip.setSellDateAndPrice(buyDate);
+				sip.setSellDateAndPrice(sellDate);
 			}
 		//remove this catch when price is autofilled on client side
 		} catch (DateTimeException e) {

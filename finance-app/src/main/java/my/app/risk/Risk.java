@@ -1,9 +1,19 @@
 package my.app.risk;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.math3.stat.correlation.Covariance;
 
 import my.app.domains.portfolio.StockInPortfolio;
+import my.app.domains.stock.Index;
+import my.app.domains.stock.IndexDailyInformation;
 import my.app.domains.stock.Stock;
+import my.app.domains.stock.StockDailyInformation;
 import my.app.stockcalculations.StockDataCalculations;
 
 public class Risk {
@@ -12,31 +22,104 @@ public class Risk {
 	
 	//The risk is based on the last 10 years of historical data
 	//it is on a scale of 0 - 100, where 0 is very low risk and 100 is very high risk
-	public static String calculateRisk(Stock stock) {
+	public static String calculateRisk(Stock stock, Index index) {
 		double variance = Risk.calculateVariance(stock, 10);
-		return calculateRisk(variance);
+		Double beta = Risk.calculateBeta(stock, index, variance);
+		return calculateRisk(beta);
 	}
 	
-	public static String calculateRisk(Double variance) {
-		double standardDeviation = Math.sqrt(variance)*100;
-		if (standardDeviation == 0) {
+	public static String calculateRisk(Double beta) {
+		if (beta == null) {
 			return RiskValues.UNKNOWN;
-		} else if (standardDeviation < 10) {
+		} else if (beta < 0.4) {
 			return RiskValues.VERY_LOW;
-		} else if (standardDeviation < 20) {
+		} else if (beta < 0.75) {
 			return RiskValues.LOW;
-		} else if (standardDeviation < 30) {
+		} else if (beta >= 0.75 && beta <= 1.25) {
 			return RiskValues.MEDIUM;
-		} else if (standardDeviation < 40) {
+		} else if (beta < 1.45) {
 			return RiskValues.MEDIUM_HIGH;
-		} else if (standardDeviation < 50) {
+		} else if (beta < 1.85) {
 			return RiskValues.HIGH;
 		} else {
 			return RiskValues.VERY_HIGH;
 		}
 	}
 	
-	//refactor this monster to be easier to understand
+	public static Double calculateBeta(Stock stock, Index index, double variance) {
+		List<StockDailyInformation> sdis = stock.getStockDailyInformations();
+		if (sdis == null || sdis.isEmpty()) {
+			return null;
+		}
+		sdis.sort(Comparator.comparing(StockDailyInformation::getDate));
+		LocalDate earliestDate = LocalDate.now().minusYears(10);
+		sdis.removeIf(o -> o.getDate().isBefore(earliestDate));
+		Set<LocalDate> dates = extractDates(sdis);
+		List<IndexDailyInformation> idis = index.getIndexDailyInformations();
+		idis.sort(Comparator.comparing(IndexDailyInformation::getDate));
+		idis.removeIf(o -> !dates.contains(o.getDate()));
+		
+		List<Double> sdiPrices = extractPrices(sdis);
+		List<Double> idiPrices = extractPrices2(idis);
+		
+		int sizeDiff = sdiPrices.size() - idiPrices.size();
+		while (sizeDiff > 0) {
+			sdiPrices.remove(0);
+			sizeDiff--;
+		}
+		
+		double[] sdiPercentageChanges = calculatePercentageChangesBetweenDays(sdiPrices);
+		double[] idiPercentageChanges = calculatePercentageChangesBetweenDays(idiPrices);
+		
+		if (sdiPercentageChanges.length < 2) {
+			return null;
+		}
+		
+		Covariance covarianceMath = new Covariance();
+		double covariance = covarianceMath.covariance(sdiPercentageChanges, idiPercentageChanges);
+		double beta = covariance / variance;
+		return beta;
+	}
+	
+	
+	private static double[] calculatePercentageChangesBetweenDays(List<Double> prices) {
+		double[] percentageChanges = new double[prices.size() - 1];
+		if (prices.size() == 1) {
+			percentageChanges[0] = 0.0;
+			return percentageChanges;
+		}
+		for (int i = 0; i < prices.size() - 1; i++) {
+			Double price = prices.get(i);
+			Double price2 = prices.get(i + 1);
+			percentageChanges[i] = ((price2 - price) / price);
+		}
+		return percentageChanges;
+	}
+
+	private static List<Double> extractPrices(List<StockDailyInformation> sdis) {
+		List<Double> prices = new ArrayList<Double>();
+		for (StockDailyInformation sdi : sdis) {
+			prices.add(sdi.getAdjCloseStockSplits());
+		}
+		return prices;
+	}
+	
+	private static List<Double> extractPrices2(List<IndexDailyInformation> idis) {
+		List<Double> prices = new ArrayList<Double>();
+		for (IndexDailyInformation idi : idis) {
+			prices.add(idi.getAdjustedClose());
+		}
+		return prices;
+	}
+
+	private static Set<LocalDate> extractDates(List<StockDailyInformation> sdis) {
+		Set<LocalDate> dates = new HashSet<LocalDate>();
+		for (StockDailyInformation sdi : sdis) {
+			dates.add(sdi.getDate());
+		}
+		return dates;
+	}
+
 	public static double calculateVariance(Stock stock, int years) {
 		//Calculate the yearly returns for the last 10 years
 		int yearlyReturnsLength = years;
@@ -52,7 +135,6 @@ public class Risk {
 		return calculateVariance(yearlyReturnsLength, yearlyReturns);
 	}
 	
-	//refactor this monster to be easier to understand
 	public static double calculateMonthlyVariance(Stock stock, int months) {
 		//Calculate the yearly returns for the last 10 years
 		int monthlyReturnsLength = months;
@@ -91,15 +173,16 @@ public class Risk {
 	}
 	
 	//calculate the risk factor of a portfolio
-	public static String calculatePortfolioRisk(List<StockInPortfolio> portfolio) {
-		double variance = 0;
+	public static String calculatePortfolioRisk(List<StockInPortfolio> portfolio, Index index) {
+		double beta = 0;
 		for (StockInPortfolio sip : portfolio) {
 			Stock stock = sip.getStock();
 			double stockVariance = Risk.calculateVariance(stock, 10);
-			double stockVarianceWeighted = stockVariance * sip.getUser().calculateHoldingWeight(sip);
-			variance += stockVarianceWeighted;
+			double stockBeta = Risk.calculateBeta(stock, index, stockVariance);
+			double stockBetaWeighted = stockBeta * sip.getUser().calculateHoldingWeight(sip);
+			beta += stockBetaWeighted;
 		}
-		return calculateRisk(variance);
+		return calculateRisk(beta);
 	}
 	
 	public static double calculate3MonthVariance(Stock stock) {

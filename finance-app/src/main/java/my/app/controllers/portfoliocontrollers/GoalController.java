@@ -23,6 +23,7 @@ import my.app.domains.user.User;
 import my.app.goallogic.GoalCalculations;
 import my.app.risk.RiskValues;
 import my.app.services.portfolio.GoalService;
+import my.app.services.stock.IndexService;
 import my.app.services.stock.StockService;
 import my.app.services.user.UserService;
 
@@ -32,15 +33,17 @@ public class GoalController {
 	private final GoalService goalService;
 	private final UserService userService;
 	private final StockService stockService;
+	private final IndexService indexService;
 	private final GoalFactory goalFactory;
 	
 	@Autowired
 	public GoalController(GoalService goalService, UserService userService, 
-			StockService stockService, GoalFactory goalFactory) {
+			StockService stockService, GoalFactory goalFactory, IndexService indexService) {
 		this.goalService = goalService;
 		this.userService = userService;
 		this.goalFactory = goalFactory;
 		this.stockService = stockService;
+		this.indexService = indexService;
 	}
 	
 	@RequestMapping(value = "portfolio/goals", method = RequestMethod.GET)
@@ -63,6 +66,7 @@ public class GoalController {
 		model.addAttribute("typeMap", goalToTypeMapping);
 		model.addAttribute("sectors", sectors);
 		model.addAttribute("risks", risks);
+		model.addAttribute("index", indexService.getIndices().get(0));
 		model.addAttribute("balancingTips", GoalCalculations.getBalancingTips(user, sectors));
 		return "portfolio/goals";
 	}
@@ -88,7 +92,7 @@ public class GoalController {
 		User user = userService.getUserByUsername(username);
 		Goal goal;
 		try {
-			goal = goalFactory.getGoal(user, goalTemplate, percentage, sector1, sector2, monthlyDepositAmount, amount, length, risk, monthsOrYears);
+			goal = goalFactory.getGoal(user, goalTemplate, percentage, sector1, sector2, monthlyDepositAmount, amount, length, risk, monthsOrYears, indexService.getIndices().get(0));
 		} catch (Exception e) {
 			ra.addFlashAttribute("error", true);
 			return "redirect:/portfolio/goals";

@@ -26,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import my.app.domains.portfolio.PortfolioDailyInformation;
 import my.app.domains.portfolio.StockInPortfolio;
 import my.app.domains.portfolio.goal.Goal;
+import my.app.domains.stock.Index;
 import my.app.domains.stock.Stock;
 import my.app.formatter.PercentageFormat;
 import my.app.risk.Risk;
@@ -263,8 +264,8 @@ public class User {
 		return result;
 	}
 
-	public String calculatePortfolioRisk() {
-		return Risk.calculatePortfolioRisk(getActivePortfolio());
+	public String calculatePortfolioRisk(Index index) {
+		return Risk.calculatePortfolioRisk(getActivePortfolio(), index);
 	}
 
 	@PercentageFormat

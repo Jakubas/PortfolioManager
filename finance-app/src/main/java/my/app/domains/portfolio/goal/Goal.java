@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import my.app.domains.portfolio.StockInPortfolio;
+import my.app.domains.stock.Index;
 import my.app.domains.stock.Stock;
 import my.app.domains.user.Tracker;
 import my.app.domains.user.User;
@@ -83,14 +84,14 @@ public class Goal {
 		this.goalStr = goalStr;
 	}
 
-	public void setTypeSpecificFields() {
+	public void setTypeSpecificFields(Index index) {
 		if (type == Type.MOVE) {
 			sector1StartWeight = user.calculateSectorWeight(sector1);
 			sector2StartWeight = user.calculateSectorWeight(sector2);
 		} else if (type == Type.RETIRE || type == Type.INVEST_TIME_LENGTH) {
 			startDate = LocalDate.now();
 		} else if (type == Type.RISK) {
-			startRisk = user.calculatePortfolioRisk();
+			startRisk = user.calculatePortfolioRisk(index);
 		}
 	}
 
@@ -252,7 +253,7 @@ public class Goal {
 		return progress;
 	}
 	
-	public List<String> getTips() {
+	public List<String> getTips(Index index) {
 		List<String> tips = new ArrayList<String>();
 		switch(type) {
 		case GROW_TO_AMOUNT:
@@ -329,7 +330,7 @@ public class Goal {
 			}
 			break;
 		case RISK:
-			String currentRisk = user.calculatePortfolioRisk();
+			String currentRisk = user.calculatePortfolioRisk(index);
 			tips.add("Current risk is: " + currentRisk);
 			if (riskToNumber(currentRisk) < riskToNumber(risk)) {
 				tips.add("To achieve this goal you need to buy riskier stock and sell some of your less risky stock holdings");

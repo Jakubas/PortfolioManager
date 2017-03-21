@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import my.app.domains.portfolio.goal.Goal.Type;
+import my.app.domains.stock.Index;
 import my.app.domains.user.User;
 import my.app.services.stock.StockService;
 
@@ -23,7 +24,7 @@ public class GoalFactory {
 	
 	public Goal getGoal(User user, String goalTemplate, Double percentage, 
 			String sector1, String sector2, Integer monthlyDepositAmount, 
-			Integer amount, Double length, String risk, String monthsOrYears) throws Exception {
+			Integer amount, Double length, String risk, String monthsOrYears, Index index) throws Exception {
 		
 		if(!areSectorsValid(sector1, sector2)) {
 			throw new Exception(sector1 + " or " + sector2 + " is not a sector");
@@ -34,7 +35,7 @@ public class GoalFactory {
 			   monthlyDepositAmount, amount, length, risk, monthsOrYears);
 	    Goal goal = new Goal(user, type, goalStr);
 	    setGoalTargets(goal, percentage, sector1, sector2, 
-			   monthlyDepositAmount, amount, length, risk, monthsOrYears);
+			   monthlyDepositAmount, amount, length, risk, monthsOrYears, index);
 		
 	    if (type == Type.SECTOR && !overThreshold(user.getGoals(), percentage)) {
 			throw new Exception("This goal would push the total portfolio percentage over 100%");
@@ -157,7 +158,7 @@ public class GoalFactory {
 	}
 	
 	private void setGoalTargets(Goal goal, Double percentage, String sector1, String sector2,
-			Integer monthlyDepositAmount, Integer amount, Double length, String risk, String monthsOrYears) {
+			Integer monthlyDepositAmount, Integer amount, Double length, String risk, String monthsOrYears, Index index) {
 		
 		if (monthsOrYears != null && monthsOrYears.equals("Months")) {
 			length = length/12;
@@ -190,6 +191,6 @@ public class GoalFactory {
 			goal.setSector1(sector1);
 			break;
 		}
-		goal.setTypeSpecificFields();
+		goal.setTypeSpecificFields(index);
 	}
 }
