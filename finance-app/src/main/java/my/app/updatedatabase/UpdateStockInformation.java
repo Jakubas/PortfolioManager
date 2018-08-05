@@ -256,36 +256,4 @@ public class UpdateStockInformation {
 		}
 		return tickers;
 	}
-	
-	/*
-	 * due to a bug I had entries with the same {date, stock} combo in stock_daily_information, so I made this method 
-	 * to remove the entries so that only one entry corresponds to one date and stock. Afterwards, I added a unique 
-	 * constraint to the database to ensure that this doesn't occur again.
-	*/
-	public void removeDuplicateDateEntries() {
-		List<Stock> stocks = stockService.getStocks();
-		for (int i = 0; i < stocks.size(); i++) {
-			Stock stock = stocks.get(i);
-			List<StockDailyInformation> sdis = stock.getStockDailyInformations();
-			sdis.sort(Comparator.comparing(StockDailyInformation::getDate));
-			List<StockDailyInformation> sdisToRemove = new ArrayList<StockDailyInformation>();
-			Iterator<StockDailyInformation> it = sdis.iterator();
-			System.out.println((i+1) + " / " + stocks.size());
-			
-			int k = 0;
-			while (it.hasNext()) {
-				StockDailyInformation sdi = it.next();
-				StockDailyInformation sdi2 = (sdis.subList(k+1, sdis.size()).stream()
-						.filter(o ->  o.getDate().equals(sdi.getDate()) && 
-								o.getId() != sdi.getId())
-						.findFirst().orElse(null));
-				if (sdi2 != null) {
-					System.out.println(k+1 + " / " + sdis.size() + " deleted");
-					sdisToRemove.add(sdi);
-				}
-				k++;
-			}
-			stockDailyInformationService.deleteStockInformations(sdisToRemove);
-		}
-	}
 }

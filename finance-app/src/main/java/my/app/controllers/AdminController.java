@@ -66,7 +66,6 @@ public class AdminController {
 		UpdateStockInformation usi = 
 				new UpdateStockInformation(rootDir, stockDailyInformationService, stockService, indexService, indexDailyInformationService);
 		usi.updateStockDailyInformation(true, true);
-//		usi.removeDuplicateDateEntries();
 		return "redirect:/admin";
 	}
 	
