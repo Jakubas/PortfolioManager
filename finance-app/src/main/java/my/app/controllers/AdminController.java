@@ -13,7 +13,7 @@ import my.app.services.stock.IndexService;
 import my.app.services.stock.StockDailyInformationService;
 import my.app.services.stock.StockService;
 import my.app.services.user.UserService;
-import my.app.updatedatabase.UpdateCorporateActions;
+import my.app.updatedatabase.CorporateActionUpdater;
 import my.app.updatedatabase.UpdatePortfolioDailyInformation;
 import my.app.updatedatabase.UpdateStockInformation;
 import my.app.updatedatabase.StockMetricsUpdater;
@@ -71,8 +71,8 @@ public class AdminController {
 	@RequestMapping(value = "/admin/updateCorporateActions", method = RequestMethod.POST)
 	public String updateCorporateActions() {
 		String rootDir = "/home/daniel/fyp/data/";
-		UpdateCorporateActions uca = 
-				new UpdateCorporateActions(rootDir, dividendService, stockSplitService, stockService);
+		CorporateActionUpdater uca =
+				new CorporateActionUpdater(rootDir, dividendService, stockSplitService, stockService);
 		uca.updateCorporateActions(true);
 		return "redirect:/admin";
 	}

@@ -11,28 +11,30 @@ import my.app.parsing.CorporateActionParser;
 import my.app.services.corporateactions.DividendService;
 import my.app.services.corporateactions.StockSplitService;
 import my.app.services.stock.StockService;
-import my.app.utilities.DownloadUtility;
+import my.app.updatedatabase.download.CorporateActionDownloader;
 
-public class UpdateCorporateActions {
+
+public class CorporateActionUpdater {
 	
 	private final DividendService dividendService;
 	private final StockSplitService stockSplitService;
 	private final StockService stockService;
+	//TODO: replace rootDir with some constant or use /tmp instead
 	private final String rootDir;
-	
-	public UpdateCorporateActions(String rootDir, DividendService dividendService, 
-			StockSplitService stockSplitService, StockService stockService) {
+
+	public CorporateActionUpdater(String rootDir, DividendService dividendService,
+								  StockSplitService stockSplitService, StockService stockService) {
 		this.dividendService = dividendService;
 		this.stockSplitService = stockSplitService;
 		this.rootDir = rootDir;
 		this.stockService = stockService;
 	}
-	
-	public void updateCorporateActions(boolean download) {
-		if (download) {
-			downloadCorporateActions();
-		}
+
+	public void updateCorporateActions() {
+		//TODO: The dir should be passed in as an arg and the file path of the downloaded files should be resolved by a
+		//TODO: method, so that we can re-use it
 		List<Stock> stocks = stockService.getStocks();
+		CorporateActionDownloader.downloadCorporateActions(stocks, rootDir);
 		int i = 1;
 		for(Stock stock : stocks) {
 			String ticker = stock.getTicker();
@@ -41,23 +43,6 @@ public class UpdateCorporateActions {
 			updateStockSplits(stock, filePath);
 			System.out.println(i++ + "/" + stocks.size() + " corporate actions updated");
 		}
-	}
-
-	private void downloadCorporateActions() {
-		List<Stock> stocks = stockService.getStocks();
-		int i = 1;
-		for(Stock stock : stocks) {
-			String ticker = stock.getTicker();
-			String filePath = rootDir + ticker + "_actions.csv";
-			downloadCorporateActions(ticker, filePath);
-			System.out.println(i++ + "/" + stocks.size() + " corporate actions downloaded");
-		}
-	}
-	
-	public void downloadCorporateActions(String ticker, String filePath) {
-		String urlPrefix = "http://ichart.finance.yahoo.com/x?s=";
-		String urlSuffix = "&a=1&b=1&c=1900&d=1&e=1&f=2099&g=v&y=0&z=30000";
-		DownloadUtility.downloadFile(urlPrefix + ticker + urlSuffix, filePath);
 	}
 
 	private void updateDividends(Stock stock, String filePath) {
@@ -117,7 +102,7 @@ public class UpdateCorporateActions {
 		int stockId = stockSplit.getStock().getId();
 		LocalDate date = stockSplit.getDate();
 		String split = stockSplit.getSplit();
-		for (StockSplit stockSplit2 : stockSplits) {	
+		for (StockSplit stockSplit2 : stockSplits) {
 			int stockId2 = stockSplit2.getStock().getId();
 			LocalDate date2 = stockSplit2.getDate();
 			String split2 = stockSplit2.getSplit();
