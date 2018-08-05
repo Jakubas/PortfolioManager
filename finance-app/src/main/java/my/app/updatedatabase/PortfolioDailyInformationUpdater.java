@@ -13,13 +13,17 @@ import my.app.services.portfolio.PortfolioDailyInformationService;
 import my.app.services.portfolio.PortfolioService;
 import my.app.services.portfolio.PortfolioServiceImpl;
 import my.app.services.user.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public class UpdatePortfolioDailyInformation {
+@Component
+public class PortfolioDailyInformationUpdater {
 	
 	private final PortfolioDailyInformationService pdiService;
 	private final UserService userService;
-	
-	public UpdatePortfolioDailyInformation(PortfolioDailyInformationService pdiService, UserService userService) {
+
+	@Autowired
+	public PortfolioDailyInformationUpdater(PortfolioDailyInformationService pdiService, UserService userService) {
 		this.pdiService = pdiService;
 		this.userService = userService;
 	}

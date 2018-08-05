@@ -12,21 +12,25 @@ import my.app.services.corporateactions.DividendService;
 import my.app.services.corporateactions.StockSplitService;
 import my.app.services.stock.StockService;
 import my.app.updatedatabase.download.CorporateActionDownloader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class CorporateActionUpdater {
 	
 	private final DividendService dividendService;
 	private final StockSplitService stockSplitService;
 	private final StockService stockService;
-	//TODO: replace rootDir with some constant or use /tmp instead
-	private final String rootDir;
+	@Value("/tmp")
+	private final String targetDir;
 
-	public CorporateActionUpdater(String rootDir, DividendService dividendService,
+	@Autowired
+	public CorporateActionUpdater(String targetDir, DividendService dividendService,
 								  StockSplitService stockSplitService, StockService stockService) {
+		this.targetDir = targetDir;
 		this.dividendService = dividendService;
 		this.stockSplitService = stockSplitService;
-		this.rootDir = rootDir;
 		this.stockService = stockService;
 	}
 
@@ -34,11 +38,11 @@ public class CorporateActionUpdater {
 		//TODO: The dir should be passed in as an arg and the file path of the downloaded files should be resolved by a
 		//TODO: method, so that we can re-use it
 		List<Stock> stocks = stockService.getStocks();
-		CorporateActionDownloader.downloadCorporateActions(stocks, rootDir);
+		CorporateActionDownloader.downloadCorporateActions(stocks, targetDir);
 		int i = 1;
 		for(Stock stock : stocks) {
 			String ticker = stock.getTicker();
-			String filePath = rootDir + ticker + "_actions.csv";
+			String filePath = targetDir + ticker + "_actions.csv";
 			updateDividends(stock, filePath);
 			updateStockSplits(stock, filePath);
 			System.out.println(i++ + "/" + stocks.size() + " corporate actions updated");

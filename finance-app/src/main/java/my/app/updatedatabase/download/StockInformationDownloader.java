@@ -26,6 +26,7 @@ public class StockInformationDownloader {
 	
 	public static void downloadHistoricalStockInformation(String ticker) {
 		String urlPrefix = HISTORICAL_STOCK_DATA_SOURCE_PREFIX;
+		//TODO: replace with /tmp, also make it an argument that is passed in e.g. targetDir
 		DownloadUtility.downloadFile(urlPrefix + ticker, "/home/daniel/fyp/data/" + ticker + ".csv");
 	}
 }

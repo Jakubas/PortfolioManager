@@ -19,30 +19,34 @@ import my.app.services.stock.IndexDailyInformationService;
 import my.app.services.stock.IndexService;
 import my.app.services.stock.StockDailyInformationService;
 import my.app.services.stock.StockService;
-import my.app.updatedatabase.StockInformationReader;
 import my.app.updatedatabase.download.StockInformationDownloader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-
-public class UpdateStockInformation {
+@Component
+public class StockInformationUpdater {
 	
 	private final StockDailyInformationService stockDailyInformationService;
 	private final StockService stockService;
 	private final IndexDailyInformationService indexDailyInformationService;
 	private final IndexService indexService;
-	private final String rootDir;
-	
-	public UpdateStockInformation(String rootDir, StockDailyInformationService stockInformationService, 
-			StockService stockService, IndexService indexService, IndexDailyInformationService indexDailyInformationService) {
+	@Value("/tmp")
+	private final String targetDir;
+
+	@Autowired
+	public StockInformationUpdater(String targetDir, StockDailyInformationService stockInformationService,
+								   StockService stockService, IndexService indexService, IndexDailyInformationService indexDailyInformationService) {
 		this.stockDailyInformationService = stockInformationService;
 		this.stockService = stockService;
 		this.indexService = indexService;
 		this.indexDailyInformationService = indexDailyInformationService;
-		this.rootDir = rootDir;
+		this.targetDir = targetDir;
 	}
 	
 	//rootDir = "/home/daniel/fyp/data/"
 	public void updateStocks(boolean downloadCSVs) {
-		List<Stock> stocks = StockInformationReader.parseBaseStockInformation(rootDir, downloadCSVs);
+		List<Stock> stocks = StockInformationReader.parseBaseStockInformation(targetDir, downloadCSVs);
 		List<Stock> stocksInDatabase = stockService.getStocks();
 		ArrayList<String> tickersInDatabase = stocksToTickers(stocksInDatabase);
 		
@@ -97,7 +101,7 @@ public class UpdateStockInformation {
 	}
 	
 	private void updateIndexHistoricalPrices(Index index) {
-		String indexInformationFilePath = rootDir + index.getTicker() + ".csv";
+		String indexInformationFilePath = targetDir + index.getTicker() + ".csv";
 		Set<IndexDailyInformation> idisInDatabase = 
 				new HashSet<IndexDailyInformation>(index.getIndexDailyInformations());
 		List<IndexDailyInformation> idis = IndexDataParser.parseCSVToIndexInformation(index, indexInformationFilePath);
@@ -128,7 +132,7 @@ public class UpdateStockInformation {
 	
 	private void updateHistoricalPrices(Stock stock) {
 		//parse the CSV file containing the historical stock data into objects
-		String stockInformationFilePath = rootDir + stock.getTicker() + ".csv";
+		String stockInformationFilePath = targetDir + stock.getTicker() + ".csv";
 		HistoricalDataParser hdp = new HistoricalDataParser();
 		Set<StockDailyInformation> sdisInDatabase = 
 				new HashSet<StockDailyInformation>(stock.getStockDailyInformations());
