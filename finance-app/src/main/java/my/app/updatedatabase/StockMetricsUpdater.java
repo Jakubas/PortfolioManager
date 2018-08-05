@@ -8,20 +8,26 @@ import my.app.risk.Risk;
 import my.app.services.stock.StockMetricsService;
 import my.app.services.stock.StockService;
 import my.app.stockcalculations.StockDataCalculations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-public class UpdateStockMetrics {
+@Component
+public class StockMetricsUpdater {
 	
 	private final StockMetricsService stockMetricsService;
 	private final StockService stockService;
-	
-	public UpdateStockMetrics(StockMetricsService stockMetricsService, StockService stockService) {
+
+	@Autowired
+	public StockMetricsUpdater(StockMetricsService stockMetricsService, StockService stockService) {
 		this.stockMetricsService = stockMetricsService;
 		this.stockService = stockService;
 	}
 	
 	public void updateStockMetrics() {
 		List<Stock> stocks = stockService.getStocks();
-		//runs out of heap space/becomes very slow around ~400 objects
+		//runs out of heap space/becomes very slow after ~400 iterations
 		for (int i = 0; i < stocks.size(); i++) {
 			Stock stock = stocks.get(i);
 			updateStockMetricsFor(stock);
@@ -29,7 +35,7 @@ public class UpdateStockMetrics {
 		}
 	}
 	
-	public void updateStockMetricsFor(Stock stock) {
+	private void updateStockMetricsFor(Stock stock) {
 		Double threeMonthAnnualisedReturn = StockDataCalculations.calculateQuarterlyAnnualisedReturn(stock);
 		Double oneYearAnnualisedReturn = StockDataCalculations.calculate1YrAnnualisedReturn(stock);
 		Double threeYearAnnualisedReturn = StockDataCalculations.calculate3YrAnnualisedReturn(stock);

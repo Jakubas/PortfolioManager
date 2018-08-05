@@ -1,0 +1,11 @@
+Add testing
+Add logger
+Some classes aren't using Spring's IOC container
+General refactoring
+ - such as relying on abstractions instead of concrete classes
+ - some classes have multiple responsibilities
+ - there are some lengthy methods in places that could be split up/extracted to classes
+use Spring's TaskScheduler to schedule automatic daily updates for stock information and anything else that might need scheduling
+make usage of parsing more abstract so that it can be switched out more easily if we have to move to different data source
+more TODOs to surface as I dig deeper into my old project 
+

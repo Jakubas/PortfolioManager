@@ -11,13 +11,12 @@ import my.app.services.portfolio.PortfolioDailyInformationService;
 import my.app.services.stock.IndexDailyInformationService;
 import my.app.services.stock.IndexService;
 import my.app.services.stock.StockDailyInformationService;
-import my.app.services.stock.StockMetricsService;
 import my.app.services.stock.StockService;
 import my.app.services.user.UserService;
 import my.app.updatedatabase.UpdateCorporateActions;
 import my.app.updatedatabase.UpdatePortfolioDailyInformation;
 import my.app.updatedatabase.UpdateStockInformation;
-import my.app.updatedatabase.UpdateStockMetrics;
+import my.app.updatedatabase.StockMetricsUpdater;
 
 @Controller
 public class AdminController {
@@ -28,24 +27,24 @@ public class AdminController {
 	private final StockSplitService stockSplitService;
 	private final StockService stockService;
 	private final StockDailyInformationService stockDailyInformationService;
-	private final StockMetricsService stockMetricsService;
 	private final IndexService indexService;
 	private final IndexDailyInformationService indexDailyInformationService;
-	
+	private final StockMetricsUpdater stockMetricsUpdater;
+
 	@Autowired
 	public AdminController(PortfolioDailyInformationService pdiService, UserService userService,
 			DividendService dividendService, StockSplitService stockSplitService, StockService stockService,
-			StockDailyInformationService stockDailyInformationService, StockMetricsService stockMetricsService,
-			IndexService indexService, IndexDailyInformationService indexDailyInformationService) {
+			StockDailyInformationService stockDailyInformationService, IndexService indexService,
+		    IndexDailyInformationService indexDailyInformationService, StockMetricsUpdater stockMetricsUpdater) {
 		this.pdiService = pdiService;
 		this.userService = userService;
 		this.dividendService = dividendService;
 		this.stockSplitService = stockSplitService;
 		this.stockService = stockService;
 		this.stockDailyInformationService = stockDailyInformationService;
-		this.stockMetricsService = stockMetricsService;
 		this.indexService = indexService;
 		this.indexDailyInformationService = indexDailyInformationService;
+		this.stockMetricsUpdater = stockMetricsUpdater;
 	}
 	
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
@@ -86,12 +85,10 @@ public class AdminController {
 		usi.updateClosingPrices();
 		return "redirect:/admin";
 	}
-	
+
 	@RequestMapping(value = "/admin/updateStockMetrics", method = RequestMethod.POST)
 	public String updateStockMetrics() {
-		UpdateStockMetrics usm = 
-				new UpdateStockMetrics(stockMetricsService, stockService);
-		usm.updateStockMetrics();
+		stockMetricsUpdater.updateStockMetrics();
 		return "redirect:/admin";
 	}
 }
