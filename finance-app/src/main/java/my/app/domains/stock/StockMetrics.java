@@ -45,10 +45,6 @@ public class StockMetrics {
 	private Double fiveYearVariance;
 	@PercentageFormat
 	private Double tenYearVariance;
-	//@PercentageFormat
-	//private Double oneYearTargetPriceEst;
-	//@PercentageFormat
-	//private Double oneYearROIEst;
 	
 	public StockMetrics() {
 		
@@ -158,22 +154,6 @@ public class StockMetrics {
 	public void setTenYearVariance(Double tenYearVariance) {
 		this.tenYearVariance = tenYearVariance;
 	}
-
-//	public Double getOneYearTargetPriceEst() {
-//		return oneYearTargetPriceEst;
-//	}
-//
-//	public void setOneYearTargetPriceEst(Double oneYearTargetPriceEst) {
-//		this.oneYearTargetPriceEst = oneYearTargetPriceEst;
-//	}
-//
-//	public Double getOneYearROIEst() {
-//		return oneYearROIEst;
-//	}
-//
-//	public void setOneYearROIEst(Double oneYearROIEst) {
-//		this.oneYearROIEst = oneYearROIEst;
-//	}
 	
 	public void setValuesFrom(StockMetrics metrics) {
 		this.threeMonthAnnualisedReturn = metrics.getThreeMonthAnnualisedReturn();
@@ -186,8 +166,6 @@ public class StockMetrics {
 		this.threeYearVariance = metrics.getThreeYearVariance();
 		this.fiveYearVariance = metrics.getFiveYearVariance();
 		this.tenYearVariance = metrics.getTenYearVariance();
-//		this.oneYearROIEst = metrics.getOneYearROIEst();
-//		this.oneYearTargetPriceEst = metrics.getOneYearTargetPriceEst();
 	}
 	
 	public boolean isEqual(Double a, Double b) {
@@ -216,7 +194,6 @@ public class StockMetrics {
     		isEqual(threeYearVariance, metrics.getThreeYearVariance()) &&
     		isEqual(fiveYearVariance, metrics.getFiveYearVariance()) &&
     		isEqual(tenYearVariance, metrics.getTenYearVariance())
-//    		isEqual(oneYearTargetPriceEst, metrics.getOneYearTargetPriceEst())
         	) {
         	return true;
         } else {
@@ -237,7 +214,6 @@ public class StockMetrics {
     	builder.append(threeYearVariance);
     	builder.append(fiveYearVariance);
     	builder.append(tenYearVariance);
-//    	builder.append(oneYearTargetPriceEst);
     	return builder.toHashCode();   
     }
 }

@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +19,8 @@ import my.app.services.stock.IndexDailyInformationService;
 import my.app.services.stock.IndexService;
 import my.app.services.stock.StockDailyInformationService;
 import my.app.services.stock.StockService;
+import my.app.updatedatabase.StockInformationReader;
+import my.app.updatedatabase.download.StockInformationDownloader;
 
 
 public class UpdateStockInformation {

@@ -5,6 +5,7 @@ import java.util.List;
 import my.app.domains.stock.Stock;
 import my.app.parsing.StockParser;
 import my.app.parsing.StockParserTwo;
+import my.app.updatedatabase.download.StockInformationDownloader;
 
 public class StockInformationReader {
 
