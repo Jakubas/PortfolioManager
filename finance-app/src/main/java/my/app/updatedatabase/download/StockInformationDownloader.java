@@ -13,7 +13,7 @@ public class StockInformationDownloader {
     public static void downloadStockDailyInformation(List<Stock> stocks) {
 		int i = 1;
 		for(Stock stock : stocks) {
-			downloadHistoricalStockInformation(stock.getTicker());
+			downloadHistoricalStockInformation(stock.getTicker(), "/tmp/");
 			System.out.println(i++ + "/" + stocks.size() + " historical data CSVs downloaded");
 		}
 	}
@@ -24,9 +24,8 @@ public class StockInformationDownloader {
 		DownloadUtility.downloadFile(url, filePath);
 	}
 	
-	public static void downloadHistoricalStockInformation(String ticker) {
+	public static void downloadHistoricalStockInformation(String ticker, String targetDir) {
 		String urlPrefix = HISTORICAL_STOCK_DATA_SOURCE_PREFIX;
-		//TODO: replace with /tmp, also make it an argument that is passed in e.g. targetDir
-		DownloadUtility.downloadFile(urlPrefix + ticker, "/home/daniel/fyp/data/" + ticker + ".csv");
+		DownloadUtility.downloadFile(urlPrefix + ticker, targetDir + ticker + ".csv");
 	}
 }

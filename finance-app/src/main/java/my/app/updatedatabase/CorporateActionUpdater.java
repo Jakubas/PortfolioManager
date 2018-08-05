@@ -22,11 +22,10 @@ public class CorporateActionUpdater {
 	private final DividendService dividendService;
 	private final StockSplitService stockSplitService;
 	private final StockService stockService;
-	@Value("/tmp")
 	private final String targetDir;
 
 	@Autowired
-	public CorporateActionUpdater(String targetDir, DividendService dividendService,
+	public CorporateActionUpdater(@Value("/tmp/") String targetDir, DividendService dividendService,
 								  StockSplitService stockSplitService, StockService stockService) {
 		this.targetDir = targetDir;
 		this.dividendService = dividendService;

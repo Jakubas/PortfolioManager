@@ -31,11 +31,10 @@ public class StockInformationUpdater {
 	private final StockService stockService;
 	private final IndexDailyInformationService indexDailyInformationService;
 	private final IndexService indexService;
-	@Value("/tmp")
 	private final String targetDir;
 
 	@Autowired
-	public StockInformationUpdater(String targetDir, StockDailyInformationService stockInformationService,
+	public StockInformationUpdater(@Value("/tmp/") String targetDir, StockDailyInformationService stockInformationService,
 								   StockService stockService, IndexService indexService, IndexDailyInformationService indexDailyInformationService) {
 		this.stockDailyInformationService = stockInformationService;
 		this.stockService = stockService;
@@ -43,8 +42,7 @@ public class StockInformationUpdater {
 		this.indexDailyInformationService = indexDailyInformationService;
 		this.targetDir = targetDir;
 	}
-	
-	//rootDir = "/home/daniel/fyp/data/"
+
 	public void updateStocks(boolean downloadCSVs) {
 		List<Stock> stocks = StockInformationReader.parseBaseStockInformation(targetDir, downloadCSVs);
 		List<Stock> stocksInDatabase = stockService.getStocks();
@@ -94,7 +92,7 @@ public class StockInformationUpdater {
 			indexService.saveIndex(index);
 		}
 		if (downloadHistoricalData) {
-			StockInformationDownloader.downloadHistoricalStockInformation(index.getTicker());
+			StockInformationDownloader.downloadHistoricalStockInformation(index.getTicker(), "/tmp/");
 		}
 		updateIndexHistoricalPrices(index);
 		System.out.println("Updated index daily information");
