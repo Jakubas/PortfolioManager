@@ -14,37 +14,25 @@ import my.app.services.stock.StockDailyInformationService;
 import my.app.services.stock.StockService;
 import my.app.services.user.UserService;
 import my.app.updatedatabase.CorporateActionUpdater;
-import my.app.updatedatabase.UpdatePortfolioDailyInformation;
-import my.app.updatedatabase.UpdateStockInformation;
+import my.app.updatedatabase.PortfolioDailyInformationUpdater;
+import my.app.updatedatabase.StockInformationUpdater;
 import my.app.updatedatabase.StockMetricsUpdater;
 
 @Controller
 public class AdminController {
 
-	private final PortfolioDailyInformationService pdiService;
-	private final UserService userService;
-	private final DividendService dividendService;
-	private final StockSplitService stockSplitService;
-	private final StockService stockService;
-	private final StockDailyInformationService stockDailyInformationService;
-	private final IndexService indexService;
-	private final IndexDailyInformationService indexDailyInformationService;
+	private final PortfolioDailyInformationUpdater portfolioDailyInformationUpdater;
+	private final StockInformationUpdater stockInformationUpdater;
 	private final StockMetricsUpdater stockMetricsUpdater;
+	private final CorporateActionUpdater corporateActionUpdater;
 
 	@Autowired
-	public AdminController(PortfolioDailyInformationService pdiService, UserService userService,
-			DividendService dividendService, StockSplitService stockSplitService, StockService stockService,
-			StockDailyInformationService stockDailyInformationService, IndexService indexService,
-		    IndexDailyInformationService indexDailyInformationService, StockMetricsUpdater stockMetricsUpdater) {
-		this.pdiService = pdiService;
-		this.userService = userService;
-		this.dividendService = dividendService;
-		this.stockSplitService = stockSplitService;
-		this.stockService = stockService;
-		this.stockDailyInformationService = stockDailyInformationService;
-		this.indexService = indexService;
-		this.indexDailyInformationService = indexDailyInformationService;
+	public AdminController(PortfolioDailyInformationUpdater portfolioDailyInformationUpdater, StockInformationUpdater stockInformationUpdater,
+						   StockMetricsUpdater stockMetricsUpdater, CorporateActionUpdater corporateActionUpdater) {
+		this.portfolioDailyInformationUpdater = portfolioDailyInformationUpdater;
+		this.stockInformationUpdater = stockInformationUpdater;
 		this.stockMetricsUpdater = stockMetricsUpdater;
+		this.corporateActionUpdater = corporateActionUpdater;
 	}
 	
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
@@ -54,35 +42,25 @@ public class AdminController {
 	
 	@RequestMapping(value = "/admin/updatePortfolioDailyInformation", method = RequestMethod.POST)
 	public String updatePortfolioDailyInformation() {
-		UpdatePortfolioDailyInformation updi = new UpdatePortfolioDailyInformation(pdiService, userService);
-		updi.updatePortfolioDailyInformation();
+		portfolioDailyInformationUpdater.updatePortfolioDailyInformation();
 		return "redirect:/admin";
 	}
 	
 	@RequestMapping(value = "/admin/updateStockInformation", method = RequestMethod.POST)
 	public String updateStockInformation() {
-		String rootDir = "/home/daniel/fyp/data/";
-		UpdateStockInformation usi = 
-				new UpdateStockInformation(rootDir, stockDailyInformationService, stockService, indexService, indexDailyInformationService);
-		usi.updateStockDailyInformation(true, true);
+		stockInformationUpdater.updateStockDailyInformation(true, true);
 		return "redirect:/admin";
 	}
-	
+
 	@RequestMapping(value = "/admin/updateCorporateActions", method = RequestMethod.POST)
 	public String updateCorporateActions() {
-		String rootDir = "/home/daniel/fyp/data/";
-		CorporateActionUpdater uca =
-				new CorporateActionUpdater(rootDir, dividendService, stockSplitService, stockService);
-		uca.updateCorporateActions(true);
+		corporateActionUpdater.updateCorporateActions();
 		return "redirect:/admin";
 	}
 	
 	@RequestMapping(value = "/admin/updateClosingPrices", method = RequestMethod.POST)
 	public String updateClosingPrices() {
-		String rootDir = "/home/daniel/fyp/data/";
-		UpdateStockInformation usi = 
-				new UpdateStockInformation(rootDir, stockDailyInformationService, stockService, indexService, indexDailyInformationService);
-		usi.updateClosingPrices();
+		stockInformationUpdater.updateClosingPrices();
 		return "redirect:/admin";
 	}
 
